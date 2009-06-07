@@ -10,6 +10,8 @@
 		<meta http-equiv="description" content="com.eboom365.estore">
 	</head>
 	<body bgcolor=#EEEEEE>
-		index page!
+		<%session.setAttribute("RC3UserInfo","{'sex':'1','loginIp':'192.168.32.28','userId':9999999999,'name':'测试员','browserEdition':'IE6','organizeId':900,'stationId':41,'computerName':'192.168.32.28','departmentId':63,'departmentName':'测试','loginCode':'admin'}"); %>
+     	<%session.setAttribute("COMPANY_INFO", "{id:900,name:\"大唐安徽发电有限公司\",alias:\"安徽分公司\",value:\"安徽公司\"}");%>
+		<jsp:forward page="/boot/index.jsp"></jsp:forward>
 	</body>
 </html>
