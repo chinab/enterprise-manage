@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<project>
+	<parent>
+		<artifactId>enm</artifactId>
+		<groupId>com.lineboom.enm</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.lineboom.enm.enmmodel
+	</groupId>
+	<artifactId>enmmodel</artifactId>
+	<name>enmmodel</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+</project>

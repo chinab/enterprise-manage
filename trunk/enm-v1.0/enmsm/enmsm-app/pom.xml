@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<parent>
+		<artifactId>enmsm</artifactId>
+		<groupId>com.lineboom.enm.enmsm
+		</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.lineboom.enm.enmsm</groupId>
+	<artifactId>enmsm-app</artifactId>
+	<name>enmsm-app</name>
+	<packaging>jar</packaging>
+
+	<build>
+		<plugins>
+			<!-- 对资源文件进行编码转换 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native2ascii-maven-plugin</artifactId>
+				<version>1.0-alpha-1</version>
+				<configuration>
+					<dest>target/classes</dest>
+					<src>src/main/resources</src>
+				</configuration>
+				<executions>
+					<execution>
+						<id>native2ascii-utf8</id>
+						<goals>
+							<goal>native2ascii</goal>
+						</goals>
+						<configuration>
+							<encoding>UTF8</encoding>
+							<includes>
+								ApplicationResources_zh*.properties,
+								errors_zh*.properties,
+								displaytag_zh*.properties
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<!-- 配置资源文件存放路径，通过此配置，来转换在pom中定义的一些常量 -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build></project>

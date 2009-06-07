@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<parent>
+		<artifactId>enm</artifactId>
+		<groupId>com.lineboom.enm</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>enmcrm</artifactId>
+	<groupId>com.lineboom.enm.enmcrm
+	</groupId>
+	<version>1.0-SNAPSHOT</version>
+	<name>enmcrm</name>
+	<packaging>pom</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.lineboom.enm.enmmodel
+			</groupId>
+			<artifactId>enmmodel</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lineboom.common
+			</groupId>
+			<artifactId>common-app</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lineboom.common
+			</groupId>
+			<artifactId>common-webapp</artifactId>
+			<version>${pom.version}</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+
+	<modules>
+		<module>enmcrm-app</module>
+		<module>enmcrm-webapp</module>
+	</modules>
+</project>
