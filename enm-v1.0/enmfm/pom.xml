@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<parent>
+		<artifactId>enm</artifactId>
+		<groupId>com.lineboom.enm</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>enmfm</artifactId>
+	<groupId>com.lineboom.enm.enmfm
+	</groupId>
+	<version>1.0-SNAPSHOT</version>
+	<name>enmfm</name>
+	<packaging>pom</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.lineboom.enm.enmmodel
+			</groupId>
+			<artifactId>esmodel</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lineboom.common
+			</groupId>
+			<artifactId>common-app</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lineboom.common
+			</groupId>
+			<artifactId>common-webapp</artifactId>
+			<version>${pom.version}</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+
+	<modules>
+		<module>enmfm-app</module>
+		<module>enmfm-webapp</module>
+	</modules>
+</project>
