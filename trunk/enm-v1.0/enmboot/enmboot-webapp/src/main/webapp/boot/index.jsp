@@ -1,17 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="/struts-tags" prefix="s" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en" xmlns:ext="http://www.rtdata.cn/rc3">
 
 <head>
   <title>上实RP3电力数据视窗系统应用软件V2.0</title>
-	<link rel="stylesheet" type="text/css" href="/ajaxlib/ext/resources/css/ext-all.css" />
-	<link rel="stylesheet" type="text/css" href="/css/icons.css" />
-	
- 	<script type="text/javascript" src="/ajaxlib/ext/adapter/ext/ext-base.js"></script>
-    <script type="text/javascript" src="/ajaxlib/ext/ext-all.js"></script>
+	<s:include value="/common/common.jsp"></s:include>    
+  	<link rel="stylesheet" type="text/css" href="${contextPath}/ajaxlib/ext/resources/css/xtheme-gray.css"></link>
+    <link rel="stylesheet" type="text/css" href="${contextPath}/css/main.css"></link>
+	<link rel="stylesheet" type="text/css" href="${contextPath}/css/style.css"></link>
+	<link rel="shortcut icon" href="${contextPath}/images/favicon.ico" />
+	<link rel="icon" href="${contextPath}/images/favicon.ico" />
+	<link rel="stylesheet" type="text/css" href="${contextPath}/css/welcome.css"/>
+	<script type="text/javascript" src="${contextPath}/jscript/common/Ext.ux.VTypes.js"></script>
+	<script type="text/javascript" src="${contextPath}/jscript/TabCloseMenu.js"></script>
+	<script type="text/javascript">
+		var RC3UserInfo = ${RC3UserInfo}; 
+	   	<%session.setAttribute("COMPANY_INFO", "{id:900,name:\"HAB发电有限公司\",alias:\"HAB公司\"}");%>
+    	var COMPANY_INFO = ${COMPANY_INFO};
+    </script>
+    <script type="text/javascript" src="/jscript/portal/Ext.ux.Portal.js"></script>
+    <script type="text/javascript" src="/jscript/portal/Ext.ux.MaximizeTool.js"></script>
+    <script type="text/javascript" src="/jscript/portal/Ext.ux.ManagedIFrame.js"></script>
+    <link rel="stylesheet" type="text/css" href="/jscript/portal/portal.css" />
+	<script type="text/javascript" src="/jscript/portal/Ext.ux.PortalManager.js"></script>
+	<script type="text/javascript" src="/jscript/portal/portlet-sample-grid.js"></script>
+	<script type="text/javascript" src="/jscript/portal/Ext.ux.PortalState.js"></script>
 	<script type="text/javascript" src="/boot/index.js"></script>
 	
-	<link rel="stylesheet" type="text/css" href="/ajaxlib/ext/resources/css/xtheme-gray.css" />
 	<style type="text/css">
 		html, body {
 	        font:normal 12px verdana;
@@ -24,6 +40,5 @@
     </style>
 </head>
 <body>
-
  </body>
 </html>
