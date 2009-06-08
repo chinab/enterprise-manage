@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>com.lineboom.enm.enmboot
 			</groupId>
-			<artifactId>esboot-app</artifactId>
+			<artifactId>enmboot-app</artifactId>
 			<version>${pom.version}</version>
 		</dependency>
 
