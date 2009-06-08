@@ -6,7 +6,7 @@
 	<artifactId>enm</artifactId>
 	<packaging>pom</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>estore</name>
+	<name>enm</name>
 	<description>
 		lineboom enterprise-manage
 	</description>
