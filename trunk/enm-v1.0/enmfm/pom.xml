@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>com.lineboom.enm.enmmodel
 			</groupId>
-			<artifactId>esmodel</artifactId>
+			<artifactId>enmmodel</artifactId>
 			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
