@@ -12,14 +12,6 @@
 	<name>common</name>
 	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.lineboom.enm.enmmodel
-			</groupId>
-			<artifactId>enmmodel</artifactId>
-			<version>${pom.version}</version>
-		</dependency>
-	</dependencies>
 	<modules>
 		<module>common-app</module>
 		<module>common-webapp</module>
