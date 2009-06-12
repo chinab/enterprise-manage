@@ -43,7 +43,7 @@ public abstract class BaseActionSupport extends ActionSupport{
 	private String paramValue(String paramName) {
 		String paramValue = getRequest().getParameter(paramName) ;
 		if(paramValue==null){
-			System.err.println("请传来一个参数"+paramName);
+			System.err.println("无法接受从前传来的参数："+paramName);
 			return null;
 		}
 		return paramValue;

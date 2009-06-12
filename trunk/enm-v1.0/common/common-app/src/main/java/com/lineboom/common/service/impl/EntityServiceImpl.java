@@ -95,7 +95,8 @@ public class EntityServiceImpl<PojoType> {
 		this.entityDao = entityDao;
 	}
 
-	public void setPojoName(String pojoName) {
-		this.pojoName = pojoName;
+	@SuppressWarnings("unchecked")
+	public void setPojoClass(Class pojoClass) {
+		this.pojoName = pojoClass.getCanonicalName();
 	}
 }
