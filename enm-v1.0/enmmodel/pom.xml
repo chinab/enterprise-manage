@@ -11,6 +11,15 @@
 	<artifactId>enmmodel</artifactId>
 	<name>enmmodel</name>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.lineboom.common
+			</groupId>
+			<artifactId>common-app</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
