@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en" xmlns:ext="http://www.rtdata.cn/rc3">
+<html>
 
 <head>
   <title>上实RP3电力数据视窗系统应用软件V2.0</title>
@@ -14,11 +14,6 @@
 	<link rel="stylesheet" type="text/css" href="/css/welcome.css"/>
 	<script type="text/javascript" src="/jscript/common/Ext.ux.VTypes.js"></script>
 	<script type="text/javascript" src="/jscript/TabCloseMenu.js"></script>
-	<script type="text/javascript">
-		var RC3UserInfo = ${RC3UserInfo}; 
-	   	<%session.setAttribute("COMPANY_INFO", "{id:900,name:\"HAB发电有限公司\",alias:\"HAB公司\"}");%>
-    	var COMPANY_INFO = ${COMPANY_INFO};
-    </script>
     <script type="text/javascript" src="/jscript/portal/Ext.ux.Portal.js"></script>
     <script type="text/javascript" src="/jscript/portal/Ext.ux.MaximizeTool.js"></script>
     <script type="text/javascript" src="/jscript/portal/Ext.ux.ManagedIFrame.js"></script>

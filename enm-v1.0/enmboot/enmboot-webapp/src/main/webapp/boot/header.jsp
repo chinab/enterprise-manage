@@ -71,7 +71,7 @@
     	});
     	
 	    Ext.Ajax.request({
-			url:indexPage.muneListUrl,params:{resourcesGroupId:-1},
+			url:indexPage.muneListUrl,params:{enmMenuId:0},
 			success: function(response, options){
 				var responseArr = Ext.util.JSON.decode(response.responseText);
 				/**
@@ -79,13 +79,13 @@
    		   			'<tr align="center"><td width="90" class="guidance-start" onclick="indexPage.workTable();">'+
 			        '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="memu" href="#">工作台</a></td>';
 				for(var i=0;i<responseArr.length;i++){
-					if(responseArr[i].extend2=='Y'){
-						indexPageMenuTable+='<td width="80" class="guidance-min" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].resourcesGroupName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+');">'+
-					        '<a class="memu" href="#">'+responseArr[i].resourcesGroupName+'</a>'+
+					if(responseArr[i].extend1=='Y'){
+						indexPageMenuTable+='<td width="80" class="guidance-min" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].enmMenuName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+');">'+
+					        '<a class="memu" href="#">'+responseArr[i].enmMenuName+'</a>'+
 					    	'</td>';
-				    }else if(responseArr[i].extend2=='N'){
+				    }else if(responseArr[i].extend1=='N'){
 				    	indexPageMenuTable+='<td width="80" class="guidance-min">'+
-					        '<a class="memuNoDisable" href="#">'+responseArr[i].resourcesGroupName+'</a>'+
+					        '<a class="memuNoDisable" href="#">'+responseArr[i].enmMenuName+'</a>'+
 					    	'</td>';
 				    }
 				}
@@ -96,8 +96,8 @@
 				    '<li class="guidance-start"></li>'+
 					'<li class="li_css2" onclick="indexPage.workTable();"><a href="#" class="menu">工作台</a></li>';
 				for(var i=0;i<responseArr.length;i++){
-					indexPageMenuUl+='<li class="li_css2" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].resourcesGroupName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+',\''+responseArr[i].extend2+'\');">'+
-				        (responseArr[i].extend2=='Y'?('<a class="menu" href="#">'+responseArr[i].resourcesGroupName+'</a>'):('<span class="disabel_link">'+responseArr[i].resourcesGroupName+'</span>'))+
+					indexPageMenuUl+='<li class="li_css2" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].enmMenuName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+',\''+responseArr[i].extend1+'\');">'+
+				        (responseArr[i].extend1=='Y'?('<a class="menu" href="#">'+responseArr[i].enmMenuName+'</a>'):('<span class="disabel_link">'+responseArr[i].enmMenuName+'</span>'))+
 				    	'</li>';
 				}
 				indexPageMenuUl+='</ul>';
