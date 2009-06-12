@@ -1,0 +1,168 @@
+.leafNode   {background-image: url(../images/ico/treenode/index-green.png) !important;}
+.my .x-tree-node-collapsed .x-tree-node-icon { 
+			background-image: url(../images/ico/treenode/branch-close-green.png);
+		}
+.my .x-tree-node-expanded .x-tree-node-icon { 
+			background-image: url(../images/ico/treenode/branch-open-green.png);
+		}
+.notNode   {background-image: url(../images/ico/treenode/branch-close-green.png) !important;}
+.modify    {background-image: url(../images/ico/treenode/branch-close-red.png) !important;}
+.treeRoot { 
+			background-image: url(../images/ico/treenode/index-root.png) !important;
+		}		
+.modifyNode { 
+			background-image: url(../images/ico/treenode/index-red.png) !important;
+		}
+.inherit { 
+			background-image: url(../images/ico/treenode/inherit.png) !important;
+		}	
+
+.gdmh		{background-image: url(../images/index_ico/gdmh.png) !important;}
+.storagecoal{background-image: url(../images/index_ico/storagecoal.png) !important;}
+.zhcydl		{background-image: url(../images/index_ico/zhcydl.png) !important;}
+.useHour		{background-image: url(../images/index_ico/useHour.png) !important;}
+.year		{background-image: url(../images/index_ico/year.png) !important;}
+.month		{background-image: url(../images/index_ico/month.png) !important;}
+.day		{background-image: url(../images/index_ico/day.png) !important;}
+.loadIndex		{background-image: url(../images/index_ico/load.png) !important;}
+.powerIndex		{background-image: url(../images/index_ico/power.png) !important;}
+.loadPerIndex	{background-image: url(../images/index_ico/loadPer.png) !important;}
+.unitPowerIndex	{background-image: url(../images/index_ico/unitpower.png) !important;}
+.gdmhIndex	{background-image: url(../images/index_ico/gdmh.png) !important;}
+.sellincome	{background-image: url(../images/index_ico/sellincome.png) !important;}
+
+.conputersign {background-image: url(../images/ico/conputersign.png) !important;}
+.add		{background-image: url(../images/ico/add.png) !important;}
+.edit 		{background-image: url(../images/ico/application_edit.png) !important;}
+.remove 	{background-image: url(../images/ico/delete.png) !important;}
+.save 		{background-image: url(../images/ico/accept.png) !important;}
+.cancel 	{background-image: url(../images/ico/asterisk_yellow.png) !important;}
+.close 		{background-image: url(../images/ico/cancel.png) !important;}
+.query 		{background-image: url(../images/ico/page_white_magnify.png) !important;}
+.check 		{background-image: url(../images/ico/question.png) !important;}
+.total 		{background-image: url(../images/ico/chart_bar_edit.png) !important;}
+.collectset 		{background-image: url(../images/ico/collect_set.png) !important;}
+.unitrelation 		{background-image: url(../images/ico/unit_relation.png) !important;}
+
+.toTop 		{background-image: url(../images/ico/toTop.png) !important;}
+.toBottom 	{background-image: url(../images/ico/toBottom.png) !important;}
+.toUp 		{background-image: url(../images/ico/toUp.png) !important;}
+.toDown 	{background-image: url(../images/ico/toDown.png) !important;}
+
+.yunx 		{background-image: url(../images/ico/yun.png) !important;}
+.tingb 	{background-image: url(../images/ico/ting.png) !important;}
+.jians 		{background-image: url(../images/ico/jian.png) !important;}
+.feit 	{background-image: url(../images/ico/cancel.png) !important;}
+
+.icon-upLoad{background-image: url(../images/ico/page_white_get.png) !important;}
+.icon-input{background-image: url(../images/ico/page_white_go.png) !important;}
+
+.icon-refresh-cls	{background-image: url(../images/ico/refresh.ico) !important;}
+.icon-folder-add-cls	{background-image: url(../images/ico/folder_add.png) !important;}
+.icon-folder-close-leaf	{background-image: url(../images/ico/folder-close-leaf.png) !important;}
+.icon-page-add-cls	{background-image: url(../images/ico/page_add.png) !important;}
+.icon-page-cls	{background-image: url(../images/ico/page.png) !important;}
+.icon-computer-cls	{background-image: url(../images/ico/computer.png) !important;}
+.icon-application-home	{background-image:url(../images/ico/application_home.png) !important;}
+.icon-archive 		{background-image: url(../images/ico/database_save.png) !important;}
+.icon-bricks 		{background-image:url(../images/ico/bricks.png) !important;}
+.icon-cls 			{background-image: url(../images/main/class.gif) !important;}
+.icon-cmp 			{background-image: url(../images/main/cmp.gif) !important;}
+.icon-collapse-all 	{background-image: url(../images/main/collapse-all.gif) !important;}
+.icon-compute 		{background-image: url(../images/ico/layout_content.png) !important;}
+.icon-config 		{background-image: url(../images/main/config.gif) !important;}
+.icon-dep 			{background-image: url(../images/ico/chart_bar.png) !important;}
+.icon-department	{background-image:url(../images/ico/group.png) !important;}
+.icon-docs 			{background-image: url(../images/main/docs.gif) !important;}
+.icon-emp 			{background-image: url(../images/ico/user.png) !important;}
+.icon-event 		{background-image: url(../images/main/event.gif) !important;}
+.icon-expand-all 	{background-image: url(../images/main/expand-all.gif) !important;}
+.icon-expand-members {background-image: url(../images/main/expand-members.gif) !important;}
+.icon-fav 			{background-image: url(../images/main/fav.gif) !important;}
+.icon-filtrate 		{background-image: url(../images/ico/package_go.png) !important;}
+.icon-group 		{background-image:url(../images/ico/group.png) !important;}
+.icon-group-key 	{background-image:url(../images/ico/group_key.png) !important;}
+.icon-hide-inherited {background-image: url(../images/main/hide-inherited.gif) !important;}
+.icon-house 		{background-image:url(../images/ico/house.png) !important;}
+.icon-org 			{background-image: url(../images/ico/chart_organisation.png) !important;}
+.icon-prop 			{background-image: url(../images/main/prop.gif) !important;}
+.icon-method 		{background-image: url(../images/main/method.gif) !important;}
+.icon-people 		{background-image:url(../images/ico/people.png) !important;}
+.icon-pkg 			{background-image: url(../images/main/pkg.gif) !important;}
+.icon-report 		{background-image: url(../images/ico/webcam_add.png) !important;}
+.icon-resource 		{background-image:url(../images/ico/people.png) !important;}
+.icon-revolution 	{background-image: url(../images/ico/plugin_edit.png) !important;}
+.icon-static 		{background-image: url(../images/main/static.gif) !important;}
+.icon-unregister 	{background-image:url(../images/ico/application_error.png) !important;}
+.icon-user 			{background-image:url(../images/ico/user.png) !important;}
+.icon-transmit		{background-image:url(../images/ico/transmit.png) !important;}
+.icon-feed		{background-image:url(../images/ico/feed.png) !important;}
+.icon-flag_blue		{background-image:url(../images/ico/flag_blue.png) !important;}
+
+.file-node1{background-image:url(../images/ico/mime/log.png) !important;}
+.file-node2{background-image:url(../images/ico/mime/mime_cdr.png) !important;}
+.file-node3{background-image:url(../images/ico/mime/deb.png) !important;}
+.file-node4{background-image:url(../images/ico/mime/exec_wine.png) !important;}
+.file-node5{background-image:url(../images/ico/mime/kchart_chrt.png) !important;}
+.file-node6{background-image:url(../images/ico/mime/mime_colorset.png) !important;}
+.file-node7{background-image:url(../images/ico/mime/moc_src.png) !important;}
+.file-node8{background-image:url(../images/ico/mime/mozilla_doc.png) !important;}
+.file-node9{background-image:url(../images/ico/mime/pk.png) !important;}
+.file-node10{background-image:url(../images/ico/mime/soffice.png) !important;}
+.file-node11{background-image:url(../images/ico/mime/source.png) !important;}
+.file-node12{background-image:url(../images/ico/mime/vcard.png) !important;}
+.file-node13{background-image:url(../images/ico/mime/swf.png) !important;}
+.file-node14{background-image:url(../images/ico/mime/source_j.png) !important;}
+.file-node15{background-image:url(../images/ico/mime/source_o.png) !important;}
+.file-node16{background-image:url(../images/ico/mime/karbon.png) !important;}
+.file-node17{background-image:url(../images/ico/mime/templates.png) !important;}
+.file-node18{background-image:url(../images/ico/mime/recycled.png) !important;}
+.file-node19{background-image:url(../images/ico/mime/readme.png) !important;}
+.file-node20{background-image:url(../images/ico/mime/quicktime.png) !important;}
+
+
+.x-window-dlg .ext-mb-error{background:transparent url(../images/default/window/icon-error.gif) no-repeat top left;}
+.x-hour-mp{position:absolute;left:0;top:0;background:white;display:none;}
+.x-hour-mp td{padding:2px;font:normal 11px arial,helvetica,tahoma,sans-serif;}
+.x-minute-mp{position:absolute;left:0;top:0;background:white;display:none;}
+.x-minute-mp td{padding:2px;font:normal 11px arial,helvetica,tahoma,sans-serif;}
+.x-second-mp{position:absolute;left:0;top:0;background:white;display:none;}
+.x-second-mp td{padding:2px;font:normal 11px arial,helvetica,tahoma,sans-serif;}
+
+.x-grid-locale-order{background-color:#6CA6CD;border:2px solid #FFF;}
+.x-grid-locale-order-blank{background-color:#FFFFFF;border:2px solid #FFF;}
+
+.time 		{background-image: url(../images/ico/clock_play.png) !important;} 
+
+.refurbish {background-image: url(../images/ico/arrow_rotate_anticlockwise.png) !important;}
+.role_inherit {background-image: url(../images/ico/role_inherit.png) !important;}
+.role_repulsion  {background-image: url(../images/ico/role_repulsion.png) !important;}
+.role_group  {background-image: url(../images/ico/role_group.png) !important;}
+.role_group_inherit  {background-image: url(../images/ico/role_group_inherit.png) !important;}
+.role_group_repulsion  {background-image: url(../images/ico/role_group_repulsion.png) !important;}
+.resource  {background-image: url(../images/ico/role_group_repulsion.png) !important;}
+.res {background-image: url(../images/ico/drive.png) !important;}
+.res_group {background-image: url(../images/ico/drive_network.png) !important;}
+.check_all  {background-image: url(../images/ico/tick.png) !important;}
+.x-form-element .strengthMeter {
+	border: 1px solid #B5B8C8;
+	margin: 3px 0 3px 0;
+	background-image: url(../images/ico/meter_background.gif);
+}
+.x-form-element .strengthMeter-focus {
+	border: 1px solid #000;
+}
+.x-form-element .scoreBar {
+	background-image: url(../images/ico/meter.gif);
+	height: 10px;
+	width: 0;
+	line-height: 1px;
+	font-size: 1px;
+}
+
+
+
+.snatch  {background-image: url(../images/ico/arrow_in.png) !important;}
+.snatch-w {background-image: url(../images/ico/arrow_inout.png) !important;}
+
+.swf_container {height:100%}

@@ -1,0 +1,67 @@
+body {
+	font-size: 12px;
+	font-family: Arial, Helvetica, sans-serif, "宋体", "新宋体";
+	background-color: #C1BFC1;
+}
+
+#main {
+	width: 1002px;
+	height: 600px;
+	background: url(../images/dt_login.jpg);
+	position: absolute;
+	left: 10%;
+	top: 20%;
+	margin: -20px 0 0 -10px;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#login {
+	width: 170px;
+	height: 104px;
+	margin-top: 283px;
+	margin-right: 329px;
+	margin-bottom: 213px;
+	margin-left: 503px;
+}
+
+#login li {
+	height: 28px;
+	line-height: 26px;
+	width: 170px;
+	text-align: left;
+}
+
+#login li label {
+	font: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #3C3C3C;
+	line-height: 26px;
+	width: 60px;
+	float: left;
+	text-align: left;
+}
+
+.button {
+	font: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	width: 55px;
+	height: 26px;
+	color: #3C3C3C;
+	line-height: 24spx;
+	margin-top: 5px;
+	padding-left: 5px;
+}
+
+input {
+	font-family: Arial, Helvetica, sans-serif, "宋体";
+	font-size: 12px;
+	color: #0C3169;
+	width: 90px;
+}

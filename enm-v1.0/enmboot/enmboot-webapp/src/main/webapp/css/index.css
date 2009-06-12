@@ -1,0 +1,157 @@
+/* index css*/
+body {
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, Helvetica, sans-serif, "宋体", "新宋体";
+	font-size: 12px;
+	color: #000000;
+}
+
+.content {
+	margin: 0px auto;
+	width: 100%;
+	height: 100%;
+}
+
+#header {
+	position: absolute;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 0px;
+	height: 81px;
+	width: 100%;
+	/**background: url(../images/index/header_mid.jpg);*/
+}
+
+#header_left {
+	position: absolute;
+	float: left;
+	width: 100%;
+	background: url(../images/index/logo.jpg) no-repeat;
+	height: 81px;
+}
+
+#header_right {
+	padding-left: 587px;
+	float: right;
+	width: 23px;
+	height: 81px;
+	background: url(../images/index/header_right1.jpg) no-repeat right;
+}
+
+.top_mid { 
+	float: right;
+	width: 350px;
+	margin-right: 23px;
+	height: 81px;
+	/**background: url(../images/index/header_mid.jpg);*/
+}
+
+.left_1 {
+	float: right;
+	text-align: center;
+	width: 56px;
+	margin-top: 16px;
+	height: 40px;
+	LIST-STYLE-TYPE: none;
+}
+
+.left_1 ul {
+	margin: 0px;
+	margin-top: 0px;
+}
+
+.left_1 li {
+	margin: 0px;
+	LIST-STYLE-TYPE: none;
+	padding: 0px;
+}
+
+a:link {
+	color: #000066;
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+	color: #333333;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #FF0000;
+}
+
+a:active {
+	text-decoration: none;
+	color: #FF0000;
+}
+
+.content {
+	margin: 1px auto;
+	width: 100%;
+	height: 100%;
+}
+
+/**********************************center css****************************/
+#centre {
+	margin-top: 109px;
+	width: 100%;
+	height: 600px;
+}
+
+.middle_right {
+	position: absolute;
+	margin-left: 228px;
+	color: #3A609E;
+	margin-top: 82px;
+	float: left;
+	width: 82%;
+	height: 500px;
+	border: #EAEBED double 1px;
+}
+
+/**
+.middle_right_top{
+  float:left;
+  background:url(../images/index-2-qie_06.jpg);
+  width:100%;
+  height:44px;
+  
+  }
+  
+ul {
+	margin: 4px;
+	margin-top: 4px;
+	font-weight: bold;
+}
+
+li {
+	margin: 4px;
+	LIST-STYLE-TYPE: none;
+	font-weight: 100;
+	padding: 0px;
+}
+*/
+
+.top_text{ 
+   position:absolute;
+   float:left;
+   margin-top:63px;
+   margin-left:15px;
+   text-align:left;
+   width:550px;
+   height:20px;
+   /**margin-left:260px;
+   font-weight: bolder;*/
+   color:#375D9C;
+} 
+/********************************footer css**************************/
+#footer {
+	position: absolute;
+	width: 100%;
+	height: 23px;
+	bottom: 0;
+	clear: both;
+	background: url(../images/index/footer.jpg);
+}
