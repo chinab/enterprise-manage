@@ -5,8 +5,15 @@
 
 <hibernate-configuration>
 
-<session-factory>
-	<mapping resource="com/lineboom/enm/enmcrm/model/EsTest.hbm.xml" />
-</session-factory>
+	<session-factory>
+		<mapping
+			resource="com/lineboom/enm/model/enmcrm/EsTest.hbm.xml" />
+		<mapping
+			resource="com/lineboom/enm/model/enmboot/EnmRole.hbm.xml" />
+		<mapping
+			resource="com/lineboom/enm/model/enmboot/EnmMenu.hbm.xml" />
+		<mapping
+			resource="com/lineboom/enm/model/enmboot/EnmUser.hbm.xml" />
+	</session-factory>
 
 </hibernate-configuration>
