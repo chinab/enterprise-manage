@@ -1,0 +1,165 @@
+html, body {
+			font:"����";
+			font-size:12px;
+	        margin:0;
+	        padding:0;
+	        border:0 none;
+	        overflow:hidden;
+	        height:100%;
+			}
+.li_css{
+    float:right;
+	padding:0px;
+	height:30px;
+	margin-left:8px;
+	letter-spacing:3px;
+	line-height:30px;
+	text-align:center;
+	LIST-STYLE-TYPE:none;
+	}	
+.li_css2{
+    float:left;
+	padding:0px;
+	margin-left:6px;
+	margin-top:6px;
+	letter-spacing:2px;
+	line-height:30px;
+	text-align:center;
+	LIST-STYLE-TYPE:none;
+	}			
+.text{
+   text-align:right;
+   height:25px;
+   line-height:25px;
+   overflow:hidden
+}
+   
+.header_logo{
+	background:url(../images/new_main/head_left.jpg) no-repeat;
+}
+.header_backgroud{
+	background:url(../images/new_main/head_mid.jpg) repeat-x;
+}
+.footer_backgroud{
+	background:url(../images/new_main/foot_mid.jpg) repeat-x;
+}
+
+.header_left{
+	background:url(../images/new_main/left.jpg) no-repeat;
+	top:0px; 
+    left:0px;
+    height:65px; 
+    width:225px; 
+    position:absolute;
+}
+.header_right{
+	background:url(../images/new_main/right.jpg) no-repeat;
+	top:0px; 
+	right:0px; 
+	height:65px; 
+	width:25px; 
+	position:absolute;
+}
+.header_mid{
+	background:url(../images/new_main/mid.jpg) repeat-x;
+	top:0px;
+	left:0px;
+	height:65px;
+	width:100%; 
+	position:absolute;
+	min-width:1024px;
+}
+.guidance{
+   top:19px;
+   right:25px; 
+   height:40px;
+   width:800px; 
+   position:absolute;
+   }
+.guidance-start{
+	background:url(../images/new_main/guidance.jpg) repeat-x;
+	height:40px;
+	width:24px;
+	float:left;
+	line-height:40px;
+	text-align:right;
+	LIST-STYLE-TYPE:none;
+    overflow:hidden;
+}
+.guidance-min{
+	background:url(../images/new_main/guidance-min.jpg) repeat-x;
+	height:40px;
+	float:right;
+	margin-left:5px;
+	margin-top:6px;
+	text-align:right;
+	line-height:40px;
+	LIST-STYLE-TYPE:none;
+	overflow:hidden;
+}
+.toolbar{
+   top:0px; 
+   right:25px; 
+   height:25px; 
+   width:800px; 
+   position:absolute;
+   vertical-align:middle;
+   }
+.toolbar_backgroud_start{
+	background:url(../images/new_main/top-ico.jpg) no-repeat;
+	height:24px;
+	width:300px;
+	float:right;
+}
+.toolbar_backgroud{
+	background:url(../images/new_main/top-bg.jpg) repeat-x;
+}
+a.menu{
+  display:block;
+  width:71px;
+  height:21px;
+  margin-top:4px;
+  line-height:21px;
+  text-decoration:none;
+ }
+a.menu:link {
+	font-weight: bold;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+a.menu:visited {
+	font-weight: bold;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+a.menu:hover {
+	font-weight: bold;
+	color:#99CCFF;
+	text-decoration: none;
+	background-image:url(../images/new_main/guidance-img1.jpg);
+	width:71px;
+	height:21px;
+	text-align:center;
+}
+a.menu:active {
+	font-weight: bold;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.disabel_link{
+	font-weight: bold;
+	color: #999999;
+	text-decoration: none;
+}
+
+.reboot_login		{background-image: url(../images/new_main/re_login.jpg) !important;}
+.modify_password		{background-image: url(../images/new_main/modify_pw.jpg) !important;}
+.system_help		{background-image: url(../images/new_main/help.jpg) !important;}
+.system_close		{background-image: url(../images/new_main/exit_site.jpg) !important;}
+
+.new_layout		{background-image: url(../images/ico/layout_content.png) !important;}
+.old_layout		{background-image: url(../images/ico/layout_header.png) !important;}
+.top_page			{background:url(../images/new_main/top_page.jpg) !important;}
+.next_page			{background:url(../images/new_main/next_page.jpg) !important;}
+.renovate			{background:url(../images/new_main/renovate.jpg) !important;}
