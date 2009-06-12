@@ -3,5 +3,9 @@
 <struts>
 	<include file="struts-default.xml"/>
 	<package name="enmboot" extends="struts-default" namespace="/enmboot">
+		<action name="*EnmMenu" class="enmMenuAction" method="{1}">
+			<result name="success">/boot/index_new.jsp</result>
+			<result name="input">/index.jsp</result>
+		</action>
 	</package>
 </struts>

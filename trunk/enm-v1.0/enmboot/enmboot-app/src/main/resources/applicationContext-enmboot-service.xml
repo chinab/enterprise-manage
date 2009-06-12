@@ -2,4 +2,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans default-autowire="byName">
+	<bean id="enmMenuService" class="com.lineboom.emn.enmboot.service.impl.EnmMenuServiceImpl"></bean>
+	<bean id="enmRoleService" class="com.lineboom.emn.enmboot.service.impl.EnmRoleServiceImpl"></bean>
+	<bean id="enmUserService" class="com.lineboom.emn.enmboot.service.impl.EnmUserServiceImpl"></bean>
 </beans>
