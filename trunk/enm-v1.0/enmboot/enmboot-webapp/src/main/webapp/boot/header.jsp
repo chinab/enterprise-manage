@@ -4,20 +4,36 @@
 		var _toolbar=new Ext.Toolbar({
     		region:'center',
     		el:'toolbar',
-    		cls:'header_backgroud',
+    		cls:'toolbar_backgroud',
     		border:false,
-	    	items:['-',
+	    	items:[' ',
+		    	{
+		    		tooltip:'旧架构',
+		    		iconCls:'old_layout',
+		    		handler:function(){
+		    			window.location="saveStrutslogon.action?systemType=index";
+		    		}
+		    	},'-',
 		    	{
 		    		tooltip:'重新登录',
 		    		iconCls:'reboot_login',
 		    		handler:function(){
-		    			window.location="index.jsp"
+		    			window.location="index.jsp";
 		    		}
 		    	},'-',
 		    	{
 		    		tooltip:'修改密码',
 		    		iconCls:'modify_password',
-		    		handler:_indexPage.modifyPassword
+		    		handler: function(){
+		    			indexPage.modifyPassword();
+		    		}
+		    	},'-',
+		    	{
+		    		tooltip:'系统帮助',
+		    		iconCls:'system_help',
+		    		handler: function(){
+		    			indexPage.help();
+		    		}
 		    	},'-',
 		    	{
 		    		tooltip:'退出系统',
@@ -27,75 +43,126 @@
 		    		}
 		    	},'-',
 		    	{
-		    		tooltip:'日程管理',
-		    		text:'日程管理',
+		    		tooltip:'上一页',
+		    		id:'backPageBtn',
+		    		disabled:true,
+		    		iconCls:'top_page',
 		    		handler:function(){
-		    			window.close();
+		    			indexPage.backPage();
 		    		}
 		    	},'-',
 		    	{
-		    		tooltip:'系统设置',
-		    		text:'系统设置',
+		    		tooltip:'下一页',
+		    		id:'forwardPageBtn',
+		    		disabled:true,
+		    		iconCls:'next_page',
 		    		handler:function(){
-		    			window.close();
+		    			indexPage.forwardPage();
 		    		}
 		    	},'-',
 		    	{
-		    		tooltip:'系统说明',
-		    		text:'系统说明',
+		    		tooltip:'刷新',
+		    		iconCls:'renovate',
 		    		handler:function(){
-		    			window.close();
+		    			indexPage.refreshPage();
 		    		}
-		    	},' '
+		    	},'-'
 	    	]
     	});
-	    
+    	
+	    Ext.Ajax.request({
+			url:indexPage.muneListUrl,params:{resourcesGroupId:-1},
+			success: function(response, options){
+				var responseArr = Ext.util.JSON.decode(response.responseText);
+				/**
+				var indexPageMenuTable='<table height="40" border="0" cellpadding="0" cellspacing="0" align="right">'+
+   		   			'<tr align="center"><td width="90" class="guidance-start" onclick="indexPage.workTable();">'+
+			        '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="memu" href="#">工作台</a></td>';
+				for(var i=0;i<responseArr.length;i++){
+					if(responseArr[i].extend2=='Y'){
+						indexPageMenuTable+='<td width="80" class="guidance-min" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].resourcesGroupName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+');">'+
+					        '<a class="memu" href="#">'+responseArr[i].resourcesGroupName+'</a>'+
+					    	'</td>';
+				    }else if(responseArr[i].extend2=='N'){
+				    	indexPageMenuTable+='<td width="80" class="guidance-min">'+
+					        '<a class="memuNoDisable" href="#">'+responseArr[i].resourcesGroupName+'</a>'+
+					    	'</td>';
+				    }
+				}
+				indexPageMenuTable+='</tr></table>';
+				document.getElementById("indexPageMenuTable").innerHTML=indexPageMenuTable;
+				**/
+				var indexPageMenuUl='<ul class="guidance-min">'+
+				    '<li class="guidance-start"></li>'+
+					'<li class="li_css2" onclick="indexPage.workTable();"><a href="#" class="menu">工作台</a></li>';
+				for(var i=0;i<responseArr.length;i++){
+					indexPageMenuUl+='<li class="li_css2" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].resourcesGroupName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+',\''+responseArr[i].extend2+'\');">'+
+				        (responseArr[i].extend2=='Y'?('<a class="menu" href="#">'+responseArr[i].resourcesGroupName+'</a>'):('<span class="disabel_link">'+responseArr[i].resourcesGroupName+'</span>'))+
+				    	'</li>';
+				}
+				indexPageMenuUl+='</ul>';
+				document.getElementById("indexPageMenuUl").innerHTML=indexPageMenuUl;
+			} ,
+			failure: function(response, options){
+				Ext.MessageBox.alert('提示', '菜单加载失败！');
+			}
+		});
+		
    		_toolbar.render();
 	});
 </script>
-<table width="100%" height="60" border="0" align="left" cellpadding="0" cellspacing="0" class="header_backgroud">
-  <tr>
-    <td>
-    	<table width="200" border="0" align="left" cellpadding="0" cellspacing="0" class="header_logo">
-	      <tr height="60">
-	      	<td></td>
+<%-- 
+<div style="top:0px;left:0px;height:65px;width:100%; position:absolute;" class="header_mid">
+	<div style="top:0px; left:0px; height:65px; width:225px; position:absolute;" class="header_left"></div>
+	<div style="top:0px; right:0px; height:65px; width:25px; position:absolute;" class="header_right"></div>
+	
+	<div style="top:0px; right:25px; height:25px; width:630px; position:absolute;">
+		<table height="25" border="0" cellpadding="0" cellspacing="0" align="right">
+	      <tr>
+	        <td>系统管理员:您好! 今天是2009年06月07日</td>
+	        <td class="toolbar_backgroud_start">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	        <td class="toolbar_backgroud"><div id="toolbar"></div></td>
 	      </tr>
 	    </table>
-    </td>
-    <td>
-	    <table width="630" border="0" align="right" cellpadding="0" cellspacing="0">
-	      <tr height="25">
-	      	<td>
-			    <table border="0" cellpadding="0" cellspacing="0" align="right">
-			      <tr height="25">
-			        <td>系统管理员:您好! 今天是2009年06月07日</td>
-			        <td>&nbsp;&nbsp;&nbsp;</td>
-			        <td><div id="toolbar"></div></td>
-			      </tr>
-			    </table>
-			</td>
+	</div>
+	
+	<div style="top:25px; right:25px; height:25px;width:630px; position:absolute;"  id="indexPageMenuTable">
+		<table height="40" border="0" cellpadding="0" cellspacing="0" align="right">
+   		   <tr align="center">
+	      	<td width="90" class="guidance-start" onclick="indexPage.workTable();">
+		        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="memu" href="#">工作台</a>
+		    </td>
 	      </tr>
-	      <tr height="35">
-	      	<td>
-			    <table border="0" cellpadding="0" cellspacing="0" align="right">
-			      <tr height="35">
-			      	<td>
-				        <a href="javascript:_indexPage.workTable();">工作台</a> |
-				        <a href="javascript:_indexPage.selectfirstMenuItem('menu1');">menu1</a> | 
-				        <a href="javascript:_indexPage.selectfirstMenuItem('menu2');">menu2</a> | 
-				        <a href="javascript:_indexPage.selectfirstMenuItem('menu3');">menu3</a> | 
-				        <a href="javascript:_indexPage.selectfirstMenuItem('menu4');">menu4</a> | 
-				        <a href="javascript:_indexPage.selectfirstMenuItem('menu5');">menu5</a> | 
-				        <a href="javascript:_indexPage.selectfirstMenuItem('menu6');">menu6</a> | 
-				        <a href="javascript:_indexPage.selectfirstMenuItem('menu7');">menu7</a> | 
-				        <a href="javascript:_indexPage.selectfirstMenuItem('menu8');">menu8</a>
-			        </td>
-			        <td>&nbsp;&nbsp;&nbsp;</td>
-			      </tr>
-			    </table>
-			</td>
-	      </tr>
-	    </table>
-    </td>
-  </tr>
-</table>
+    	</table>
+	</div>
+	
+</div>
+ --%>
+
+<div  class="header_mid">
+	<div class="header_left"></div>
+	<div class="header_right"></div>
+	<div class="toolbar">
+		<ul class="toolbar_backgroud_start">
+		    <li class="li_css"><div id="toolbar"/></div></li>
+		    <%--
+		    <li class="li_css"><img src="images/new_main/exit_site.gif" /></li>
+			<li class="li_css"><img src="images/new_main/help.gif"/></li>
+			<li class="li_css"><img src="images/new_main/modify_pw.gif" /></li>
+			<li class="li_css"><img src="images/new_main/re_login.gif" /></li>
+		     --%>
+		</ul>
+		<ul>
+			<li class="text">系统管理员:您好! 今天是2009年06月07日</li>
+		</ul> 
+  	</div>
+	
+	<div  class="guidance" id="indexPageMenuUl">
+		<ul class="guidance-min">
+			<li class="guidance-start"></li>
+			<li class="li_css2" onclick="indexPage.workTable();">
+				<a href="#" class="menu">工作台</a>
+			</li>
+		</ul>
+	</div>
+</div>
