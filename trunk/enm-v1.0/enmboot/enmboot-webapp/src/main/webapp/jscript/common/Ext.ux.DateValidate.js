@@ -36,8 +36,7 @@ Ext.form.BasicForm.prototype.validateDateChron = function(start, end, config) {
 	};
 	
 	*/
-	
-package("rtdata.common");
+rtdata={common:{}};
 rtdata.common.compareDate = function(formPanel,start,end,allowSameDay){
 	var startdate, enddate, fn;
 		start = (start instanceof Ext.form.DateField) ? start : formPanel.form.findField(start);

@@ -17,12 +17,12 @@ Ext.onReady(function(){
 	/**
 	 * 构建第一级与第二级菜单时请求的路径
 	 **/
-	indexPage.muneListUrl = '/getNewMenulogon.action';
+	indexPage.muneListUrl = '/enmboot/getMenuListEnmMenu.action';
 	
 	/**
 	 * 构建第二级菜单下的树时请求的路径
 	 **/
-	indexPage.muneTreeUrl = '/treelogon.action';
+	indexPage.muneTreeUrl = '/enmboot/getMenuTreeEnmMenu.action';
 	
 	/**
 	 * 存储访问记录的属性
@@ -106,7 +106,7 @@ Ext.onReady(function(){
 	        visitRecord += "\"deptId\":\"" + RC3UserInfo.departmentId + "\",";
 	        visitRecord += "\"employeeInformId\":\"" + RC3UserInfo.userId + "\",";
 	        visitRecord += "\"loginDate\":" + Ext.util.JSONExtender.encode(new Date()) + ",";
-	        visitRecord += "\"resourcesGroupId\":\"" + params.resourceNode + "\",";
+	        visitRecord += "\"enmMenuId\":\"" + params.resourceNode + "\",";
 	        visitRecord += "\"loginIp\":\"" + RC3UserInfo.loginIp + "\",";
 	        visitRecord += "\"browserEdition\":\"" + RC3UserInfo.browserEdition + "\",";
 	        visitRecord += "\"computerName\":\"" + RC3UserInfo.computerName + "\"";
@@ -121,7 +121,7 @@ Ext.onReady(function(){
 	/**
 	 * 在主面板上打开一个页面，顺便传些信息给后台
 	 **/
-	indexPage.selectfirstMenuItem = function(title,url,resourcesGroupId,enable){
+	indexPage.selectfirstMenuItem = function(title,url,enmMenuId,enable){
 		if(enable!='Y'){
 			Ext.MessageBox.alert('提示','没有权限！');
 			return;
@@ -138,18 +138,18 @@ Ext.onReady(function(){
 		for(var i=0;i<menu.items.length;i++){
 			otherMenuItems[i]=menu.items.get(i);
 		}
-		if(indexPage['menuItem'+resourcesGroupId]!=null&&indexPage['menuItem'+resourcesGroupId].length>=1){
-			indexPage.changeSecondMenu(otherMenuItems,resourcesGroupId,menu,true);
+		if(indexPage['menuItem'+enmMenuId]!=null&&indexPage['menuItem'+enmMenuId].length>=1){
+			indexPage.changeSecondMenu(otherMenuItems,enmMenuId,menu,true);
 		}else
 			Ext.Ajax.request({
-				url:url,params:{resourcesGroupId:resourcesGroupId},
+				url:url,params:{enmMenuId:enmMenuId},
 				success: function(response, options){
 					var responseArr = Ext.util.JSON.decode(response.responseText);
 					
-					indexPage['menuItem'+resourcesGroupId] =new Array(responseArr.length);
+					indexPage['menuItem'+enmMenuId] =new Array(responseArr.length);
 					for(var i=0;i<responseArr.length;i++){
 						var menuItemId = responseArr[i].id;
-						var menuItemTitle = responseArr[i].resourcesGroupName;
+						var menuItemTitle = responseArr[i].enmMenuName;
 						var tree = indexPage.openMenuTree(menuItemTitle,indexPage.muneTreeUrl,menuItemId,i==0);
 						var menuItem = {
 							id:'menuItemId'+menuItemId,
@@ -160,10 +160,10 @@ Ext.onReady(function(){
 							items:tree
 						}
 						menu.add(menuItem);
-						indexPage['menuItem'+resourcesGroupId][i]=Ext.getCmp(menuItem.id);
+						indexPage['menuItem'+enmMenuId][i]=Ext.getCmp(menuItem.id);
 					}
 					
-					indexPage.changeSecondMenu(otherMenuItems,resourcesGroupId,menu,false);
+					indexPage.changeSecondMenu(otherMenuItems,enmMenuId,menu,false);
 				} ,
 				failure: function(response, options){
 					Ext.MessageBox.alert('提示', '没有菜单项！');
@@ -171,7 +171,7 @@ Ext.onReady(function(){
 			});
 	}
 	
-	indexPage.changeSecondMenu=function(otherMenuItems,resourcesGroupId,menu,treeExpendEd){
+	indexPage.changeSecondMenu=function(otherMenuItems,enmMenuId,menu,treeExpendEd){
 		menu.doLayout();
 		menu.expand(true);
 		
@@ -179,12 +179,12 @@ Ext.onReady(function(){
 			otherMenuItems[i].hide();
 			otherMenuItems[i].collapse(true);
 		}
-		for(var i=0;i<indexPage['menuItem'+resourcesGroupId].length;i++){
-			indexPage['menuItem'+resourcesGroupId][i].show();
+		for(var i=0;i<indexPage['menuItem'+enmMenuId].length;i++){
+			indexPage['menuItem'+enmMenuId][i].show();
 			if(i==0){
-				indexPage['menuItem'+resourcesGroupId][i].expand(true);
+				indexPage['menuItem'+enmMenuId][i].expand(true);
 				if(treeExpendEd){
-					var tree = indexPage['menuItem'+resourcesGroupId][i].items.get(0);
+					var tree = indexPage['menuItem'+enmMenuId][i].items.get(0);
 					var firstChild =tree.getRootNode();
 					var mainPanelTitle = firstChild.text;
 					while(!firstChild.isLeaf()){
@@ -196,6 +196,7 @@ Ext.onReady(function(){
 			}
 		}
 		menu.doLayout();
+		menu.expand(true);
 	}
 	
 	indexPage.workTable = function(){
