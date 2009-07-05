@@ -22,18 +22,18 @@
 	<script type="text/javascript" src="/jscript/portal/portlet-sample-grid.js"></script>
 	<script type="text/javascript" src="/jscript/portal/Ext.ux.PortalState.js"></script>
 	<script type="text/javascript" src="/jscript/portal/Ext.ux.ManagedIFrame.js"></script>
-	<script type="text/javascript" src="/boot/index_new.js"></script>
+		<script type="text/javascript" src="/boot/index_new.js"></script>
 	
 	<style type="text/css">
-		html, body {
-	        font:normal 12px verdana;
-	        margin:0;
-	        padding:0;
-	        border:0 none;
-	        overflow:hidden;
-	        height:100%;
-	    }
-    </style>
+		html,body {
+			font: normal 12px verdana;
+			margin: 0;
+			padding: 0;
+			border: 0 none;
+			overflow: hidden;
+			height: 100%;
+		}
+	</style>
 </head>
 <body>
  </body>
