@@ -6,10 +6,11 @@ import java.util.List;
 import net.sf.json.JSONArray;
 
 public class TreeTools {
-	public static String getTree(List<TreeNodeSupport> treeNodeSupports){
+	@SuppressWarnings("unchecked")
+	public static String getTree(List treeNodeSupports){
 		List<TreeNode> treeNodes = new ArrayList<TreeNode>();
-		for (TreeNodeSupport treeNodeSupport : treeNodeSupports) {
-			treeNodes.add(treeNodeSupport.toTreeNode());
+		for (Object treeNodeSupport : treeNodeSupports) {
+			treeNodes.add(((TreeNodeSupport)treeNodeSupport).toTreeNode());
 		}
 		return JSONArray.fromObject(treeNodes).toString();
 	}
