@@ -1,12 +1,15 @@
 package com.lineboom.enm.model.enmboot;
 
+import com.lineboom.common.tools.tree.TreeNode;
+import com.lineboom.common.tools.tree.TreeNodeSupport;
+
 /**
  * EnmMenu entity.
  * 
  * @author MyEclipse Persistence Tools
  */
 
-public class EnmMenu extends treenodes implements java.io.Serializable {
+public class EnmMenu extends TreeNodeSupport implements java.io.Serializable {
 
 	// Fields
 
@@ -16,7 +19,9 @@ public class EnmMenu extends treenodes implements java.io.Serializable {
 	private String enmMenuHref;
 	private String enmMenuIco;
 	private Long enmMenuType;
-	private String extend1;
+	private String enmMenuDisable;
+	private Long enmMenuDisplayNo;
+	private String entexd1;
 
 	// Constructors
 
@@ -32,13 +37,15 @@ public class EnmMenu extends treenodes implements java.io.Serializable {
 	/** full constructor */
 	public EnmMenu(Long enmMenuParentId, String enmMenuName,
 			String enmMenuHref, String enmMenuIco, Long enmMenuType,
-			String extend1) {
+			String enmMenuDisable, Long enmMenuDisplayNo, String entexd1) {
 		this.enmMenuParentId = enmMenuParentId;
 		this.enmMenuName = enmMenuName;
 		this.enmMenuHref = enmMenuHref;
 		this.enmMenuIco = enmMenuIco;
 		this.enmMenuType = enmMenuType;
-		this.extend1 = extend1;
+		this.enmMenuDisable = enmMenuDisable;
+		this.enmMenuDisplayNo = enmMenuDisplayNo;
+		this.entexd1 = entexd1;
 	}
 
 	// Property accessors
@@ -91,15 +98,33 @@ public class EnmMenu extends treenodes implements java.io.Serializable {
 		this.enmMenuType = enmMenuType;
 	}
 
-	public String getExtend1() {
-		return this.extend1;
+	public String getEnmMenuDisable() {
+		return this.enmMenuDisable;
 	}
 
-	public void setExtend1(String extend1) {
-		this.extend1 = extend1;
+	public void setEnmMenuDisable(String enmMenuDisable) {
+		this.enmMenuDisable = enmMenuDisable;
 	}
-	
-	public TreeNode toTreeNode(){
-		
+
+	public Long getEnmMenuDisplayNo() {
+		return this.enmMenuDisplayNo;
 	}
+
+	public void setEnmMenuDisplayNo(Long enmMenuDisplayNo) {
+		this.enmMenuDisplayNo = enmMenuDisplayNo;
+	}
+
+	public String getEntexd1() {
+		return this.entexd1;
+	}
+
+	public void setEntexd1(String entexd1) {
+		this.entexd1 = entexd1;
+	}
+
+	@Override
+	protected TreeNode toTreeNode() {
+		return new TreeNode(this.id,this.enmMenuName,this.enmMenuIco,this.enmMenuHref,this.enmMenuType.equals(2L));
+	}
+
 }
