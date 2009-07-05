@@ -8,13 +8,6 @@
     		border:false,
 	    	items:[' ',
 		    	{
-		    		tooltip:'旧架构',
-		    		iconCls:'old_layout',
-		    		handler:function(){
-		    			window.location="saveStrutslogon.action?systemType=index";
-		    		}
-		    	},'-',
-		    	{
 		    		tooltip:'重新登录',
 		    		iconCls:'reboot_login',
 		    		handler:function(){
@@ -69,8 +62,11 @@
 		    	},'-'
 	    	]
     	});
-    	
-	    Ext.Ajax.request({
+
+		var _today =  "当前用户:${user.enmUserName} " + new Date().format('Y年m月d日 星期l') +"  欢迎您使用本系统！";
+		document.getElementById("todayImform").innerHTML=_today;
+		
+		Ext.Ajax.request({
 			url:indexPage.muneListUrl,params:{enmMenuId:-1},
 			success: function(response, options){
 				var responseArr = Ext.util.JSON.decode(response.responseText);
@@ -107,7 +103,6 @@
 				Ext.MessageBox.alert('提示', '菜单加载失败！');
 			}
 		});
-		
    		_toolbar.render();
 	});
 </script>
@@ -153,7 +148,7 @@
 		     --%>
 		</ul>
 		<ul>
-			<li class="text">系统管理员:您好! 今天是2009年06月07日</li>
+			<li class="text" id="todayImform"></li>
 		</ul> 
   	</div>
 	
