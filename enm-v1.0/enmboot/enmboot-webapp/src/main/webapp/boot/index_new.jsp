@@ -4,7 +4,7 @@
 <html>
 
 <head>
-  <title>上实RP3电力数据视窗系统应用软件V2.0</title>
+  <title>我的测试项目</title>
 	<s:include value="/common/common.jsp"></s:include>    
   	<link rel="stylesheet" type="text/css" href="/ajaxlib/ext/resources/css/xtheme-gray.css"></link>
     <link rel="stylesheet" type="text/css" href="/css/main.css"></link>
@@ -12,6 +12,9 @@
 	<link rel="shortcut icon" href="/images/favicon.ico" />
 	<link rel="icon" href="/images/favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="/css/welcome.css"/>
+	<script type="text/javascript">
+		var COMPANY_TITLE = '我的测试项目';
+	</script>
 	<script type="text/javascript" src="/jscript/common/Ext.ux.VTypes.js"></script>
 	<script type="text/javascript" src="/jscript/TabCloseMenu.js"></script>
     <script type="text/javascript" src="/jscript/portal/Ext.ux.Portal.js"></script>
@@ -22,7 +25,7 @@
 	<script type="text/javascript" src="/jscript/portal/portlet-sample-grid.js"></script>
 	<script type="text/javascript" src="/jscript/portal/Ext.ux.PortalState.js"></script>
 	<script type="text/javascript" src="/jscript/portal/Ext.ux.ManagedIFrame.js"></script>
-		<script type="text/javascript" src="/boot/index_new.js"></script>
+	<script type="text/javascript" src="/boot/index_new.js"></script>
 	
 	<style type="text/css">
 		html,body {
