@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Used to specify the pod content in the dashboard sample app.
+To keep the implementation straightforward, all of the data is
+stored in this file rather than a database or separate XML files.
+-->
+<view
+	label="Sales">
+	<pod
+		id="pod00"
+		type="columnLineChart"
+		title="Yearly Revenue"
+		dataSource="/boot/test/data/revenue.xml"
+		selectedViewIndex="1"
+		valueField="value"
+		categoryField="month"
+		dataTipUnitLabel="$*M"
+		dataTipLabelField="month"/>
+	<pod
+		id="pod06"
+		type="pieChart"
+		title="Revenue by Region"
+		dataSource="/boot/test/data/revenue_by_region.xml"
+		valueField="value"
+		categoryField="region"
+		dataTipUnitLabel="$*M"
+		dataTipLabelField="region"/>
+	<pod
+		id="pod01"
+		type="chart"
+		title="Yearly Profit"
+		dataSource="/boot/test/data/profit.xml"
+		valueField="value"
+		categoryField="month"
+		dataTipUnitLabel="$*M"
+		dataTipLabelField="month"/>
+	<pod
+		id="pod02"
+		type="form"
+		title="To Do"
+		dataSource="/boot/test/data/tasks.xml"
+		labels="Name,Date,Description"
+		dataFields="name,date,description" />
+	<pod
+		id="pod03"
+		type="list"
+		title="Company News"
+		dataSource="/boot/test/data/news.xml" />
+	<pod
+		id="pod04"
+		type="form"
+		title="Sales Pipeline"
+		dataSource="/boot/test/data/pipeline.xml"
+		selectedViewIndex="1"
+		labels="Name,Date,Description"
+		dataFields="name,date,description" />
+	<pod
+		id="pod05"
+		type="chart"
+		title="Projected Revenue"
+		dataSource="/boot/test/data/projected_revenue.xml"
+		valueField="value"
+		categoryField="month"
+		dataTipUnitLabel="$*M"
+		dataTipLabelField="month"/>
+</view>

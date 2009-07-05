@@ -71,7 +71,7 @@
     	});
     	
 	    Ext.Ajax.request({
-			url:indexPage.muneListUrl,params:{enmMenuId:0},
+			url:indexPage.muneListUrl,params:{enmMenuId:-1},
 			success: function(response, options){
 				var responseArr = Ext.util.JSON.decode(response.responseText);
 				/**
@@ -79,11 +79,11 @@
    		   			'<tr align="center"><td width="90" class="guidance-start" onclick="indexPage.workTable();">'+
 			        '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="memu" href="#">工作台</a></td>';
 				for(var i=0;i<responseArr.length;i++){
-					if(responseArr[i].extend1=='Y'){
+					if(responseArr[i].enmMenuDisable=='Y'){
 						indexPageMenuTable+='<td width="80" class="guidance-min" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].enmMenuName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+');">'+
 					        '<a class="memu" href="#">'+responseArr[i].enmMenuName+'</a>'+
 					    	'</td>';
-				    }else if(responseArr[i].extend1=='N'){
+				    }else if(responseArr[i].enmMenuDisable=='N'){
 				    	indexPageMenuTable+='<td width="80" class="guidance-min">'+
 					        '<a class="memuNoDisable" href="#">'+responseArr[i].enmMenuName+'</a>'+
 					    	'</td>';
@@ -96,8 +96,8 @@
 				    '<li class="guidance-start"></li>'+
 					'<li class="li_css2" onclick="indexPage.workTable();"><a href="#" class="menu">工作台</a></li>';
 				for(var i=0;i<responseArr.length;i++){
-					indexPageMenuUl+='<li class="li_css2" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].enmMenuName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+',\''+responseArr[i].extend1+'\');">'+
-				        (responseArr[i].extend1=='Y'?('<a class="menu" href="#">'+responseArr[i].enmMenuName+'</a>'):('<span class="disabel_link">'+responseArr[i].enmMenuName+'</span>'))+
+					indexPageMenuUl+='<li class="li_css2" onclick="indexPage.selectfirstMenuItem(\''+responseArr[i].enmMenuName+'\',\''+indexPage.muneListUrl+'\','+responseArr[i].id+',\''+responseArr[i].enmMenuDisable+'\');">'+
+				        (responseArr[i].enmMenuDisable=='Y'?('<a class="menu" href="#">'+responseArr[i].enmMenuName+'</a>'):('<span class="disabel_link">'+responseArr[i].enmMenuName+'</span>'))+
 				    	'</li>';
 				}
 				indexPageMenuUl+='</ul>';

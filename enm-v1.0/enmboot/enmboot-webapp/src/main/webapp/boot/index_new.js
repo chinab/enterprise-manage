@@ -100,21 +100,6 @@ Ext.onReady(function(){
 		indexPage.curPage={title:title,url:url,params:params};
 		indexPage.main.setTitle(title);
 		indexPage.main.load({url:url,params:params,scripts:true});
-		if(params!=null){
-			var visitRecord = "[{";
-	        visitRecord += "\"id\":\"\",";
-	        visitRecord += "\"deptId\":\"" + RC3UserInfo.departmentId + "\",";
-	        visitRecord += "\"employeeInformId\":\"" + RC3UserInfo.userId + "\",";
-	        visitRecord += "\"loginDate\":" + Ext.util.JSONExtender.encode(new Date()) + ",";
-	        visitRecord += "\"enmMenuId\":\"" + params.resourceNode + "\",";
-	        visitRecord += "\"loginIp\":\"" + RC3UserInfo.loginIp + "\",";
-	        visitRecord += "\"browserEdition\":\"" + RC3UserInfo.browserEdition + "\",";
-	        visitRecord += "\"computerName\":\"" + RC3UserInfo.computerName + "\"";
-	        visitRecord = visitRecord + "}]";
-	        Ext.Ajax.request({
-				url:"/log/batchLoginRecord.action?jsonData="+visitRecord
-			}); 
-		}
 	}
 	
 	

@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<script type="text/javascript" src="/boot/test/welcome.js"></script>
 </head>
 <body>
-	welcome
+	<div id="welcome_portal_swf_div" style="height:100%;"></div>
 </body>
 </html>
