@@ -25,8 +25,14 @@
         <property name="enmMenuType" type="java.lang.Long">
             <column name="enm_menu_type" />
         </property>
-        <property name="extend1" type="java.lang.String">
-            <column name="extend1" />
+        <property name="enmMenuDisable" type="java.lang.String">
+            <column name="enm_menu_disable" length="1" />
+        </property>
+        <property name="enmMenuDisplayNo" type="java.lang.Long">
+            <column name="enm_menu_display_no" />
+        </property>
+        <property name="entexd1" type="java.lang.String">
+            <column name="entexd1" />
         </property>
     </class>
 </hibernate-mapping>
