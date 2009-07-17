@@ -59,6 +59,22 @@ public class EnmMenuAction extends BaseActionSupport {
 		renderJSON(TreeTools.getTree(enmMenus));
 	}
 	
+	public void reverseMenuNode(){
+		EnmMenu enmMenu = enmMenuService.get(getLongParam("enmMenuId"));
+		Long enmMenuParentId = enmMenu.getEnmMenuParentId();
+		if(enmMenuParentId.equals(-1L)){
+			renderJSON("{enmMenuId:"+enmMenu.getId()+",enmMenuName:"+enmMenu.getEnmMenuName()+",nodeId:"+enmMenu.getId()+"}");
+			return;
+		}
+		EnmMenu rootMenu = enmMenuService.get(enmMenuParentId);
+		do{
+			enmMenu = rootMenu;
+			rootMenu = enmMenuService.get(enmMenuParentId);
+			enmMenuParentId = rootMenu.getEnmMenuParentId();
+		}while(!enmMenuParentId.equals(-1L));
+		renderJSON("{enmMenuId:"+rootMenu.getId()+",enmMenuName:'"+rootMenu.getEnmMenuName()+"',nodeId:"+enmMenu.getId()+"}");
+	}
+	
 	public void update(){
 		Long enmMenuId = getLongParam("enmMenuId");
 		String enmMenuName = getStringParam("enmMenuName");
