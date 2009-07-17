@@ -18,6 +18,8 @@
 # Source for table enm_menu
 #
 
+use estore;
+
 DROP TABLE IF EXISTS `enm_menu`;
 CREATE TABLE `enm_menu` (
   `Id` bigint(20) NOT NULL auto_increment,
