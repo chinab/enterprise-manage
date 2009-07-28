@@ -287,19 +287,19 @@
 			<artifactId>${jdbc.artifactId}</artifactId>
 			<version>${jdbc.version}</version>
 		</dependency>
-		<!--ÊÖ¹¤ oracle¿½Èë.m/repository/ÏÂ-->
+		<!--æ‰‹å·¥ oracleæ‹·å…¥.m/repository/ä¸‹-->
 		<dependency>
 			<groupId>oracle</groupId>
 			<artifactId>ojdbc</artifactId>
 			<version>14_10g</version>
 		</dependency>
-		<!-- ÊÖ¹¤ atg¿½Èë.m/repository/ÏÂ-->
+		<!-- æ‰‹å·¥ atgæ‹·å…¥.m/repository/ä¸‹-->
 		<dependency>
 			<groupId>atg.taglib.json</groupId>
 			<artifactId>json-taglib</artifactId>
 			<version>${json.taglib.version}</version>
 		</dependency>
-		<!--ÊÖ¹¤ json-lib¿½Èë.m/repository/net/sf/ÏÂ-->
+		<!--æ‰‹å·¥ json-libæ‹·å…¥.m/repository/net/sf/ä¸‹-->
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
@@ -312,7 +312,7 @@
 		<rbc.version>2.0</rbc.version>
 		<dao.framework>hibernate</dao.framework>
 
-		<!-- ¿ÉÒÔ½øÐÐÐÞ¸Ä-->
+		<!-- å¯ä»¥è¿›è¡Œä¿®æ”¹-->
 		<hibernate.dialect>org.hibernate.dialect.MySQLDialect</hibernate.dialect>
 		<jdbc.groupId>mysql</jdbc.groupId>
 		<jdbc.artifactId>mysql-connector-java</jdbc.artifactId>
