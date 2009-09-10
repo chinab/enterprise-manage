@@ -26,13 +26,6 @@
 			<artifactId>common-app</artifactId>
 			<version>${pom.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.lineboom.common
-			</groupId>
-			<artifactId>common-webapp</artifactId>
-			<version>${pom.version}</version>
-			<type>war</type>
-		</dependency>
 	</dependencies>
 
 	<modules>
