@@ -14,6 +14,5 @@
 
 	<modules>
 		<module>common-app</module>
-		<module>common-webapp</module>
 	</modules>
 </project>
