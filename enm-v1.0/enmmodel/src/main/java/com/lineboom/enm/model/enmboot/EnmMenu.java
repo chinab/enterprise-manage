@@ -10,9 +10,7 @@ import com.lineboom.common.tools.tree.TreeNodeSupport;
  */
 
 public class EnmMenu extends TreeNodeSupport implements java.io.Serializable {
-
-	// Fields
-
+	private static final long serialVersionUID = 7128898069911695748L;
 	private Long id;
 	private Long enmMenuParentId;
 	private String enmMenuName;

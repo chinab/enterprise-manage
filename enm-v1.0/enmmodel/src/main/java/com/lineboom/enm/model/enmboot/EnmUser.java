@@ -7,9 +7,7 @@ package com.lineboom.enm.model.enmboot;
  */
 
 public class EnmUser implements java.io.Serializable {
-
-	// Fields
-
+	private static final long serialVersionUID = 7395551356219803330L;
 	private Long id;
 	private String enmUserName;
 	private String enmUserPassword;
