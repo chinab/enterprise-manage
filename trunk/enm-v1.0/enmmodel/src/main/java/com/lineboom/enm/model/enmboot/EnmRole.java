@@ -8,6 +8,7 @@ package com.lineboom.enm.model.enmboot;
 
 public class EnmRole implements java.io.Serializable {
 
+	private static final long serialVersionUID = -7734708981656110441L;
 	// Fields
 
 	private Long id;

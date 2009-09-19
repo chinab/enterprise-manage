@@ -9,6 +9,7 @@
 	<mapping resource="com/lineboom/enm/model/enmboot/EnmMenu.hbm.xml" />
 	<mapping resource="com/lineboom/enm/model/enmboot/EnmRole.hbm.xml" />
 	<mapping resource="com/lineboom/enm/model/enmboot/EnmUser.hbm.xml" />
+	<mapping resource="com/lineboom/enm/model/enmboot/WebsiteMenu.hbm.xml" />
 	<mapping resource="com/lineboom/enm/model/enmcrm/EsTest.hbm.xml" />
 </session-factory>
 
