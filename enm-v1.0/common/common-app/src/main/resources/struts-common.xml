@@ -3,6 +3,6 @@
 <struts>
 	<include file="struts-default.xml"/>
 	<package name="common" extends="struts-default" namespace="/common">
-		
+		<action name="*FileTools" class="fileToolsAction" method = "{1}" />
 	</package>
 </struts>
