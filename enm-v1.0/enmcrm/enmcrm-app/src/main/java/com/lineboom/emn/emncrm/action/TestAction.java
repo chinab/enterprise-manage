@@ -1,6 +1,6 @@
 package com.lineboom.emn.emncrm.action;
 
-import com.lineboom.common.action.BaseActionSupport;
+import com.lineboom.common.web.action.BaseActionSupport;
 import com.lineboom.emn.emncrm.service.TestService;
 
 public class TestAction extends BaseActionSupport{
