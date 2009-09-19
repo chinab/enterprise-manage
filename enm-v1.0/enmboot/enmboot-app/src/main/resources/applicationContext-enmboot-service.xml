@@ -5,4 +5,5 @@
 	<bean id="enmMenuService" class="com.lineboom.emn.enmboot.service.impl.EnmMenuServiceImpl"></bean>
 	<bean id="enmRoleService" class="com.lineboom.emn.enmboot.service.impl.EnmRoleServiceImpl"></bean>
 	<bean id="enmUserService" class="com.lineboom.emn.enmboot.service.impl.EnmUserServiceImpl"></bean>
+	<bean id="websiteMenuService" class="com.lineboom.emn.enmboot.service.impl.WebsiteMenuServiceImpl"></bean>
 </beans>

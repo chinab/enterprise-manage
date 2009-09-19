@@ -4,8 +4,8 @@ import java.util.List;
 
 import net.sf.json.JSONArray;
 
-import com.lineboom.common.action.BaseActionSupport;
 import com.lineboom.common.tools.tree.TreeTools;
+import com.lineboom.common.web.action.BaseActionSupport;
 import com.lineboom.emn.enmboot.service.EnmMenuService;
 import com.lineboom.emn.enmboot.service.EnmRoleService;
 import com.lineboom.emn.enmboot.service.EnmUserService;
