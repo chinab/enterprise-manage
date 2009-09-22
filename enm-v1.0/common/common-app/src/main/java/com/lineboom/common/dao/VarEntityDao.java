@@ -12,7 +12,7 @@ import com.lineboom.common.model.Page;
  * @author yinshuwei
  * @param <PojoType>
  */
-public interface EntityDao<PT,PK extends Serializable> {
+public interface VarEntityDao<PT,PK extends Serializable> {
 	public void save(PT pojo);
 	public void saveAll(Collection<PT> pojos);
 	public void saveObject(Object pojo);
@@ -33,4 +33,6 @@ public interface EntityDao<PT,PK extends Serializable> {
 	public Page<PT> pagedQuery(Map<String, Object> map, int start, int limit);
 	@SuppressWarnings("unchecked")
 	public Page pagedQuery(int start, int limit, String hql, Object... objs);
+	public VarEntityDao<PT,PK> setPojoName(String pojoName);
+	public VarEntityDao<PT,PK> setPojoClass(Class<PT> pojoClass);
 }

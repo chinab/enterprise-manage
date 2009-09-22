@@ -2,15 +2,21 @@ package com.lineboom.common.model;
 
 import java.util.List;
 
-public class Page<T> {
-	private List<T> data ;
+/**
+ * 分页用的vo
+ * @author yinshuwei
+ *
+ * @param <PT>
+ */
+public class Page<PT> {
+	private List<PT> data ;
 	private int totalCount;
 	private int pageNo;
 	
-	public List<T> getData() {
+	public List<PT> getData() {
 		return data;
 	}
-	public void setData(List<T> data) {
+	public void setData(List<PT> data) {
 		this.data = data;
 	}
 	public int getTotalCount() {
