@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="/dwr/interface/EnmUserService.js"></script>
+<script type="text/javascript" src="/dwr/engine.js"></script>
+<script type="text/javascript" src="/dwr/util.js"></script>
+<script type="text/javascript">
+var dwr_test={
+	onGet:function(data)
+	{
+		if(data!=null)
+			$('showMsg').innerHTML = (data.enmUserName);
+		else Ext.MessageBox.alert("提示","data is null");
+	},
+	query:function()
+	{
+		EnmUserService.get(parseInt($('queryUserId').value),dwr_test.onGet);
+	},
+	onSave:function()
+	{
+	},
+	add:function()
+	{
+		user = {
+			id:parseInt($('addUserId').value),
+			enmUserName:$('addEnmUserName').value,
+			enmUserPassword:$('addEnmUserPassword').value,
+			enmRoleId:parseInt($('addEnmRoleId').value),
+			extend1:$('addExtend1').value
+		}
+		EnmUserService.save(user,dwr_test.onSave);
+	}
+}
+</script>
+</head>
+<body>
+<div id="showMsg" style="color: #FF00000;"></div>
+
+query userId:<input id="queryUserId"/>
+<button onclick="dwr_test.query();">
+query
+</button>
+
+<br/>
+add userId:<input id="addUserId"/>
+add enmUserName:<input id="addEnmUserName"/>
+add enmUserPassword:<input type="password" id="addEnmUserPassword"/>
+add enmRoleId:<input id="addEnmRoleId"/>
+add extend1:<input id="addExtend1"/>
+<button onclick="dwr_test.add();">
+add
+</button>
+
+
+</body>
+</html>
