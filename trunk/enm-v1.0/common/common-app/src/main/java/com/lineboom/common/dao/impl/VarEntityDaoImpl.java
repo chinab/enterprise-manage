@@ -12,7 +12,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import com.lineboom.common.dao.EntityDao;
+import com.lineboom.common.dao.VarEntityDao;
 import com.lineboom.common.model.Page;
 
 /**
@@ -20,11 +20,9 @@ import com.lineboom.common.model.Page;
  * @author yinshuwei
  * @param <PT>
  */
-public class EntityDaoImpl<PT,PK extends Serializable> extends HibernateDaoSupport implements EntityDao<PT, PK>{
+public class VarEntityDaoImpl<PT,PK extends Serializable> extends HibernateDaoSupport implements VarEntityDao<PT, PK>{
 	private String pojoName;
-	public EntityDaoImpl(Class<PT> pojoClass) {
-		this.pojoName = pojoClass.getCanonicalName();
-	}
+	
 	public void save(PT pojo) {
 		getHibernateTemplate().save(pojo);
 	}
@@ -187,5 +185,15 @@ public class EntityDaoImpl<PT,PK extends Serializable> extends HibernateDaoSuppo
 		page.setPageNo(start/limit+1);
 		page.setTotalCount(totalCount);
 		return page;
+	}
+
+	public VarEntityDao<PT,PK> setPojoName(String pojoName) {
+		this.pojoName = pojoName;
+		return this;
+	}
+	
+	public VarEntityDao<PT,PK> setPojoClass(Class<PT> pojoClass) {
+		this.pojoName = pojoClass.getCanonicalName();
+		return this;
 	}
 }
