@@ -6,7 +6,7 @@ import com.lineboom.common.service.impl.EntityServiceImpl;
 import com.lineboom.emn.enmboot.service.WebsiteMenuService;
 import com.lineboom.enm.model.enmboot.WebsiteMenu;
 
-public class WebsiteMenuServiceImpl extends EntityServiceImpl<WebsiteMenu> implements WebsiteMenuService {
+public class WebsiteMenuServiceImpl extends EntityServiceImpl<WebsiteMenu,Long> implements WebsiteMenuService {
 	public WebsiteMenuServiceImpl(){
 		setPojoClass(WebsiteMenu.class);
 	}
