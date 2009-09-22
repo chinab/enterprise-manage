@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-autowire="byName">
+	<bean id="enmMenuDao" class="com.lineboom.common.dao.impl.EntityDaoImpl">
+		<constructor-arg>com.lineboom.enm.model.enmboot.EnmMenu</constructor-arg>
+	</bean>
+	<bean id="enmRoleDao" class="com.lineboom.common.dao.impl.EntityDaoImpl">
+		<constructor-arg>com.lineboom.enm.model.enmboot.EnmRole</constructor-arg>
+	</bean>
+	<bean id="enmUserDao" class="com.lineboom.common.dao.impl.EntityDaoImpl">
+		<constructor-arg>com.lineboom.enm.model.enmboot.EnmUser</constructor-arg>
+	</bean>
+</beans>
