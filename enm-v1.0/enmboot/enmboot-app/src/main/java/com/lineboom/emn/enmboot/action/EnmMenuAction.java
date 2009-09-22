@@ -18,7 +18,8 @@ public class EnmMenuAction extends BaseActionSupport {
 	private EnmMenuService enmMenuService;
 	private EnmRoleService enmRoleService;
 	private EnmUserService enmUserService;
-	
+	private EnmMenu enmMenu;
+
 	public void loginVal() throws Exception{
 		String username = getStringParam("j_username");
 		String password = getStringParam("j_password");
@@ -75,43 +76,9 @@ public class EnmMenuAction extends BaseActionSupport {
 		renderJSON("{enmMenuId:"+rootMenu.getId()+",enmMenuName:'"+rootMenu.getEnmMenuName()+"',nodeId:"+enmMenu.getId()+"}");
 	}
 	
-	public void update(){
-		Long enmMenuId = getLongParam("enmMenuId");
-		String enmMenuName = getStringParam("enmMenuName");
-		Long enmMenuType = getLongParam("enmMenuType");
-		Long enmMenuDisplayNo = getLongParam("enmMenuDisplayNo");
-		String enmMenuHref = getStringParam("enmMenuHref");
-		String enmMenuIco = getStringParam("enmMenuIco");
-		String enmMenuDisable = getStringParam("enmMenuDisable");
-		EnmMenu enmMenu = enmMenuService.get(enmMenuId);
-		enmMenu.setEnmMenuDisable(enmMenuDisable);
-		enmMenu.setEnmMenuDisplayNo(enmMenuDisplayNo);
-		enmMenu.setEnmMenuHref(enmMenuHref);
-		enmMenu.setEnmMenuIco(enmMenuIco);
-		enmMenu.setEnmMenuName(enmMenuName);
-		enmMenu.setEnmMenuType(enmMenuType);
-		enmMenuService.update(enmMenu);
+	public void save(){
+		enmMenuService.saveEnmMenu(enmMenu);
 	}
-	
-	public void insert(){
-		Long enmMenuParentId = getLongParam("enmMenuParentId");
-		String enmMenuName = getStringParam("enmMenuName");
-		Long enmMenuType = getLongParam("enmMenuType");
-		Long enmMenuDisplayNo = getLongParam("enmMenuDisplayNo");
-		String enmMenuHref = getStringParam("enmMenuHref");
-		String enmMenuIco = getStringParam("enmMenuIco");
-		String enmMenuDisable = getStringParam("enmMenuDisable");
-		EnmMenu enmMenu = new EnmMenu();
-		enmMenu.setEnmMenuParentId(enmMenuParentId);
-		enmMenu.setEnmMenuDisable(enmMenuDisable);
-		enmMenu.setEnmMenuDisplayNo(enmMenuDisplayNo);
-		enmMenu.setEnmMenuHref(enmMenuHref);
-		enmMenu.setEnmMenuIco(enmMenuIco);
-		enmMenu.setEnmMenuName(enmMenuName);
-		enmMenu.setEnmMenuType(enmMenuType);
-		enmMenuService.save(enmMenu);
-	}
-	
 	
 	public void edit(){
 		Long enmMenuId = getLongParam("enmMenuId");
@@ -140,6 +107,14 @@ public class EnmMenuAction extends BaseActionSupport {
 
 	public void setEnmUserService(EnmUserService enmUserService) {
 		this.enmUserService = enmUserService;
+	}
+
+	public EnmMenu getEnmMenu() {
+		return enmMenu;
+	}
+
+	public void setEnmMenu(EnmMenu enmMenu) {
+		this.enmMenu = enmMenu;
 	}
 	
 }
