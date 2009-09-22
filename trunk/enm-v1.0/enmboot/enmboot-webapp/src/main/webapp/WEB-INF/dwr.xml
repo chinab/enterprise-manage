@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE dwr PUBLIC "-//GetAhead Limited//DTD Direct Web Remoting 2.0//EN" "http://www.getahead.ltd.uk/dwr/dwr20.dtd">
+<!DOCTYPE dwr PUBLIC
+    "-//GetAhead Limited//DTD Direct Web Remoting 1.0//EN"
+    "http://www.getahead.ltd.uk/dwr/dwr10.dtd">
 <dwr>
-	<allow>
-		<create creator="spring" javascript="WebsiteMenuService">
-			<param name="beanName" value="websiteMenuService" />
-		</create>
-	</allow>
+  <allow>
+    <create creator="spring" javascript="EnmUserService">
+      <param name="beanName" value="enmUserService"/>
+    </create>
+    <convert converter="bean" match="com.lineboom.enm.model.enmboot.EnmUser">
+    	<param name="include" value="id,enmUserName,enmUserPassword,enmRoleId,extend1"></param>
+    </convert>
+  </allow>
 </dwr>
