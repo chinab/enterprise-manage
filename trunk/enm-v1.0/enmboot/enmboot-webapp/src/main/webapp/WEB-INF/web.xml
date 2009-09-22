@@ -23,6 +23,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath*:/applicationContext-common-dao.xml
+			classpath*:/applicationContext-enmboot-dao.xml
 			classpath*:/applicationContext-enmsm-service.xml
 			classpath*:/applicationContext-enmsm-web.xml
 			classpath*:/applicationContext-enmon-service.xml
