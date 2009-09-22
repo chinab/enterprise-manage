@@ -7,12 +7,14 @@ Ext.onReady(function(){
 
 	var fpReader = new Ext.data.JsonReader( {root : 'enmMenu'}, 
 	   [
-   		{name: 'enmMenuName', mapping :'enmMenuName'},
-   		{name: 'enmMenuDisplayNo', mapping :'enmMenuDisplayNo'},
-   		{name: 'enmMenuType', mapping :'enmMenuType'},
-   		{name: 'enmMenuHref', mapping :'enmMenuHref'},
-   		{name: 'enmMenuIco', mapping :'enmMenuIco'},
-   		{name: 'enmMenuDisable', mapping :'enmMenuDisable'}
+   		{name: 'enmMenu.id', mapping :'id'},
+   		{name: 'enmMenu.enmMenuParentId', mapping :'enmMenuParentId'},
+   		{name: 'enmMenu.enmMenuName', mapping :'enmMenuName'},
+   		{name: 'enmMenu.enmMenuDisplayNo', mapping :'enmMenuDisplayNo'},
+   		{name: 'enmMenu.enmMenuType', mapping :'enmMenuType'},
+   		{name: 'enmMenu.enmMenuHref', mapping :'enmMenuHref'},
+   		{name: 'enmMenu.enmMenuIco', mapping :'enmMenuIco'},
+   		{name: 'enmMenu.enmMenuDisable', mapping :'enmMenuDisable'}
 	   ]
 	);
 	
@@ -28,7 +30,7 @@ Ext.onReady(function(){
 				maxLength: 6,
 				minLength: 1,
 				fieldLabel : '菜单名',
-				name : 'enmMenuName'
+				name : 'enmMenu.enmMenuName'
 			}]
 		},{
 			style:'margin-top:10px;',
@@ -39,14 +41,12 @@ Ext.onReady(function(){
 				xtype: 'textfield',
 				fieldLabel: '结点Id',
 				readOnly:true,
-	            name: 'enmMenuId',
-	            value:enmMenuInfo.selectId==null?-1:enmMenuInfo.selectId
+	            name: 'enmMenu.id'
 	        }:{
 				xtype: 'textfield',
 				fieldLabel: '父结点Id',
 				readOnly:true,
-	            name: 'enmMenuParentId',
-	            value:enmMenuInfo.selectId==null?-1:enmMenuInfo.selectId
+	            name: 'enmMenu.enmMenuParentId'
 	        }]
 		},{
 			style:'margin-top:10px;',
@@ -60,8 +60,8 @@ Ext.onReady(function(){
 				minLength: 1,
 				width: 127,
 				fieldLabel : '菜单类型',
-				name : 'enmMenuType',
-				hiddenName : 'enmMenuType',
+				name : 'enmMenu.enmMenuType',
+				hiddenName : 'enmMenu.enmMenuType',
 				editable: false,
 				store:  enmMenuTypeStore,
 			    valueField :'value',
@@ -83,8 +83,8 @@ Ext.onReady(function(){
 				minLength: 1,
 				width: 127,
 				fieldLabel : '是否显示',
-				name : 'enmMenuDisable',
-				hiddenName : 'enmMenuDisable',
+				name : 'enmMenu.enmMenuDisable',
+				hiddenName : 'enmMenu.enmMenuDisable',
 				editable: false,
 				store:  enmMenuDisableStore,
 			    valueField :'value',
@@ -102,7 +102,7 @@ Ext.onReady(function(){
 			items : [{
 				xtype: 'numberfield',
 				fieldLabel: '显示顺序',
-				name: 'enmMenuDisplayNo',
+				name: 'enmMenu.enmMenuDisplayNo',
 				allowBlank:false
 	    	}]
 		},{
@@ -113,7 +113,7 @@ Ext.onReady(function(){
 			items : [{
 				xtype: 'textfield',
 				fieldLabel: '图标',
-				name: 'enmMenuIco',
+				name: 'enmMenu.enmMenuIco',
 				allowBlank:false
 	    	}]
 		},{
@@ -127,9 +127,16 @@ Ext.onReady(function(){
 				maxLength: 100,
 				minLength: 1,
 				fieldLabel : '页面地址',
-				name : 'enmMenuHref'
+				name : 'enmMenu.enmMenuHref'
 			}]
-		}];
+		},!isUpdate?{
+			xtype: 'hidden',
+            name: 'enmMenu.id'
+        }:{
+			xtype: 'hidden',
+            name: 'enmMenu.enmMenuParentId'
+        }
+        ];
 	}
 
 	//修改
@@ -142,7 +149,7 @@ Ext.onReady(function(){
 	    	labelWidth : 90,
 	    	width:500,
 	    	height:400,
-			url : '/enmboot/updateEnmMenu.action',
+			url : '/enmboot/saveEnmMenu.action',
 			labelAlign : 'right',
 			enctype:'multipart/form-data' ,
 			layout : 'column',
@@ -183,6 +190,7 @@ Ext.onReady(function(){
 							},
 							success : function(form, action) {
 								_win.close();
+								enmMenuInfo.selectNode.parentNode.reload();
 								Ext.MessageBox.alert('提示', "修改成功！");
 							}
 						});
@@ -206,7 +214,7 @@ Ext.onReady(function(){
 	    	labelWidth : 90,
 	    	width:500,
 	    	height:400,
-	        url:'/enmboot/insertEnmMenu.action',
+	        url:'/enmboot/saveEnmMenu.action',
 			labelAlign : 'right',
 			enctype:'multipart/form-data' ,
 			layout : 'column',
@@ -242,6 +250,7 @@ Ext.onReady(function(){
 							},
 							success : function(form, action) {
 								_win.close();
+								enmMenuInfo.selectNode.reload();
 								Ext.MessageBox.alert('提示', "保存成功！");
 							}
 						});
@@ -259,7 +268,10 @@ Ext.onReady(function(){
 	
 		_win.show();
 	}
-		
+
+	function deleteMenu(){
+		enmMenuInfo.selectNode();
+	}
 		
 		var tree = new Ext.tree.TreePanel({
 			region:'center',
@@ -291,7 +303,7 @@ Ext.onReady(function(){
 		    		tooltip:'删除',
 		    		iconCls:'remove',
 		    		handler:function(){
-		    		
+		    			deleteMenu();
 		    		}
 		    	},'-',
 		    	{
@@ -304,6 +316,7 @@ Ext.onReady(function(){
 	        listeners:{click : function(node,e){
 	        		e.stopEvent();
 	        		enmMenuInfo.selectId = node.id;
+	        		enmMenuInfo.selectNode = node;
 	        	}
 	        }
 	    });
