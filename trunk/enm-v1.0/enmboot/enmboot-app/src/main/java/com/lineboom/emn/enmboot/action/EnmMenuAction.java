@@ -80,6 +80,10 @@ public class EnmMenuAction extends BaseActionSupport {
 		enmMenuService.saveEnmMenu(enmMenu);
 	}
 	
+	public void deleteNode(){
+		enmMenuService.deleteAndChildren(enmMenu);
+	}
+	
 	public void edit(){
 		Long enmMenuId = getLongParam("enmMenuId");
 		renderJSON("{enmMenu:"+JSONArray.fromObject(enmMenuService.get(enmMenuId)).toString()+"}");
