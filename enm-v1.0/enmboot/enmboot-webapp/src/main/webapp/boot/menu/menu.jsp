@@ -46,7 +46,8 @@ Ext.onReady(function(){
 				xtype: 'textfield',
 				fieldLabel: '父结点Id',
 				readOnly:true,
-	            name: 'enmMenu.enmMenuParentId'
+	            name: 'enmMenu.enmMenuParentId',
+	            value: enmMenuInfo.selectId
 	        }]
 		},{
 			style:'margin-top:10px;',
@@ -270,7 +271,22 @@ Ext.onReady(function(){
 	}
 
 	function deleteMenu(){
-		enmMenuInfo.selectNode();
+		if(enmMenuInfo.selectId==null||enmMenuInfo.selectId==-1) {
+			Ext.MessageBox.alert('提示', "请选择一个非根结点再继续！");
+			return ;
+		}
+		Ext.MessageBox.confirm('提示','确定要删除菜单"'+enmMenuInfo.selectNode.attributes.text+'"',function(btn){
+			if(btn=='yes'){
+				Ext.Ajax.request({
+					url:'/enmboot/deleteNodeEnmMenu.action',
+					params:{'enmMenu.id':enmMenuInfo.selectId,'enmMenu.enmMenuParentId':enmMenuInfo.selectNode.parentNode.id},
+					success:function(){
+						Ext.MessageBox.alert('提示','删除成功');
+						enmMenuInfo.selectNode.parentNode.reload();
+					}
+				});
+			}
+		});
 	}
 		
 		var tree = new Ext.tree.TreePanel({
