@@ -1,9 +1,18 @@
 package com.lineboom.emn.enmboot.action;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 
 import net.sf.json.JSONArray;
 
+import com.lineboom.common.tools.file.FileTools;
 import com.lineboom.common.tools.tree.TreeTools;
 import com.lineboom.common.web.action.BaseActionSupport;
 import com.lineboom.emn.enmboot.service.EnmMenuService;
@@ -82,6 +91,20 @@ public class EnmMenuAction extends BaseActionSupport {
 	
 	public void deleteNode(){
 		enmMenuService.deleteAndChildren(enmMenu);
+	}
+	
+	public void getXml() throws IOException{
+		List<EnmMenu> all = enmMenuService.getAll();
+		Document document = DocumentHelper.createDocument();
+		Element datasEle = document.addElement("datas");
+		for (EnmMenu enmMenu : all) {
+			datasEle.addElement("data").addAttribute("href", enmMenu.getEnmMenuHref()).addAttribute("id", enmMenu.getId().toString());
+		}
+		
+		HttpServletResponse response = getResponse();
+		response.setContentType("text/xml;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.print(document.asXML());
 	}
 	
 	public void edit(){
