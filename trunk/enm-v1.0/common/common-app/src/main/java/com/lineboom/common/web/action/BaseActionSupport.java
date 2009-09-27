@@ -10,6 +10,8 @@ import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public abstract class BaseActionSupport extends ActionSupport{
+	private static final long serialVersionUID = 6595065316514888563L;
+	
 	protected void renderJSON(String content) {
 		String contentType = "text/json;charset=UTF-8";
 		renderContent(content, contentType);
