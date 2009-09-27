@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				initialize="init()"
+				layout="absolute"
+				backgroundColor="#FFFFFF"
+				xmlns:aclass="com.xvxv.aclass.*"
+				width="780"
+				height="380" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+			import flash.net.navigateToURL;
+			import flash.net.sendToURL;
+			import mx.graphics.codec.PNGEncoder;
+			import com.xvxv.aclass.FlexPngExporter;
+			import mx.controls.Alert;
+			import com.xvxv.aclass.AmchartsLoader;
+
+			private function init():void
+			{
+				var swfUrl:String=Application.application.parameters["swf_url"];
+				var path:String=Application.application.parameters["path"];
+				var settingsFile:String=Application.application.parameters["settings_file"];
+				var dataFile:String=Application.application.parameters["data_file"];
+				amchartsLoader.swfUrl=swfUrl;
+				amchartsLoader.path=path;
+				amchartsLoader.settingsFile=settingsFile;
+				amchartsLoader.dataFile=dataFile;
+				amchartsLoader.loadChart();
+
+				var timer:Timer=new Timer(5000, 1);
+				timer.addEventListener(TimerEvent.TIMER_COMPLETE, function():void
+					{
+						cut("fdl");
+					});
+				timer.start();
+			}
+
+			private function cut(index:String):void
+			{
+				var screenWidth:Number=flash.system.Capabilities.screenResolutionX;
+				var screenHeight:Number=flash.system.Capabilities.screenResolutionY;
+				var cutHeight:Number=(screenHeight - 310) / 2;
+				var cutWidth:Number=(screenWidth - 60) / 3;
+				var bitmapData:BitmapData=new BitmapData(cutWidth, cutHeight);
+				var matrix:Matrix=new Matrix();
+				matrix.translate(0, cutHeight - height > 0 ? 0 : (cutHeight - height));
+				bitmapData.draw(amchartsLoader, matrix);
+				var request:URLRequest=new URLRequest("/ahboot/saveImageFlexReportExport.action?width=" + screenWidth + "&height=" + screenHeight + "&index=" + index);
+				request.contentType='applicatoin/octet-stream';
+				request.data=(new PNGEncoder()).encode(bitmapData);
+				request.method=URLRequestMethod.POST;
+				sendToURL(request);
+			}
+		]]>
+	</mx:Script>
+	<aclass:AmchartsLoader id="amchartsLoader"
+						   width="780"
+						   height="380"
+						   x="0"
+						   y="0"/>
+</mx:Application>

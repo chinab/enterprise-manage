@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Displays a ColumnChart and LineChart using a ViewStack.
+ The ColumnChart and LineChart allow a user to drill-down
+ one level. For the demo, random data is generated.
+ The ColumnChart and LineChart use the same dataProvider.
+-->
+<PodContentBase
+	xmlns="com.esria.samples.dashboard.view.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:effects="qs.charts.effects.*"
+	xmlns:renderers="qs.charts.renderers.*"
+	width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.rpc.http.HTTPService;
+			import mx.charts.chartClasses.ChartBase;
+			import mx.charts.chartClasses.Series;
+			import mx.charts.events.ChartItemEvent;
+			import mx.charts.HitData;
+			import mx.charts.series.ColumnSeries;
+			import mx.collections.ArrayCollection;
+			import mx.controls.ComboBox;
+			import mx.events.ListEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			// The original data provider used for drillUp.
+			private var initialDataProvider:ArrayCollection;
+			[Bindable]
+			private var dataProvider:ArrayCollection;
+			private var initialDataProviderXml:XMLList;
+			[Bindable]
+			private var dataProviderXml:XMLList;
+			[Bindable]
+			private var _selectedViewIndex:Number = 0;
+			
+			// Chart drill down variables. Users can only drill down
+			// one level then click the chart to drill up.
+			// Note, the majority of the drill down code including all of the classes in the "qs" package
+			// are from Ely Greenfield's blog, http://www.quietlyscheming.com/blog/charts/chart-drilldown-animations/.
+			private var chart:ChartBase;
+			private var series:Series;
+			private var drillToIndex:Number;
+			
+			override protected function onResultHttpService(e:ResultEvent):void
+			{
+				var a:Array = xmlListToObjectArray(e.result.item);
+				var ac:ArrayCollection = new ArrayCollection(a);
+				initialDataProvider = ac;
+				dataProvider = ac;
+				initialDataProviderXml = e.result.item;
+				dataProviderXml = e.result.item;
+				
+				// Get the values from properties XML.
+				if (properties.@selectedViewIndex.toString() != null &&
+					Number(properties.@selectedViewIndex) < viewStack.numChildren) // Make sure the index is in range.
+					selectedViewIndex = Number(properties.@selectedViewIndex);
+				else
+					selectedViewIndex = 0;
+				
+				columnChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+				lineChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+			}
+			
+			private function set selectedViewIndex(n:Number):void
+			{
+				if(chart!=null){
+					drillUp(null);
+				}
+				_selectedViewIndex = n;
+				if (n == 0)
+				{
+					chart = columnChart;
+					series = columnSeries;
+				}
+				else
+				{
+					chart = lineChart;
+					series = lineSeries;
+				}
+			}
+			
+			private function onChangeComboBox(e:ListEvent):void
+			{
+				var index:Number = ComboBox(e.target).selectedIndex;
+				selectedViewIndex = index;
+				dispatchViewStackChange(index);
+			}
+
+			
+			private function columnChartDataTipFunction(o:HitData):String
+			{
+				var item:XML = XML(o.item);
+				var a:Array = properties.@dataTipUnitLabel.split("*");
+				var s:String = item.attribute(properties.@dataTipLabelField) + "\n";
+				s += a[0] + item.attribute(properties.@valueField) + a[1] + "\n";
+				return s;
+			}
+			
+			// Creates random drill down data.
+			// Assumes initial data is months and breaks down months into 30 days.
+			public function createDrillDownData(data:XML):void
+			{
+				var url:String = data.attribute(properties.@urlField).toString();
+				var subHttpService:HTTPService =new HTTPService();
+				subHttpService.url = url;
+				subHttpService.resultFormat = HTTPService.RESULT_FORMAT_E4X;
+				subHttpService.addEventListener(ResultEvent.RESULT,function(e:ResultEvent):void{
+					var a:Array = xmlListToObjectArray(e.result.item);
+					dataProvider = new ArrayCollection(a);
+					dataProviderXml = e.result.item;
+				});
+				subHttpService.send();
+			}
+			
+			public function drillDown(e:ChartItemEvent):void
+			{
+				chart.showDataTips = false;
+				drillToIndex = e.hitData.chartItem.index;
+				drillDownEffect.drillFromIndex = drillToIndex;
+				series.setStyle("showDataEffect", drillDownEffect);
+				
+				createDrillDownData(XML(e.hitData.chartItem.item)); 
+				
+				columnChart.removeEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+				lineChart.removeEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+				columnChart.addEventListener(MouseEvent.CLICK, drillUp);
+				lineChart.addEventListener(MouseEvent.CLICK, drillUp);
+			}
+			
+			public function drillUp(e:MouseEvent):void
+			{
+				chart.showDataTips = false;
+				drillUpEffect.drillToIndex = drillToIndex;
+				series.setStyle("showDataEffect", drillUpEffect);
+				dataProvider = initialDataProvider; 
+				dataProviderXml = initialDataProviderXml; 
+				
+				columnChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+				lineChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+				columnChart.removeEventListener(MouseEvent.CLICK, drillUp);
+				lineChart.removeEventListener(MouseEvent.CLICK, drillUp);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<effects:DrillDownEffect id="drillDownEffect" duration="500" effectEnd="chart.showDataTips=true" />
+    <effects:DrillUpEffect id="drillUpEffect" duration="500" effectEnd="chart.showDataTips=true"/>
+    
+	<mx:RadialGradient id="code1">
+        <mx:entries>
+            <mx:Array>
+                <mx:GradientEntry color="#DEFE7E" ratio="0" alpha="0.8"/>
+                <mx:GradientEntry color="#98CB02" ratio="1" alpha="0.8"/>
+            </mx:Array>
+        </mx:entries>
+    </mx:RadialGradient>
+	<mx:HBox
+		width="100%"
+		horizontalAlign="right">
+		<mx:ComboBox
+			dataProvider="['柱状图', '线图']"
+			selectedIndex="{_selectedViewIndex}"
+			change="onChangeComboBox(event)" />
+	</mx:HBox>
+	<mx:ViewStack
+		id="viewStack"
+		selectedIndex="{_selectedViewIndex}"
+		creationPolicy="all"
+		width="100%" height="100%">
+		<mx:Canvas
+			width="100%" height="100%">
+			<mx:ColumnChart
+				id="columnChart"
+				width="100%" height="100%"
+				dataProvider="{dataProviderXml}"
+				showDataTips="true"
+				dataTipFunction="columnChartDataTipFunction">
+				<mx:series>
+					<mx:ColumnSeries
+						id="columnSeries"
+						yField="@{properties.@valueField}" fill="{code1}">
+						<mx:itemRenderer>
+							<mx:Component>
+								<renderers:RollOverBoxItemRenderer color="#98CB02" overColor="#DEFE7E" downColor="#98CB02" />
+							</mx:Component>
+						</mx:itemRenderer>
+					</mx:ColumnSeries>
+				</mx:series>
+				<mx:horizontalAxis>
+					<mx:CategoryAxis
+						categoryField="@{properties.@categoryField}" />
+				</mx:horizontalAxis>
+			</mx:ColumnChart>
+		</mx:Canvas>
+		<mx:Canvas
+			width="100%" height="100%">
+			<mx:LineChart
+				id="lineChart" seriesFilters="[]"
+			    fontSize="12"
+				width="100%" height="100%"
+				dataProvider="{dataProviderXml}"
+				showDataTips="true"
+				dataTipFunction="columnChartDataTipFunction"
+			    color="#000000">
+				<mx:verticalAxis>
+					<mx:LinearAxis baseAtZero="false" />
+				</mx:verticalAxis>
+	
+				<mx:horizontalAxis>
+					<mx:CategoryAxis id="ca"
+						categoryField="@{properties.@categoryField}" />
+				</mx:horizontalAxis>
+				
+				<mx:horizontalAxisRenderers>
+					<mx:AxisRenderer axis="{ca}"
+									 canDropLabels="true"/>
+				</mx:horizontalAxisRenderers>
+				
+				<mx:series>
+					<mx:LineSeries
+						id="lineSeries" form="curve"
+						yField="@{properties.@valueField}" fill="{code1}">
+						
+						<mx:itemRenderer>
+							<mx:Component>
+								<renderers:RollOverBoxItemRenderer color="#98CB02" overColor="#DEFE7E" downColor="#98CB02" />
+							</mx:Component>
+						</mx:itemRenderer>
+					</mx:LineSeries>
+				</mx:series>
+			</mx:LineChart>
+		</mx:Canvas>
+	</mx:ViewStack>
+</PodContentBase>

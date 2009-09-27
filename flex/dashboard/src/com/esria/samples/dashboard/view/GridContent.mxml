@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Displays a list of links.
+-->
+<PodContentBase
+	xmlns="com.esria.samples.dashboard.view.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml" initialize="init();"
+	width="100%" height="100%" xmlns:aclass="com.xvxv.aclass.*">
+	<mx:Script>
+		<![CDATA[
+			import com.xvxv.aclass.CellColorIFactory;
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import mx.events.ItemClickEvent;
+			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+			import mx.controls.Alert;
+			import mx.controls.Label;
+			import flash.net.navigateToURL;
+			import mx.collections.ArrayCollection;
+			import mx.events.ListEvent;
+			import mx.rpc.events.ResultEvent;
+							
+			[Bindable]
+			private var dataProvider:ArrayCollection;
+			private var cellColorIFactory:CellColorIFactory;
+			
+			private function init():void{
+				cellColorIFactory = new CellColorIFactory(this.properties.@redText.toString());
+			}
+			
+			override protected function onResultHttpService(event:ResultEvent):void
+			{
+				var setXml:XML = (XML)(event.result);
+			    if(setXml.name().toString()=="error"){
+		    		Alert.show(setXml.toString(),"提示");
+		    		return;
+			    }
+				dataGrid.columns = createHeaders(setXml.header[0].column);
+				dataGrid.dataProvider = setXml.datas[0].data;
+			}
+			
+			private function itemClick(event:ListEvent):void
+			{
+				try{
+	            	var data:XML=XML(event.itemRenderer.data);
+	            	var funName:String = data.@onclick.toString();
+	            	if(funName!=null && funName!="" && properties.@clickable == "true")
+	            		ExternalInterface.call(funName,data.@arg);
+				}catch(e:Error){
+					
+				}
+			}
+			
+			/**
+             * 为列表产生头表部
+             * 递归掉用这个方法，当遇到分组时就递归生成子列
+             **/
+            private function createHeaders(dataChildren:XMLList) : Array{
+				var children:Array = new Array(dataChildren.length());
+				for(var i:int=0;i<dataChildren.length();i++){
+			    	var xml:XML = dataChildren[i];
+			    	var name:String = xml.name().toString();
+			    	if(name=="column"){
+			    		var column:DataGridColumn = new DataGridColumn();
+					    /**
+					    * 给column设置属性
+					    **/
+			    		column.headerText=xml.@headerText;
+			    		column.itemRenderer = cellColorIFactory;
+			    		if(xml.@width.toString()!="")
+			    			column.width=xml.@width;
+			    		column.dataField=xml.@dataField.toString()!=""?"@"+xml.@dataField:"";
+			    		column.setStyle("color",0x00000);
+			    		column.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		if(xml.@textAlign=="left"){
+			    			column.setStyle("textAlign","left");
+			    		}else if(xml.@textAlign=="center"){
+			    			column.setStyle("textAlign","center");
+			    		}else{
+			    			column.setStyle("textAlign","right");
+			    		}
+			    		
+			    		children[i] = column;
+			    	}
+			    }
+			    return children;
+			}
+			
+		]]>
+	</mx:Script>
+	<aclass:MyDataGrid id="dataGrid"
+		sortableColumns="false"
+		itemClick="itemClick(event)" horizontalScrollPolicy="on"
+		width="100%" height="100%" 
+		headerStyleName="header" textAlign="right"
+		y="52" x="5" color="#000000" styleName="myFont" 
+		fontSize="12" rollOverColor="#EFEFEF" selectionColor="#DFE8F7" fontFamily="SIMSUN">
+	</aclass:MyDataGrid>
+</PodContentBase>

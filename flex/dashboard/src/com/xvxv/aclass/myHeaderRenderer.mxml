@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" backgroundAlpha="0.0" width="100%" initialize="init()" horizontalAlign="center">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			private var _loadFun:Function = null;
+			
+			public function set loadFun(loadFun:Function):void{
+				_loadFun = loadFun;
+			}
+			private function init():void{
+			}
+			private function buttonClick(colId:String):void{
+				if(colId==null||colId==""){
+					_loadFun.call(this);
+				}else{
+					_loadFun.call(this,colId.replace("@col",""));
+				}
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Button fontWeight="normal" label="{data.headerText}" click="buttonClick(data.dataField)" height="100%" width="100%" x="0" y="0" horizontalCenter="0" verticalCenter="0"/>
+	
+</mx:HBox>

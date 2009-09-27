@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+<!-- 方法1 -->
+ 	<mx:TextInput id="phoneInput1" x="58" y="86"/> 
+ 	<!-- 绑定验证对象:source:表示验证的对象，property:表示验证对象的属性 -->
+	<mx:PhoneNumberValidator id="pnV1" source="{phoneInput1}" property="text"/>
+	
+	
+<!-- 方法2 -->
+	<mx:Script> 
+	 <![CDATA[
+	 	//用AS编程实现验证
+		import mx.validators.PhoneNumberValidator; 
+		// 创建验证器
+		private var pnV2:PhoneNumberValidator = new PhoneNumberValidator(); 
+		private function createValidator():void {
+			// 设置验证器
+			pnV2.source = phoneInput2;
+			pnV2.property = "text"; 
+		} 
+	 ]]> 
+	 </mx:Script>
+	 <mx:TextInput  creationComplete="createValidator()" id="phoneInput2" x="58" y="142"/>
+	 
+	 
+<!-- 方法3 -->
+	<!--
+		trigger:表示触发验证事件的对象
+		triggerEvent:表示对象触发验证事件的时机(如click,mouseOver等)
+		requiredFieldError属性 表示必填项没填入数据的时的提示错误信息
+		wrongLengthError:表示输入的数据阿拉伯数字长度小于10时提示的错误信息
+		invalidCharError:表示输入数据不是阿拉伯数字时提示的错误信息 
+	-->
+	<mx:TextInput id="phoneInput3" x="58" y="204"/> 
+	<mx:PhoneNumberValidator id="pnV3" source="{phoneInput3}" property="text"
+		trigger="{phoneInput3}" triggerEvent="change"
+		requiredFieldError="此项为必填"
+		invalidCharError="请输入阿拉伯数字"
+		wrongLengthError="请输入10个阿拉伯数字" />
+	<mx:Button label="Button" id="btn" x="286" y="204"/>
+
+<!-- 方法4 -->
+	<!-- 使用正则表达式创建自定义验证器 -->
+</mx:Application>

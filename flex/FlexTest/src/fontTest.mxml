@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Style>
+        @font-face 
+        {
+            font-family: Copacetix;
+
+            src: url("assets/JDFZHONGB.TTF");
+            unicode-range:
+                U+0020-U+0040, /* Punctuation, Numbers */
+
+                U+0041-U+005A, /* Upper-Case A-Z */
+                U+005B-U+0060, /* Punctuation and Symbols */
+                U+0061-U+007A, /* Lower-Case a-z */
+                U+007B-U+007E; /* Punctuation and Symbols */
+
+        }
+
+        .MyTextStyle 
+        { 
+            font-family: Copacetix; 
+            font-size: 80;    
+        }
+
+    </mx:Style>
+
+    <mx:Text styleName="MyTextStyle" text="ffffffff" width="100%"/>
+
+
+</mx:Application>

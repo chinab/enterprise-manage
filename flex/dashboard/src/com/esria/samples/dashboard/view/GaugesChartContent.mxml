@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Displays a ColumnChart and LineChart using a ViewStack.
+ The ColumnChart and LineChart allow a user to drill-down
+ one level. For the demo, random data is generated.
+ The ColumnChart and LineChart use the same dataProvider.
+-->
+<PodContentBase
+	xmlns="com.esria.samples.dashboard.view.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:effects="qs.charts.effects.*"
+	xmlns:renderers="qs.charts.renderers.*"
+	width="100%" height="100%" initialize="init();" xmlns:controls="com.brightPoint.controls.*">
+	<mx:Script>
+		<![CDATA[
+			import com.xvxv.aclass.DateTools;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			
+			private function init():void{
+				var lastMenuName:String;
+				var lastMenuFunction:Function;
+				var nextMenuName:String;
+				var nextMenuFunction:Function;
+				var dateScope:String = properties.@dateScope;
+				if(dateScope=="day"){
+					lastMenuName = "上一日";
+					nextMenuName = "下一日";
+					lastMenuFunction = lastDay;
+					nextMenuFunction = nextDay;
+				}else if(dateScope=="month"){
+					lastMenuName = "上一月";
+					nextMenuName = "下一月";
+					lastMenuFunction = lastMonth;
+					nextMenuFunction = nextMonth;
+				}else if(dateScope=="year"){
+					lastMenuName = "上一年";
+					nextMenuName = "下一年";
+					lastMenuFunction = lastYear;
+					nextMenuFunction = nextYear;
+				}else{
+					return;
+				}
+				
+				var nextDate : ContextMenuItem = new ContextMenuItem(lastMenuName);
+				nextDate.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,lastMenuFunction);
+				var lastDate : ContextMenuItem = new ContextMenuItem(nextMenuName);
+				lastDate.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,nextMenuFunction);
+				
+				var myContextMenu : ContextMenu = new ContextMenu();
+				myContextMenu.customItems.push(nextDate);
+				myContextMenu.customItems.push(lastDate);
+				myContextMenu.hideBuiltInItems();
+				this.contextMenu = myContextMenu;
+				this.parent.contextMenu = myContextMenu;
+				canvas.contextMenu = myContextMenu;
+				vbox.contextMenu = myContextMenu;
+				gauge.contextMenu = myContextMenu;
+			}
+			
+			private function nextYear(event:ContextMenuEvent):void{
+				date.setFullYear(date.getFullYear()+1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYString(date) + title;
+			}
+			private function lastYear(event:ContextMenuEvent):void{
+				date.setFullYear(date.getFullYear()-1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYString(date) + title;
+			}
+			private function nextMonth(event:ContextMenuEvent):void{
+				date = DateTools.getUpOrDownMonth(date,1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYMString(date) + title;
+			}
+			private function lastMonth(event:ContextMenuEvent):void{
+				date = DateTools.getUpOrDownMonth(date,-1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYMString(date) + title;
+			}
+			private function nextDay(event:ContextMenuEvent):void{
+				date = DateTools.getUpOrDownDay(date,1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYMDString(date) + title;
+			}
+			private function lastDay(event:ContextMenuEvent):void{
+				date = DateTools.getUpOrDownDay(date,-1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYMDString(date) + title;
+			}
+			
+			
+			override protected function onResultHttpService(e:ResultEvent):void
+			{
+				var xml:XML = XML(e.result);
+			
+				var value:Number=Number(xml.value.toString());
+				var cross:Number=Number(xml.cross.toString());
+				var reverse:String=xml.reverse.toString();
+				
+				labelText.text = xml.label.toString();
+				gauge.minValue=0;
+				if(reverse=="true"){
+					gauge.maxValue=getMaxValue(cross*1.2);
+					gauge.setStyle("alertRatios",[cross,cross*1.1,getMaxValue(cross*1.2)]);
+					gauge.setStyle("alertColors",[0x00FF00,0xFFFF00,0xDD0000]);
+				}else{
+					gauge.maxValue=getMaxValue(cross*1.1);
+					gauge.setStyle("alertRatios",[cross*0.5,cross,getMaxValue(cross*1.1)]);
+					gauge.setStyle("alertColors",[0xDD0000,0xFFFF00,0x00FF00]);
+				}
+				
+				gauge.value = value;
+			}
+			
+            private function getMaxValue(maxValue:Number):Number{
+            	var intValue:int = int(maxValue);
+            	var valueLength:int = intValue.toString().length;
+            	valueLength-=2;
+            	var i:int;
+            	if(valueLength==-1){
+            		intValue=int(10*maxValue);
+            	}else if(valueLength>=0){
+            		for(i=valueLength;i>0;i--){
+            			intValue/=10;
+            		}
+            	}
+            	intValue = 4-(intValue%4)+intValue;
+            	var resultValue:Number = Number(intValue);
+            	if(valueLength==-1){
+            		resultValue/=10;
+            	}else if(valueLength>=0){
+            		for(i=valueLength;i>0;i--){
+            			resultValue*=10;
+            		}
+            	}
+            	return resultValue;
+            }
+		]]>
+	</mx:Script>
+	
+		<mx:Canvas id="canvas"
+			width="100%" height="100%">
+			<mx:VBox id="vbox"
+			width="100%" height="100%" resize="{vbox.width = vbox.height}" horizontalAlign="center" horizontalCenter="0">
+				<controls:Gauge
+					id="gauge" 
+					showValue="true"
+					alertAlphas="[.7,.7,.7]"
+					faceColor="0xFFFFFF"
+					ticksColor="0x000000"
+					fontColor="0x000000"
+					pointerColor="0x006699"
+					centerColor="0xA9AAAB"
+					bezelColor="0xDADADA"
+					faceShadowColor="0xC2C2C2"
+					fontSize="12"
+					width="90%"
+					height="90%" 
+					horizontalCenter="0" y="-1">
+				</controls:Gauge>
+				<mx:Spacer height="50"/>
+				<mx:Label id="labelText" horizontalCenter="0" fontWeight="bold" fontSize="14"/>
+			</mx:VBox>
+		</mx:Canvas>
+</PodContentBase>

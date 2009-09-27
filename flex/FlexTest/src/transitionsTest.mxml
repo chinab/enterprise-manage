@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:VBox id="myVBox"  x="247" y="160" width="305" height="223">
+	</mx:VBox>
+	<mx:transitions>
+		<!--
+		//fromState 属性指定当应用该过渡时您要更改的视图状态
+		//toState 属性指定您要更改为的视图状态
+		//effect 属性是对要播放的 Effect 对象的引用
+		-->
+		<mx:Transition id="myTransition" fromState="*" toState="Advanced">
+			<!--
+			//<mx:Parallel> 和 <mx:Sequence> 标签分别引发并行或按顺序播放的效果
+			 -->
+			<mx:Parallel target="{myVBox}">
+				<!--
+				//效果标签
+				-->
+				<mx:WipeDown duration="2000"/>
+				<mx:Dissolve alphaFrom="0.0" alphaTo="1.0" duration="2000"/>
+			</mx:Parallel>
+		</mx:Transition>
+	</mx:transitions>
+
+</mx:Application>

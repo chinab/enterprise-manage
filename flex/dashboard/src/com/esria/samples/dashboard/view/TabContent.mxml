@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Displays a list of links.
+-->
+<PodContentBase
+	xmlns="com.esria.samples.dashboard.view.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%" height="100%">
+	<mx:Script>
+		<![CDATA[
+			import mx.containers.Canvas;
+			import mx.controls.Label;
+			import flash.net.navigateToURL;
+			import mx.collections.ArrayCollection;
+			import mx.events.ListEvent;
+			import mx.rpc.events.ResultEvent;
+							
+			[Bindable]
+			private var dataProvider:ArrayCollection;
+			
+			override protected function onResultHttpService(e:ResultEvent):void
+			{
+				var tabXMLList:XMLList = XMLList(e.result.tab);
+				for(var j:int=0;j<tabXMLList.length();j++){
+					var podContent:PodContentBase;
+					if (tabXMLList[j].@type == "chart")
+						podContent = new ChartContent();
+					else if (tabXMLList[j].@type == "form")
+						podContent = new FormContent();
+					else if (tabXMLList[j].@type == "list")
+						podContent = new ListContent();
+					else if (tabXMLList[j].@type == "pieChart")
+						podContent = new PieChartContent();
+					else if (tabXMLList[j].@type == "gaugesChart")
+						podContent = new GaugesChartContent();
+					else if (tabXMLList[j].@type == "grid")
+						podContent = new GridContent();
+					else if (tabXMLList[j].@type == "tab")
+						podContent = new TabContent();
+					
+					podContent.properties = tabXMLList[j];
+					var canvas:Canvas = new Canvas();
+					canvas.percentHeight = 100;
+					canvas.percentWidth = 100;
+					canvas.label = tabXMLList[j].@title;
+					canvas.addChild(podContent);
+					tab.addChild(canvas);
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:TabNavigator id="tab" width="100%" height="100%">
+	</mx:TabNavigator>
+	
+</PodContentBase>

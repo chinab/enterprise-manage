@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	width="300" height="430" horizontalAlign="center" verticalAlign="middle" 
+	title="{titleWin}" fontSize="12" initialize="init()">
+
+	<mx:Script>
+		<![CDATA[
+			/**
+			 * 说明：
+			 * 1、TreeTitleWin客户端组件是一个展示树形结构数据的窗口组件，可以根据设定单个树或多个树，设定节点是否含有选择框，选择节点确定后可以返回节点id
+			 * 2、组件中更改了树节点的图标，所以使用的时候确保含有"../resources/treeLeaf.png"和"../resources/treeRoot.png"两个图片文件
+			 * 3、组件中为了对节点加选择框使用了渲染器，所以使用的时候确保含有"com.test.TreeCheckBoxRenderer"类
+			 * 4、数据文件为xml格式，可采用直接请求一个action返回一个xml串的形式,如：
+			 * 	<company id="1" name="大唐集团发电公司" isLeaf="false" selected="false">
+  			 *		<company id="900" name="安徽分公司" isLeaf="true" selected="false"/>
+  			 *		<company id="1700" name="大唐甘肃发电有限公司" isLeaf="true" selected="false"/>
+ 			 *		<company id="200" name="大唐国际发电股份有限公司" isLeaf="true" selected="false"/>
+  			 *		<company id="1500" name="大唐黑龙江发电有限公司" isLeaf="true" selected="false"/>
+  			 *		<company id="600" name="大唐华银电力股份有限公司" isLeaf="true" selected="false"/>
+  			 *	</company>
+  			 *  其中company元素中的属性如id、name为不能更改项，必须按这个格式写，company元素名可以自行定义。
+  			 * 	id为树节点id，name为树的显示标签，isLeaf主要是用来设置带有选择框的节点是否可选，为false则不可选（例子中设置根为false不可选），selected="false"为默认设置，不要更改。
+  			 * 
+  			 * 作者：zhouyang
+  			 * 2009-06-20
+			 * 
+			 */
+			
+			import com.xvxv.aclass.XmlTools;
+			import mx.collections.XMLListCollection;
+			import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			
+			private var treeXml1:XML;
+			private var treeXml2:XML;
+			private var treeXml3:XML;
+			private var service2Flag:Boolean = true;
+			private var service3Flag:Boolean = true;
+			private var lastSelectTree:String = "tree4"; 
+			
+			[Bindable]
+			internal var titleWin:String = "树窗口";     //窗口标题
+			internal var singleTree:Boolean = true;  //是否是单个树，默认为是
+			internal var treeName1:String = "";    //第一个树的名字
+			internal var treeName2:String = "";    //第二个树的名字
+			internal var treeName3:String = "";    //第三个树的名字
+			internal var haveCheckBox:Boolean = false; //是否需要节点前带选择框，默认不要
+			
+			[Embed(source="../resources/treeLeaf.png")]
+			private static const leaf:Class;
+			[Embed(source="../resources/treeRoot.png")]
+			private static const treeRoot:Class;
+			
+			private function getImage(data:Object):Object{
+				if(data==null) return null;
+				if("true"==data.@isLeaf){
+					return leaf;
+				}
+				return treeRoot;
+			}
+			
+			private function init():void {
+				
+				if(singleTree==true){
+					//top为0隐藏TabBar
+					vStack.setStyle("top",0);
+					//bottom为36，用于设置确定、取消按钮的高度
+					vStack.setStyle("bottom",36);
+					
+					if(haveCheckBox==false){
+						//设置第四个树伟选中状态，使第四个树初始时不为null
+						vStack.selectedIndex = 3;
+					}
+				}else{
+					vStack.setStyle("top",24);
+					vStack.setStyle("bottom",36);
+					//TabBar的数据源
+					var array:Array = new Array();
+					if(treeName1!=""){
+						var obj1:Object = new Object();
+						obj1.label = treeName1;
+						obj1.data = "1";
+						array.push(obj1);
+					}
+					if(treeName2!=""){
+						var obj2:Object = new Object();
+						obj2.label = treeName2;
+						obj2.data = "2";
+						array.push(obj2);
+					}
+					if(treeName3!=""){
+						var obj3:Object = new Object();
+						obj3.label = treeName3;
+						obj3.data = "3";
+						array.push(obj3);
+					}
+					tabbar.dataProvider = array;
+					if(haveCheckBox==false){
+						vStack.selectedIndex = 3;
+					}
+				}
+				
+				try{
+				  	treeXmlService1.send();
+			  	}catch(e:IOError){
+			  		Alert.show("请求服务器错误","提示");
+			  	}
+			}
+			
+			private function doIt():void {
+				//分两种情况处理，false节点不带选择框：返回最后一个选中的节点，若是有多个树，则以最后查看的树为标准，最后一个树没有选择节点则提示选择节点
+				//true节点带选择框：返回所有被选择的节点，包括不在同一个树中的节点（如果有多个树）
+				if(haveCheckBox==false){
+					if(lastSelectTree == "tree4"){
+						if(tree4.selectedIndex<0||tree4.selectedItem.@id==""){
+							Alert.show("请选择节点！","提示");
+							return;
+						}else{
+							parentDocument._singleSelectedId = tree4.selectedItem.@id;
+						}
+					}else if(lastSelectTree == "tree5"){
+						if(tree5.selectedIndex<0||tree5.selectedItem.@id==""){
+							Alert.show("请选择节点！","提示");
+							return;
+						}else{
+							parentDocument._singleSelectedId = tree5.selectedItem.@id;
+						}
+					}else if(lastSelectTree == "tree6"){
+						if(tree6.selectedIndex<0||tree6.selectedItem.@id==""){
+							Alert.show("请选择节点！","提示");
+							return;
+						}else{
+							parentDocument._singleSelectedId = tree6.selectedItem.@id;
+						}
+					}
+				}else{
+					var arr1:XMLListCollection;
+					var arr2:XMLListCollection;
+					var arr3:XMLListCollection;
+					var arr:Array = new Array();
+					
+					if(tree1!=null && tree1.selectedIndex<0){
+					
+					}else if(tree1!=null && tree1.selectedIndex>0){
+						arr1 = XmlTools.treeListToList(XMLList(tree1.dataProvider));
+						for each(var o1:XML in arr1){
+	                		if(o1.@selected.toString()=="true")
+	                			arr.push(o1.@id);
+	                	}
+					}
+					
+					if(tree2!=null && tree2.selectedIndex<0){
+						
+					}else if(tree2!=null && tree2.selectedIndex>0){
+						arr2 = XmlTools.treeListToList(XMLList(tree2.dataProvider));
+						for each(var o2:XML in arr2){
+	                		if(o2.@selected.toString()=="true")
+	                			arr.push(o2.@id);
+	                	}
+					}
+					
+					if(tree3!=null && tree3.selectedIndex<0){
+						
+					}else if(tree3!=null && tree3.selectedIndex>0){
+						arr3 = XmlTools.treeListToList(XMLList(tree3.dataProvider));
+						for each(var o3:XML in arr3){
+	                		if(o3.@selected.toString()=="true")
+	                			arr.push(o3.@id);
+	                	}
+					}
+					
+					if(arr!=null&&arr.length>0){
+						parentDocument._multiSelectedIds = arr;
+					}else{
+						Alert.show("请选择节点！","提示");
+						return;
+					}
+				}
+				
+				PopUpManager.removePopUp(this);	
+			}
+			
+			private function cancelIt():void {
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function treeXmlToData1(event:ResultEvent):void {
+				treeXml1 = (XML)(event.result);
+			    if(treeXml1.name().toString()=="error"){
+			    		Alert.show(treeXml1.toString(),"提示");
+			    }else{
+			    	if(haveCheckBox==true){
+			    		tree1.dataProvider = treeXml1;
+					    //展开第一级
+						tree1.validateNow();
+					    tree1.selectedIndex = 0;
+					    tree1.expandItem(tree1.selectedItem,true);
+			    	}else{
+					    tree4.dataProvider = treeXml1;
+					    //展开第一级
+						tree4.validateNow();
+					    tree4.selectedIndex = 0;
+					    tree4.expandItem(tree4.selectedItem,true);
+			    	}
+			    }
+			}
+			
+			private function treeXmlToData2(event:ResultEvent):void {
+				treeXml2 = (XML)(event.result);
+			    if(treeXml2.name().toString()=="error"){
+			    		Alert.show(treeXml2.toString(),"提示");
+			    }else{
+			    	if(haveCheckBox==true){
+					    tree2.dataProvider = treeXml2;
+					     //展开第一级
+						tree2.validateNow();
+					    tree2.selectedIndex = 0;
+					    tree2.expandItem(tree2.selectedItem,true);
+			    	}else{
+					    tree5.dataProvider = treeXml2;
+					     //展开第一级
+						tree5.validateNow();
+					    tree5.selectedIndex = 0;
+					    tree5.expandItem(tree5.selectedItem,true);
+			    	}
+			    }
+			}
+			
+			private function treeXmlToData3(event:ResultEvent):void {
+				treeXml3 = (XML)(event.result);
+			    if(treeXml3.name().toString()=="error"){
+			    		Alert.show(treeXml3.toString(),"提示");
+			    }else{
+			    	if(haveCheckBox==true){
+					    tree3.dataProvider = treeXml3;
+					    //展开第一级
+						tree3.validateNow();
+					    tree3.selectedIndex = 0;
+					    tree3.expandItem(tree3.selectedItem,true);
+			    	}else{
+					    tree6.dataProvider = treeXml3;
+					    //展开第一级
+						tree6.validateNow();
+					    tree6.selectedIndex = 0;
+					    tree6.expandItem(tree6.selectedItem,true);
+			    	}
+			    }
+			}
+			
+			private function tab_itemClick(event:ItemClickEvent):void {
+				vStack.selectedIndex = event.index;
+				if(vStack.selectedIndex==1 && service2Flag){
+					if(haveCheckBox==false){
+						vStack.selectedIndex=4;
+						lastSelectTree = "tree5";
+					}
+					treeXmlService2.send();
+					service2Flag = false;
+				}else if(vStack.selectedIndex==1 && !service2Flag){
+					if(haveCheckBox==false){
+						vStack.selectedIndex=4;
+						lastSelectTree = "tree5";
+					}
+				}
+				
+				if(vStack.selectedIndex==2 && service3Flag){
+					if(haveCheckBox==false){
+						vStack.selectedIndex = 5;
+						lastSelectTree = "tree6";
+					}
+					treeXmlService3.send();
+					service3Flag = false;
+				}else if(vStack.selectedIndex==2 && !service3Flag){
+					if(haveCheckBox==false){
+						vStack.selectedIndex = 5;
+						lastSelectTree = "tree6";
+					}
+				}
+				
+				if(vStack.selectedIndex==0){
+					if(haveCheckBox==false){
+						vStack.selectedIndex = 3;
+						lastSelectTree = "tree4";
+					}
+				}
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="treeXmlService1" resultFormat="xml" result="treeXmlToData1(event)" />
+	<mx:HTTPService id="treeXmlService2" resultFormat="xml" result="treeXmlToData2(event)" />
+	<mx:HTTPService id="treeXmlService3" resultFormat="xml" result="treeXmlToData3(event)" />
+	<mx:TabBar fontWeight="normal" id="tabbar" itemClick="tab_itemClick(event)">
+	</mx:TabBar>
+	<!--定义了六个树，前三个为节点前带选择框时用，后三个为节点前不带选择框时用，因为渲染器不支持as代码中动态设置，所以采用此设计 -->
+	<mx:ViewStack id="vStack" width="100%" height="100%">
+		<mx:VBox>
+			<mx:Tree id="tree1" itemRenderer="com.test.TreeCheckBoxRenderer" labelField="@name" showRoot="true" iconFunction="getImage" width="100%" height="100%">
+			</mx:Tree>
+		</mx:VBox>
+		<mx:VBox>
+			<mx:Tree id="tree2" itemRenderer="com.test.TreeCheckBoxRenderer" labelField="@name" showRoot="true" iconFunction="getImage" width="100%" height="100%">
+			</mx:Tree>
+		</mx:VBox>
+		<mx:VBox>
+			<mx:Tree id="tree3" itemRenderer="com.test.TreeCheckBoxRenderer" labelField="@name" showRoot="true" iconFunction="getImage" width="100%" height="100%">
+			</mx:Tree>
+		</mx:VBox>
+		<mx:VBox>
+			<mx:Tree id="tree4" labelField="@name" showRoot="true" iconFunction="getImage" width="100%" height="100%">
+			</mx:Tree>
+		</mx:VBox>
+		<mx:VBox>
+			<mx:Tree id="tree5" labelField="@name" showRoot="true" iconFunction="getImage" width="100%" height="100%">
+			</mx:Tree>
+		</mx:VBox>
+		<mx:VBox>
+			<mx:Tree id="tree6" labelField="@name" showRoot="true" iconFunction="getImage" width="100%" height="100%">
+			</mx:Tree>
+		</mx:VBox>
+	</mx:ViewStack>
+	<mx:Button x="70" y="360" label="确定" fontWeight="normal" click="doIt()" labelPlacement="bottom"/>
+	<mx:Button x="158" y="360" label="取消" fontWeight="normal" click="cancelIt()" labelPlacement="bottom"/>
+</mx:TitleWindow>

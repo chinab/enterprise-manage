@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:ilog="http://www.ilog.com/2007/ilog/flex"
+                xmlns:local="*" backgroundColor="#FFFFFF"
+                layout="absolute"
+                initialize="load()" xmlns:rtdata="cn.rtdata.*">
+  <mx:Script>
+    <![CDATA[
+import cn.rtdata.Condition;
+import mx.formatters.DateFormatter;
+import mx.controls.Alert;
+import mx.collections.ArrayCollection;
+import flash.utils.getQualifiedClassName;
+import mx.resources.ResourceManager;
+import mx.collections.IViewCursor;
+import mx.controls.treeClasses.HierarchicalCollectionView;
+import mx.collections.IList;
+import mx.controls.treeClasses.TreeItemRenderer;
+import mx.controls.Label;
+import mx.formatters.PhoneFormatter;
+import mx.containers.VBox;  
+import mx.managers.PopUpManager;      
+import mx.resources.ResourceBundle;
+import mx.events.CollectionEventKind;
+import mx.events.CollectionEvent;
+import mx.controls.RadioButton;
+import mx.events.PropertyChangeEvent;
+import mx.events.FlexEvent;
+import mx.controls.CheckBox;
+import mx.events.ListEvent;
+import mx.collections.ICollectionView;
+import mx.collections.HierarchicalData;
+import mx.collections.XMLListCollection;
+import ilog.orgchart.OrgChartEvent;
+  
+  [Bindable]
+  private var model:XML;
+//  private var models:ArrayCollection = new ArrayCollection();
+  private var conditions:ArrayCollection = new ArrayCollection();
+  private var condition:Condition;
+  private var modelNo:int = 0;
+  private var reportId:String;
+  private var indexId:String;
+  private var unitId:String;
+  private var dateFormatter:DateFormatter = new DateFormatter();
+  private var valueDate:String ;
+  
+  [Embed(source="../resources/fenggongshi.png")]
+  private static const fenggongshi:Class;
+  
+  [Embed(source="../resources/dianchang.png")]
+  private static const dianchang:Class;
+  
+  [Embed(source="../resources/jizhu.png")]
+  private static const jizhu:Class;
+  
+  		private var xmlLoader:URLLoader = new URLLoader();
+		private var xml:XML;
+		
+	private function initDataSource(evt:Event):void
+	{
+		switch (evt.type) {
+			case Event.COMPLETE:
+			var ldr:URLLoader = evt.currentTarget as URLLoader;
+			model = XML(ldr.data);
+			chart.viewMode = OrgChart.GLOBAL_VIEW_MODE;
+			chart.lowerLevelLimit = 4;
+			condition = new Condition("0","0");
+		    conditions.addItem(condition);
+		    titleLable.text = model.@unitName+"当前机组运行情况";
+		    indexTotal.text = model.@valueName4+ model.@value4+"       "+model.@valueName5+model.@value5+"       "+model.@valueName6+model.@value6;
+		    chart.dataProvider = model;
+		    chart.fitToContents(true);
+		    chart.enabled = true;
+		    chart.localItem = chart.selectedItems[0];
+		}
+	}
+
+  public function load():void {
+  		reportId = Application.application.parameters["reportId"];
+	  	var resourceNode:String = Application.application.parameters["resourceNode"];
+		xmlLoader = new URLLoader();
+		xmlLoader.addEventListener(Event.COMPLETE, initDataSource);
+		xmlLoader.load(new URLRequest("/ahboot/runStateStatReport.action?resourceNode="+resourceNode));
+//		xmlLoader.load(new URLRequest("http://192.168.32.28:8080/ahboot/runStateStatReport.action"));
+//		xmlLoader.load(new URLRequest("d:/data.xml"));
+  }
+
+  private function initOrgChart():void {
+    chart.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler);
+  }
+  
+  private function propertyChangeHandler(event:PropertyChangeEvent):void {
+   if(event.property == "localItem") {
+     chart.fitToContents(false);
+   }
+  }
+  
+  private function getUnitName(data:Object):String {
+    return (data.@unitName);
+  }
+  private function getValue1(data:Object):String {
+    return (data.@valueName1+data.@value1);
+  }
+  
+  private function getValue2(data:Object):String {
+    return (data.@valueName2+data.@value2);
+  }
+  
+  private function getValue3(data:Object):String {
+    return (data.@valueName3+data.@value3);
+  }
+  
+  private function getLayout(item:Object):String {
+      return item.@layout; 
+  }
+  
+  private function getImage(data:Object):Object {
+  	if("group2"==data.@groupType){
+	    return fenggongshi;
+  	}else if("group3"==data.@groupType){
+    	return dianchang;
+    }else{
+    	return jizhu;
+    }
+  }
+    ]]>
+       
+  </mx:Script>
+  	<mx:HBox horizontalAlign="center" width="100%" height="25">
+  		<mx:Label id="titleLable" text="" fontWeight="bold" fontSize="14"/>
+  	</mx:HBox>
+  	<mx:HBox horizontalAlign="center" width="100%" height="25" left="0" top="20">
+  		<mx:Label id="indexTotal" text="" fontSize="12"/>
+  	</mx:HBox>
+  <ilog:OrgChart id="chart" width="100%" height="100%" creationComplete="initOrgChart()" doubleClickEnabled="false" 
+                 layoutYPadding="30" layoutXPadding="40" initialPosition="fitToContents" allowLocalNavigation="false"
+                linkRadius="0" linkThickness="2" allowNavigation="true" allowSelection="false" 
+                allowMultipleSelection="true" y="45">
+    <ilog:fields>
+    	<ilog:OrgChartFields layoutFunction="{getLayout}" pictureFunction="{getImage}" nameFunction="{getUnitName}" positionFunction="{getValue1}" emailFunction="{getValue2}" phoneFunction="{getValue3}" />
+    </ilog:fields>
+    <ilog:itemRenderer>
+      <mx:Component>
+      	<!--local:ComplexItemRenderer /-->
+        <!--ilog:OrgChartItemRenderer fontAntiAliasType="advanced" fontGridFitType="none" fontSize="12"/-->
+        <rtdata:MyOrgChartItemRenderer  fontAntiAliasType="advanced" fontGridFitType="none" fontSize="12"/>
+      </mx:Component>
+    </ilog:itemRenderer>
+  </ilog:OrgChart>
+</mx:Application>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Displays a list of links.
+-->
+<PodContentBase
+	xmlns="com.esria.samples.dashboard.view.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	width="100%" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+	<mx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			import com.xvxv.aclass.AmchartsLoader;
+			import mx.rpc.events.ResultEvent;
+			private var amchartsLoader:AmchartsLoader = new AmchartsLoader();
+			override protected function onResultHttpService(event:ResultEvent):void{
+				var dataXml:XML = XML(event.result);
+				amchartsLoader.percentWidth= dataXml.percent_width;
+				amchartsLoader.percentHeight = dataXml.percent_height;
+				amchartsLoader.swfUrl = dataXml.swf_url.toString();
+				amchartsLoader.path = dataXml.path.toString();
+				amchartsLoader.dataFile = dataXml.data_file.toString(); 
+				amchartsLoader.settingsFile = dataXml.settings_file.toString();
+				amchartsLoader.maintainAspectRatio = true;
+				canvas.addChild(amchartsLoader);
+				
+				var width:Number = flash.system.Capabilities.screenResolutionX;
+				if(width==1024)
+					amchartsLoader.loadChart(canvas.width*3,canvas.height*2.9);
+				if(width==1280)
+					amchartsLoader.loadChart(canvas.width*2,canvas.height*1.9);
+			}
+		]]>
+	</mx:Script>
+	<mx:Canvas id="canvas" width="100%" height="100%"/>
+</PodContentBase>

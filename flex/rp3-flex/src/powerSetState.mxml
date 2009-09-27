@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				layout="absolute"
+				backgroundColor="#FFFFFF"
+				xmlns:ilog="http://www.ilog.com/2007/ilog/flex"
+				xmlns:aclass="com.xvxv.aclass.*"
+				initialize="init()">
+	<mx:Style>
+		Application{
+			font-size:12px;
+		}
+		LegendItem{
+			font-size:12px;
+        }
+        DataTip{
+        	font-size:12px;
+        }
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.series.ColumnSeries;
+			import mx.charts.series.items.ColumnSeriesItem;
+			import mx.charts.HitData;
+			import mx.events.ListEvent;
+			import mx.charts.events.ChartItemEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.charts.LegendItem;
+			import mx.charts.chartClasses.IAxis;
+			import mx.graphics.SolidColor;
+			import mx.charts.series.items.PieSeriesItem;
+			import mx.charts.ChartItem;
+			import mx.graphics.IFill;
+			import com.xvxv.aclass.MyIFactory;
+			import com.xvxv.aclass.myItemRenderer;
+
+			[Embed(source="../resources/fenggongshi-min.png")]
+			private static const fenggongshi:Class;
+			[Embed(source="../resources/dianchang-min.png")]
+			private static const dianchang:Class;
+			[Embed(source="../resources/jizhu-min.png")]
+			private static const jizhu:Class;
+			[Embed(source="../resources/jizhu1.png")]
+			private static const jizhu1:Class;
+			[Embed(source="../resources/jizhu2.png")]
+			private static const jizhu2:Class;
+
+			private function getImage(data:Object):Object
+			{
+				if (data == null)
+					return null;
+				if ("group2" == data.@groupType)
+				{
+					return fenggongshi;
+				}
+				else if ("group3" == data.@groupType)
+				{
+					return dianchang;
+				}
+				return jizhu;
+			}
+			private var resourceNode:String="";
+
+			private function pieSeries_labelFunc(item:Object, field:String, index:Number, percentValue:Number):String
+			{
+				return percentValue.toFixed(2) + "%";
+			}
+
+			private function linearAxis_labelFunc(item:Object, prevValue:Object, axis:IAxis):String
+			{
+				return numberFormatter.format(item);
+			}
+
+			private function init():void
+			{
+//				dataGridService.url="file:///D:/getXmlFlexStateTreeData.action.xml";
+//				dataPieChart1.url="file:///D:/pieChart.xml";
+//    			dataPieChart2.url="file:///D:/pieChart.xml";
+//    			dataPieChart3.url="file:///D:/pieChart.xml";
+//    			dataColumnChart.url="file:///D:/columnChart.xml";
+//    			dataGaugeChart.url="file:///D:/getXMLDataMeterSinglePowerDataValueAction.action.xml";
+
+				dataGridService.url="/ahboot/getXmlFlexStateTreeData.action";
+				dataPieChart1.url="/ahboot/getXMLPowerSizeNumSinglePowerDataValueAction.action";
+				dataPieChart2.url="/ahboot/getXMLPowerSetNumSinglePowerDataValueAction.action";
+				dataPieChart3.url="/ahboot/getXMLDataCakeSinglePowerDataValueAction.action";
+				dataColumnChart.url="/ahboot/getXMLDataPoleSinglePowerDataValueAction.action";
+				dataGaugeChart.url="/ahboot/getXMLDataMeterSinglePowerDataValueAction.action";
+				resourceNode=Application.application.parameters["resourceNode"];
+
+				dataGridService.send({resourceNode: resourceNode});
+				showChange(true);
+				dataPieChart1.send({resourceNode: resourceNode,unitId:900});
+				dataPieChart2.send({resourceNode: resourceNode,unitId:900});
+			}
+
+			private function dataGridServiceResult(event:ResultEvent):void
+			{
+				var data:XML=XML(event.result);
+				advancedDataGridData.source=data;
+//				var unitId:String = XML(data.children()[0]).children()[0].@unitId.toString();
+				var unitId:String=data.@unitId.toString();
+				dataPieChart3.send({unitId: unitId});
+				dataColumnChart.send({unitId: unitId});
+				dataGaugeChart.send({unitId: unitId});
+			}
+
+			private function adgItemClick(event:ListEvent):void
+			{
+				var data:XML=XML(event.itemRenderer.data);
+				var unitId:String=data.@unitId;
+				if ("group4" == data.@groupType)
+				{
+					dataPieChart3.send({unitId: unitId});
+					dataColumnChart.send({unitId: unitId});
+					showChange(false);
+				}
+				else
+				{
+					dataPieChart1.send({resourceNode: resourceNode,unitId:unitId});
+					dataPieChart2.send({resourceNode: resourceNode,unitId:unitId});
+					showChange(true);
+				}
+				dataGaugeChart.send({unitId: unitId});
+			}
+
+			private function dataPieChart1Result(event:ResultEvent):void
+			{
+				pieChart1.dataProvider=XML(event.result).data;
+			}
+
+			private function dataPieChart2ceResult(event:ResultEvent):void
+			{
+				pieChart2.dataProvider=XML(event.result).data;
+			}
+
+			private function dataPieChart3ceResult(event:ResultEvent):void
+			{
+				pieChart3.dataProvider=XML(event.result).data;
+
+			}
+
+			private function dataColumnChartResult(event:ResultEvent):void
+			{
+				var dataXmlList:XMLList=XML(event.result).data;
+				var obj:Object={value1: dataXmlList[0].@value.toString(), value2: dataXmlList[1].@value.toString()};
+				columnchart.dataProvider=obj;
+			}
+
+			private function dataGaugeChartResult(event:ResultEvent):void
+			{
+				var data:XML=XML(event.result);
+				gaugeChart.value=Number(data.@yougong.toString());
+				gaugeChart.maximum=Number(data.@size.toString());
+				gaugeChart.majorTickInterval=Number(data.@size.toString()) / 5;
+				gaugeChart.minorTickInterval=Number(data.@size.toString());
+				gaugeChart.trackMaximum=Number(data.@size.toString());
+				var obj:Object={time: data.@time.toString(), yougong: data.@yougong.toString(), wugong: data.@wugong.toString(), agc: data.@agc.toString(), fhplan: data.@fhplan.toString(), yinshu: data.@yinshu.toString()};
+				setStateDataGrid.dataProvider=obj;
+				setStateTitelLable.text=data.@unitName.toString() + "当前出力情况";
+			}
+
+			private function pieChart_itemClick(evt:ChartItemEvent, chartId:String):void
+			{
+				var arr:Array=[];
+				arr[evt.hitData.chartItem.index]=0.1;
+				if (chartId == "pieChart1")
+				{
+					pieSeries1.perWedgeExplodeRadius=arr;
+				}
+				else if (chartId == "pieChart2")
+				{
+					pieSeries2.perWedgeExplodeRadius=arr;
+				}
+				else if (chartId == "pieChart3")
+				{
+					pieSeries3.perWedgeExplodeRadius=arr;
+				}
+			}
+
+			private function columnDataTipFunction(item:HitData):String
+			{
+				var cSI:ColumnSeriesItem=item.chartItem as ColumnSeriesItem;
+				var cs:ColumnSeries=ColumnSeries(cSI.element);
+				return "<b>" + cs.legendData[0].label + "</b><br>" + cSI.yValue + "天";
+			}
+
+			private function pieDataTipFunction1(item:HitData):String
+			{
+				return pieDataTipFunction(item, "pieChart1");
+			}
+
+			private function pieDataTipFunction2(item:HitData):String
+			{
+				return pieDataTipFunction(item, "pieChart2");
+			}
+
+			private function pieDataTipFunction3(item:HitData):String
+			{
+				return pieDataTipFunction(item, "pieChart3");
+			}
+
+			private function pieDataTipFunction(item:HitData, chartId:String):String
+			{
+				var pSI:PieSeriesItem=item.chartItem as PieSeriesItem;
+				if (chartId == "pieChart1")
+				{
+					return "当前<b>" + pSI.item.@name + "</b>总容量<br />" + pSI.item.@value + "MW <br />(<i>" + pSI.percentValue.toFixed(2) + "%</i>)";
+				}
+				else if (chartId == "pieChart2")
+				{
+					return "当前<b>" + pSI.item.@name + "</b>机组数<br />" + pSI.item.@value + "个 <br />(<i>" + pSI.percentValue.toFixed(2) + "%</i>)";
+				}
+				else if (chartId == "pieChart3")
+				{
+					return "历史<b>" + pSI.item.@name + "</b>总天数<br />" + pSI.item.@value + "天 <br />(<i>" + pSI.percentValue.toFixed(2) + "%</i>)";
+				}
+				return "";
+			}
+
+			private function showChange(show:Boolean):void
+			{
+				pieChart1.visible=show;
+				pieChart2.visible=show;
+				label1.visible=show;
+				label2.visible=show;
+				pieChart3.visible=!show;
+				label3.visible=!show;
+				columnchart.visible=!show;
+				columnLegend.visible=!show;
+			}
+		]]>
+	</mx:Script>
+	<mx:NumberFormatter id="numberFormatter"
+						precision="0"/>
+	<mx:HTTPService id="dataGridService"
+					resultFormat="xml"
+					result="dataGridServiceResult(event)"/>
+	<mx:HTTPService id="dataPieChart1"
+					resultFormat="xml"
+					result="dataPieChart1Result(event)"/>
+	<mx:HTTPService id="dataPieChart2"
+					resultFormat="xml"
+					result="dataPieChart2ceResult(event)"/>
+	<mx:HTTPService id="dataPieChart3"
+					resultFormat="xml"
+					result="dataPieChart3ceResult(event)"/>
+	<mx:HTTPService id="dataColumnChart"
+					resultFormat="xml"
+					result="dataColumnChartResult(event)"/>
+	<mx:HTTPService id="dataGaugeChart"
+					resultFormat="xml"
+					result="dataGaugeChartResult(event)"/>
+	<mx:Array id="pieChartFillArray">
+		<mx:RadialGradient id="code1">
+			<mx:entries>
+				<mx:Array>
+					<mx:GradientEntry color="#DEFE7E"
+									  ratio="0"
+									  alpha="0.8"/>
+					<mx:GradientEntry color="#98CB02"
+									  ratio="1"
+									  alpha="0.8"/>
+				</mx:Array>
+			</mx:entries>
+		</mx:RadialGradient>
+		<mx:RadialGradient id="code3">
+			<mx:entries>
+				<mx:Array>
+					<mx:GradientEntry color="#BFCFFF"
+									  ratio="0"
+									  alpha="0.8"/>
+					<mx:GradientEntry color="#3366FF"
+									  ratio="1"
+									  alpha="0.8"/>
+				</mx:Array>
+			</mx:entries>
+		</mx:RadialGradient>
+		<mx:RadialGradient id="code4">
+			<mx:entries>
+				<mx:Array>
+					<mx:GradientEntry color="#FFD3B0"
+									  ratio="0"
+									  alpha="0.8"/>
+					<mx:GradientEntry color="#FF7101"
+									  ratio="1"
+									  alpha="0.8"/>
+				</mx:Array>
+			</mx:entries>
+		</mx:RadialGradient>
+	</mx:Array>
+	<mx:SeriesInterpolate id="interpolate"
+						  elementOffset="10"/>
+
+	<mx:Canvas width="799"
+			   height="511"
+			   backgroundColor="#FFFFFF"
+			   x="9"
+			   y="0">
+		<aclass:MyAdvancedDataGrid displayItemsExpanded="true"
+								   itemClick="{adgItemClick(event)}"
+								   x="10"
+								   sortableColumns="false"
+								   sortExpertMode="true"
+								   iconFunction="getImage"
+								   y="191"
+								   id="adg1"
+								   designViewDataType="tree"
+								   width="779"
+								   height="314"
+								   fontSize="12"
+								   rollOverColor="#EFEFEF"
+								   selectionColor="#DFE8F7">
+			<aclass:dataProvider>
+				<mx:HierarchicalData id="advancedDataGridData"/>
+			</aclass:dataProvider>
+			<aclass:columns>
+				<mx:AdvancedDataGridColumn headerText="单位"
+										   dataField="@unitName"
+										   width="140"/>
+				<mx:AdvancedDataGridColumn headerText="状态"
+										   dataField="@stateId"
+										   width="90">
+					<mx:itemRenderer>
+						<mx:Component>
+							<aclass:stateItemRenderer/>
+						</mx:Component>
+					</mx:itemRenderer>
+				</mx:AdvancedDataGridColumn>
+				<mx:AdvancedDataGridColumn headerText="本日发电量"
+										   textAlign="right"
+										   dataField="@indexDTPower"/>
+				<mx:AdvancedDataGridColumn headerText="本月发电量"
+										   textAlign="right"
+										   dataField="@indexMTPower"/>
+				<mx:AdvancedDataGridColumn headerText="本年发电量"
+										   textAlign="right"
+										   dataField="@indexYTPower"/>
+				<mx:AdvancedDataGridColumn headerText="   "
+										   textAlign="right"
+										   dataField=""/>
+			</aclass:columns>
+		</aclass:MyAdvancedDataGrid>
+
+		<mx:PieChart showDataTips="true"
+					 dataTipFunction="pieDataTipFunction1"
+					 x="444"
+					 y="12"
+					 id="pieChart1"
+					 itemClick="{pieChart_itemClick(event,'pieChart1');}"
+					 hideEffect="Fide"
+					 width="164"
+					 height="150">
+			<mx:series>
+				<mx:PieSeries id="pieSeries1"
+							  nameField="@name"
+							  field="@value"
+							  labelFunction="pieSeries_labelFunc"
+							  labelPosition="inside"
+							  fills="{pieChartFillArray}"
+							  showDataEffect="{interpolate}"/>
+			</mx:series>
+		</mx:PieChart>
+		<mx:PieChart showDataTips="true"
+					 dataTipFunction="pieDataTipFunction2"
+					 x="616"
+					 y="12"
+					 id="pieChart2"
+					 itemClick="{pieChart_itemClick(event,'pieChart2');}"
+					 width="164"
+					 height="150">
+			<mx:series>
+				<mx:PieSeries id="pieSeries2"
+							  nameField="@name"
+							  field="@value"
+							  labelFunction="pieSeries_labelFunc"
+							  labelPosition="inside"
+							  fills="{pieChartFillArray}"
+							  showDataEffect="{interpolate}"/>
+			</mx:series>
+		</mx:PieChart>
+		<mx:PieChart showDataTips="true"
+					 dataTipFunction="pieDataTipFunction3"
+					 x="617"
+					 y="12"
+					 id="pieChart3"
+					 itemClick="{pieChart_itemClick(event,'pieChart3');}"
+					 width="164"
+					 height="150">
+			<mx:series>
+				<mx:PieSeries id="pieSeries3"
+							  nameField="@name"
+							  field="@value"
+							  labelFunction="pieSeries_labelFunc"
+							  labelPosition="inside"
+							  fills="{pieChartFillArray}"
+							  showDataEffect="{interpolate}"/>
+			</mx:series>
+		</mx:PieChart>
+		<mx:Legend dataProvider="{pieChart1}"
+				   horizontalGap="5"
+				   width="164"
+				   height="29"
+				   fontWeight="normal"
+				   name="@name"
+				   y="154"
+				   x="620"/>
+
+		<mx:Label id="label1"
+				  x="534"
+				  y="12"
+				  text="容量比"
+				  width="52"
+				  textAlign="center"
+				  fontSize="12"/>
+		<mx:Label id="label2"
+				  x="687"
+				  y="12"
+				  text="机组个数比"
+				  width="74"
+				  textAlign="center"
+				  fontSize="12"/>
+		<mx:Label id="label3"
+				  x="687"
+				  y="12"
+				  text="时间分布"
+				  width="64"
+				  fontSize="12"
+				  textAlign="center"/>
+
+		<ilog:BlackSemiCircularGauge id="gaugeChart"
+									 minimum="0"
+									 trackMinimum="0"
+									 x="74"
+									 y="4"
+									 width="273"
+									 height="116"
+									 fontSize="12"/>
+		<mx:DataGrid id="setStateDataGrid"
+					 x="10"
+					 y="121"
+					 width="395"
+					 height="45"
+					 fontSize="12"
+					 rollOverColor="#EFEFEF"
+					 selectionColor="#DFE8F7">
+			<mx:columns>
+				<mx:DataGridColumn headerText="时间"
+								   dataField="time"
+								   width="100"/>
+				<mx:DataGridColumn headerText="有功"
+								   dataField="yougong"
+								   width="80"/>
+				<mx:DataGridColumn headerText="无功"
+								   dataField="wugong"
+								   width="80"/>
+				<mx:DataGridColumn headerText="AGC"
+								   dataField="agc"
+								   width="80"/>
+				<mx:DataGridColumn headerText="负荷计划"
+								   dataField="fhplan"
+								   width="100"/>
+				<mx:DataGridColumn headerText="因素"
+								   dataField="yinshu"
+								   width="80"/>
+			</mx:columns>
+		</mx:DataGrid>
+		<mx:Label id="setStateTitelLable"
+				  x="50"
+				  y="167"
+				  width="300"
+				  text="当前出力情况"
+				  textAlign="center"
+				  fontSize="12"/>
+
+		<mx:ColumnChart x="401"
+						y="6"
+						id="columnchart"
+						dataTipFunction="columnDataTipFunction"
+						width="215"
+						height="137"
+						showDataTips="true"
+						columnWidthRatio="0.5"
+						fontSize="12">
+			<mx:horizontalAxis>
+				<mx:CategoryAxis id="ca"
+								 categoryField="@name"/>
+			</mx:horizontalAxis>
+			<mx:verticalAxis>
+				<mx:LinearAxis labelFunction="linearAxis_labelFunc"/>
+			</mx:verticalAxis>
+			<mx:horizontalAxisRenderers>
+				<mx:AxisRenderer axis="{ca}"/>
+			</mx:horizontalAxisRenderers>
+			<mx:series>
+				<mx:ColumnSeries yField="value1"
+								 showDataEffect="interpolate"
+								 displayName="历史最好连续运行天数"
+								 fill="{code3}">
+				</mx:ColumnSeries>
+				<mx:ColumnSeries yField="value2"
+								 showDataEffect="interpolate"
+								 displayName="当前连续运行天数"
+								 fill="{code1}">
+				</mx:ColumnSeries>
+			</mx:series>
+		</mx:ColumnChart>
+		<mx:Legend id="columnLegend"
+				   dataProvider="{columnchart}"
+				   verticalGap="0"
+				   width="167"
+				   height="50"
+				   fontWeight="normal"
+				   name="displayName"
+				   y="134"
+				   x="431"/>
+
+	</mx:Canvas>
+
+</mx:Application>

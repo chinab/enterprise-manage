@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:itemRenderer xmlns:mx="http://www.adobe.com/2006/mxml"> 
+  <mx:Component> 
+  <mx:DataGridItemRenderer>
+   <mx:Script>
+	   <![CDATA[ 
+	   
+	   ]]>
+   </mx:Script> 
+
+  </mx:DataGridItemRenderer> 
+  </mx:Component> 
+</mx:itemRenderer> 

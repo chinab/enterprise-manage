@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<view
+	id="view0"
+	label="Sales">
+	<pod
+		id="pod00"
+		type="chart"
+		title="Yearly Revenue"
+		dataSource="data/revenue.xml"
+		selectedViewIndex="1"
+		valueField="value"
+		categoryField="month"
+		dataTipUnitLabel="$*M"
+		dataTipLabelField="month"/>
+	<pod
+		id="pod13"
+		type="lineChart"
+		title="lineChart"
+		dataSource="data/profit1.xml"
+		radiosName="proType"
+		radioDefaultValue="proType"
+		radioTexts="在建,已开工"
+		radioValues="1,2"
+		buttonsName="dateScope"
+		buttonDefaultValue="proType"
+		buttonTexts="年,月,日"
+		buttonValues="year,month,day"
+		categoryField="month"
+		dataTipUnitLabel="$*M"
+		dataTipLabelField="month"/>
+	<pod
+		id="pod14"
+		type="columnChart"
+		title="lineChart"
+		dataSource="data/profit1.xml"
+		radiosName="proType"
+		radioDefaultValue="proType"
+		radioTexts="在建,已开工"
+		radioValues="1,2"
+		buttonsName="dateScope"
+		buttonDefaultValue="proType"
+		buttonTexts="年,月,日"
+		buttonValues="year,month,day"
+		categoryField="month"
+		dataTipUnitLabel="$*M"
+		dataTipLabelField="month"/>
+	<pod
+		id="pod06"
+		type="pieChart"
+		title="Revenue by Region"
+		dataSource="data/revenue_by_region.xml"
+		valueField="value"
+		categoryField="region"
+		dataTipUnitLabel="$*M"
+		dataTipLabelField="region"/>
+	<pod
+		id="pod03" type="grid" title="创一流水电"
+		dataSource="data/shortcut.xml"  clickable="false"/>
+</view>

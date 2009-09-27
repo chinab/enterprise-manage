@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" initialize="init()" backgroundColor="#FFFFFF" xmlns:aclass="com.xvxv.aclass.*">
+	<mx:Style>
+		Alert{
+			font-size:12;
+		}
+		ToolTip{
+			font-size:12;
+		}
+		.header{
+			text-align:center;
+			font-weight:bold;
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import com.xvxv.aclass.DateTools;
+			import com.xvxv.aclass.MyIFactory;
+			import com.xvxv.aclass.ExcelBean;
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+			import mx.formatters.DateFormatter;
+			import mx.rpc.events.ResultEvent;
+			
+			[Embed(source="../resources/fenggongshi.png")]
+			private static const fenggongshi:Class;
+			[Embed(source="../resources/dianchang.png")]
+			private static const dianchang:Class;
+			[Embed(source="../resources/jizhu.png")]
+			private static const jizhu:Class;
+			[Embed(source="../resources/jizhu1.png")]
+			private static const jizhu1:Class;
+			[Embed(source="../resources/jizhu2.png")]
+			private static const jizhu2:Class;
+			
+			[Bindable]
+			private var lockedColumnCount:int = 1;
+			
+			private var dateFormatter:DateFormatter = new DateFormatter();
+			private var reportName:String;
+			private var resourceNode:String;
+			private var dataXml:XML;
+			private var setXml:XML;
+			private var exportPath:String;
+			private var isFirst:Boolean=true;
+			private var _nowDate:Date = DateTools.getUpOrDownDay(new Date(),-1);
+			
+			private function getImage(data:Object):Object {
+				if(data==null) return null;
+				if("group2"==data.@groupType){
+					return fenggongshi;
+				}else if("group3"==data.@groupType){
+					return dianchang;
+				}
+				return jizhu;
+			}
+			
+			private function getRowColor(data:Object,color:uint):Object {
+				if(data==null) return 0xFFFFFF;
+				if("group2"==data.@groupType){
+					color = 0xF9D2CA;
+				}else if("group3"==data.@groupType){
+					color = 0xDFE5F2;
+				}else{
+					color = 0xFFFFFF;
+				}
+				return color;
+			}
+			
+			private function getColumnColor(columnIndex:int,color:uint):Object {
+				if(columnIndex<lockedColumnCount){
+					color = 0xD1EAFD;
+				}else{
+					if((columnIndex-lockedColumnCount)%3==0) color = 0xFFF5EE;
+					if((columnIndex-lockedColumnCount)%3==1) color = 0xF0FFF0;
+					if((columnIndex-lockedColumnCount)%3==2) color = 0xFFFACD;
+				}
+				return color;
+			}
+			
+			private function init():void{
+				var t:Timer = new Timer(1000, 1);
+			    t.addEventListener(TimerEvent.TIMER_COMPLETE, function(e:Event):void {
+				    dateField.visible = true;
+				    chaxun.visible = true;
+				    perDay.visible = true;
+				    nextDay.visible = true;
+				    mainBox.visible = true;
+			    });
+			    t.start();
+		  		dateFormatter.formatString = "YYYY-MM-DD";
+			  	dateField.selectedDate=new Date(1240675200000);
+			  	
+//			  	dataXmlService.url = "file:///D:/getXmlFlexReportData.action.xml";
+//			  	setXmlService.url = "file:///D:/getXmlFlexReportSet.action.xml";
+			  	dataXmlService.url = Application.application.parameters["dataXmlPath"];
+			  	setXmlService.url = Application.application.parameters["setXmlPath"];
+			  	exportPath = Application.application.parameters["exportPath"];
+			  	resourceNode = Application.application.parameters["resourceNode"];
+			  	reportName = Application.application.parameters["reportName"];
+			  	
+			  	try{
+				  	setXmlService.send({reportName:reportName,resourceNode:resourceNode});
+			  	}catch(e:IOError){
+			  		Alert.show("请求服务器错误","提示");
+			  	}
+			}
+			
+			private function load():void{
+				var valueDate:String = dateFormatter.format(dateField.selectedDate);
+				try{
+					dataXmlService.send({reportName:reportName,resourceNode:resourceNode,valueDate:valueDate});
+				  	ExternalInterface.call("flex_day_baoBiao.showMessage",{resourceNode:resourceNode,valueDate:valueDate});
+				}catch(e:IOError){
+			  		Alert.show("请求服务器错误","提示");
+			  	}
+			}
+			
+			private function goPerDay():void{
+			  	var date:Date = new Date(dateField.selectedDate.getTime()-1000*60*60*24);
+			  	dateField.selectedDate = date;
+			  	load();
+			}
+			
+			private function goNextDay():void{
+			  	var date:Date = new Date(dateField.selectedDate.getTime()+1000*60*60*24);
+			  	dateField.selectedDate = date;
+			  	valDate();
+			  	load();
+			}
+			
+			private function onXmlTOData(event:ResultEvent) : void {
+			    dataXml = (XML)(event.result);
+			    if(dataXml.name().toString()=="error"){
+			    	if(isFirst){
+			    		Alert.show(dataXml.toString(),"提示");
+			    	}
+			    }else{
+				    hd.source = dataXml.power;
+			    }
+			    isFirst = false;
+			}
+			
+			private function onXmlToSet(event:ResultEvent) : void {
+			    setXml = (XML)(event.result);
+			    if(setXml.name().toString()=="error"){
+		    		Alert.show(setXml.toString(),"提示");
+		    		return;
+			    }
+			    
+			    /**
+			    * 给header设置属性
+			    **/
+			    dataTitle.text = setXml.@headerText;
+			    
+				dataColumns = createHeaders(dataColumns,setXml.elements());
+				advancedDataGrid.groupedColumns = dataColumns.children;
+		  		
+		  		load();
+		  		var t:Timer = new Timer(1000, 1);
+			    t.addEventListener(TimerEvent.TIMER_COMPLETE, function(e:Event):void {
+				    load();
+			    });
+			    t.start();
+			}
+			
+			private function createHeaders(parent:AdvancedDataGridColumnGroup,dataChildren:XMLList) : AdvancedDataGridColumnGroup{
+				var children:Array = new Array(dataChildren.length());
+				for(var i:int;i<dataChildren.length();i++){
+			    	var xml:XML = dataChildren[i];
+			    	var name:String = xml.name().toString();
+			    	if(name=="group"){
+			    		var group:AdvancedDataGridColumnGroup = new AdvancedDataGridColumnGroup();
+					    /**
+					    * 给group设置属性
+					    **/
+			    		group.headerText=xml.@headerText;
+			    		group.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		
+			    		children[i] = createHeaders(group,xml.children());
+			    	}else if(name=="column"){
+			    		var column:AdvancedDataGridColumn = new AdvancedDataGridColumn();
+					    /**
+					    * 给column设置属性
+					    **/
+					    if(xml.@dataField=="state") {
+					    	lockedColumnCount=2;
+					    	column.itemRenderer = new MyIFactory();
+					    }
+			    		column.headerText=xml.@headerText;
+			    		column.width=xml.@width.toString()!=""?xml.@width:100;
+			    		column.dataField=xml.@dataField.toString()!=""?"@"+xml.@dataField:"";
+			    		column.setStyle("backgroundColor",0xFFFFFF);
+			    		column.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		if(xml.@textAlign=="left"){
+			    			column.setStyle("textAlign","left");
+			    		}else{
+			    			column.setStyle("textAlign","right");
+			    		}
+			    		
+			    		children[i] = column;
+			    	}
+			    }
+	    		parent.children = children;
+			    return parent;
+			}
+			
+			private function exportReport():void{
+				var valueDate:String = dateFormatter.format(dateField.selectedDate);
+				var exportType:String = exportTypeCB.selectedItem.data;
+				var excelBean:ExcelBean;
+				if(exportPath.indexOf("/")!=-1){
+					if(exportType=="1"){
+						excelBean = new ExcelBean(setXml,dataXml,valueDate,"excel");
+						excelBean.loadExcel(exportPath);
+					}else if(exportType=="2"){
+						excelBean = new ExcelBean(setXml,dataXml,valueDate,"word");
+						excelBean.loadExcel(exportPath);
+					}else if(exportType=="3"){
+						excelBean = new ExcelBean(setXml,dataXml,valueDate,"pdf");
+						excelBean.loadExcel(exportPath);
+					}else if(exportType=="4"){
+						excelBean = new ExcelBean(setXml,dataXml,valueDate,"html");
+						excelBean.loadExcel(exportPath);
+					}
+				}else{
+					Alert.show("请购买此功能!\n","提示");
+				}
+			}
+			
+			private function valDate():void{
+				if(dateField.selectedDate!=null)
+					dateField.selectedDate=_nowDate.getTime()>dateField.selectedDate.getTime()?dateField.selectedDate:_nowDate;
+				else dateField.selectedDate=_nowDate;
+			}
+			
+			private function getDataGridDataTip(item:Object):String{
+				if(item is AdvancedDataGridColumn){  
+					return "column";//这里是对表头的提示  
+				}else{  
+					return "item"; //这里是对某一格的提示  
+				}  
+			}
+		]]>
+	</mx:Script>
+	<mx:HTTPService id="dataXmlService" resultFormat="xml" result="onXmlTOData(event)" />
+	<mx:HTTPService id="setXmlService" resultFormat="xml" result="onXmlToSet(event)" />
+	<mx:Image source="@Embed('../resources/logo.png')" visible="true" horizontalCenter="0" verticalCenter="0"/>
+	<mx:VBox id="mainBox" height="100%" width="100%" visible="false">
+		<mx:HBox top="10" left="10" width="100%" height="25" horizontalAlign="center" backgroundColor="#E3E5F1">
+			<mx:Button id="perDay" fontWeight="normal" fontSize="12" width="67" height="24" showEffect="fadeIn" click="goPerDay()" visible="true" label="上一日"/>  
+          	<mx:DateField id="dateField" fontWeight="normal" fontSize="12" yearNavigationEnabled="true"
+				    dayNames="['日','一','二','三','四','五','六']"
+				    monthNames="['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']"
+				    formatString="YYYY-MM-DD" visible="true" close="valDate()"/>
+            <mx:Button id="chaxun" fontWeight="normal" fontSize="12" width="50" height="24" showEffect="fadeIn" click="load()" visible="true" label="查询"/>
+            <mx:Button id="nextDay" fontWeight="normal" fontSize="12" width="64" height="24" showEffect="fadeIn" click="goNextDay()" visible="true" label="下一日"/>
+            
+            <mx:TextInput id="kong1" visible="false" fontSize="12" width="30"/>
+            <mx:ComboBox id="exportTypeCB" fontWeight="normal" fontSize="12" close="exportReport()">
+            	<mx:Array>
+					<mx:Object data="0" label="导出报表"/>
+					<mx:Object data="1" label="Excel"/>
+					<mx:Object data="2" label="Word"/>
+					<mx:Object data="3" label="PDF"/>
+					<mx:Object data="4" label="HTML"/>
+				</mx:Array>
+            </mx:ComboBox>
+		</mx:HBox>
+		<mx:HBox width="100%" height="25" horizontalAlign="center">
+			<mx:Label id="dataTitle" text="" fontSize="14" fontWeight="bold" textAlign="center"/>
+		</mx:HBox>
+		<aclass:MyAdvancedDataGrid id="advancedDataGrid" rowColorFunction="getRowColor" columnColorFunction="getColumnColor" lockedColumnCount="{lockedColumnCount}" horizontalScrollPolicy="on" width="100%" height="100%" iconFunction="getImage" displayItemsExpanded="true" headerStyleName="header" textAlign="right">
+			<aclass:dataProvider>
+				<mx:HierarchicalData id="hd"/>
+			</aclass:dataProvider>
+			<aclass:groupedColumns>
+				<mx:AdvancedDataGridColumnGroup id="dataColumns">
+				</mx:AdvancedDataGridColumnGroup>
+			</aclass:groupedColumns>
+		</aclass:MyAdvancedDataGrid>
+	</mx:VBox>
+</mx:Application>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Script>
+		<![CDATA[
+			import mx.graphics.codec.PNGEncoder;
+			import mx.core.UIComponent;
+			public function sendImageByte(target:UIComponent):void {  
+				var bitmapData : BitmapData = new BitmapData(target.width, target.height);  
+				bitmapData.draw(target); 
+				var request:URLRequest = new URLRequest("http://127.0.0.1:8080/ahboot/exportImageFlexReportExport.action");
+				request.contentType = 'applicatoin/octet-stream';
+				request.data = (new PNGEncoder()).encode(bitmapData);
+				request.method = URLRequestMethod.POST;
+				navigateToURL(request, "_self");
+             }
+             
+             
+		]]>
+	</mx:Script>
+	<mx:Panel x="45.5" y="10" width="352" height="174" layout="absolute" title="你好啊">
+	</mx:Panel>
+	<mx:Accordion id="panel1"  x="57" y="224" width="200" height="200">
+		<mx:Canvas label="Accordion Pane 1" width="100%" height="100%">
+		</mx:Canvas>
+		<mx:Canvas label="plan2" width="100%" height="100%">
+		</mx:Canvas>
+		<mx:Canvas label="keep" width="100%" height="100%">
+		</mx:Canvas>
+		<mx:Canvas label="gfdgfd" width="100%" height="100%">
+		</mx:Canvas>
+	</mx:Accordion>
+	<mx:DateField x="279" y="224"/>
+	<mx:DateChooser id="dateChooser" x="279" y="254"/>
+	<mx:Button x="106" y="514" label="Button" click="sendImageByte(dateChooser);"/>
+	
+</mx:Application>

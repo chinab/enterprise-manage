@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" initialize="init();" layout="absolute" backgroundColor="#FFFFFF">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridColumn;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			
+			private function init():void{
+//				dataGridXmlService.url = Application.application.parameters["url"];
+				dataGridXmlService.url = "http://localhost:8080/tt/TestServlet?method=flexDataGrid";
+				dataGridXmlService.send();
+			}
+			/**
+			 * 列表数据返回后要调用的方法
+			 * 先递归生成列表的表头
+			 * 然后加载列表的数据
+			 * 为图表加载数据
+			 **/
+			private function dataGridXmlServiceResult(event:ResultEvent) : void {
+				var setXml:XML = (XML)(event.result);
+			    if(setXml.name().toString()=="error"){
+		    		Alert.show(setXml.toString(),"提示");
+		    		return;
+			    }
+				title.text = setXml.@title.toString();
+				dataGrid.columns = createHeaders(setXml.header[0].column);
+				dataGrid.dataProvider = setXml.datas[0].data;
+			}
+			
+			private function createHeaders(dataChildren:XMLList) : Array{
+				var children:Array = new Array(dataChildren.length());
+				for(var i:int=0;i<dataChildren.length();i++){
+			    	var xml:XML = dataChildren[i];
+			    	var name:String = xml.name().toString();
+			    	if(name=="column"){
+			    		var column:DataGridColumn = new DataGridColumn();
+					    /**
+					    * 给column设置属性
+					    **/
+			    		column.headerText=xml.@headerText;
+			    		if(xml.@width.toString()!="")
+			    			column.width=xml.@width;
+			    		column.dataField=xml.@dataField.toString()!=""?"@"+xml.@dataField:"";
+			    		column.setStyle("color",0x00000);
+			    		column.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		if(xml.@textAlign=="left"){
+			    			column.setStyle("textAlign","left");
+			    		}else if(xml.@textAlign=="center"){
+			    			column.setStyle("textAlign","center");
+			    		}else{
+			    			column.setStyle("textAlign","right");
+			    		}
+			    		if(column.dataField=="@time"){
+			    			column.editable = false;
+			    		}else{
+			    			column.editable = true;
+			    		}
+			    		
+			    		children[i] = column;
+			    	}
+			    }
+			    return children;
+			}
+		]]>
+	</mx:Script>
+	<mx:HTTPService id="dataGridXmlService" resultFormat="xml" result="dataGridXmlServiceResult(event)" />
+	<mx:DataGrid id="dataGrid" 
+		sortableColumns="false"
+		horizontalScrollPolicy="on" 
+		editable="true"
+		width="98%" height="98%"
+		headerStyleName="header" textAlign="right" 
+		color="#000000" styleName="myFont" 
+		fontSize="12" rollOverColor="#EFEFEF" selectionColor="#DFE8F7" fontFamily="SIMSUN" horizontalCenter="0" y="30">
+	</mx:DataGrid>
+	<mx:Label id="title" text="" horizontalCenter="0" y="10"/>
+</mx:Application>

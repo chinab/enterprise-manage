@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#FFFFFF" layout="absolute" xmlns:ns1="com.brightPoint.controls.*" xmlns:xvxv="com.xvxv.*" initialize="init()" xmlns:aclass="com.xvxv.aclass.*" borderColor="#FFFFFF" width="100%" height="95%">
+	<mx:Style>
+		Alert{
+			font-size:10;
+		}
+		.header{
+			font-color:#000000;
+			text-align:center;
+		}
+		.myFont{  
+	        fontFamily:"SIMSUN";
+	        fontColor:#000000;
+        }  
+
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import com.xvxv.aclass.DateTools; 
+			import mx.events.ListEvent;
+			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			[Bindable]
+			private var colorArray:Array =[0x0000FF,0x8B008B,0x1E90FF,0x218868,0xCD2626,0x8B2252,0x7FFF00];
+			
+			[Embed(source="../resources/fenggongshi.png")]
+			private static const fenggongshi:Class;
+			[Embed(source="../resources/dianchang.png")]
+			private static const dianchang:Class;
+			[Embed(source="../resources/jizhu.png")]
+			private static const jizhu:Class;
+			[Embed(source="../resources/jizhu1.png")]
+			private static const jizhu1:Class;
+			[Embed(source="../resources/jizhu2.png")]
+			private static const jizhu2:Class;
+			
+			private var resourceNode:String="";
+			private function getImage(data:Object):Object {
+				if(data==null) return null;
+				if("group2"==data.@groupType){
+					return fenggongshi;
+				}else if("group3"==data.@groupType){
+					return dianchang;
+				}
+				return jizhu;
+			}
+			
+			private function init():void
+			{
+//				setXmlService.url="file:///D:/getSetXmlflexPowerSituation.action.xml";
+//				adgDataService.url="file:///D:/getDataXmlflexPowerSituation.action.xml";
+				resourceNode = Application.application.parameters["resourceNode"];
+				setXmlService.url="/ahboot/getSetXmlFlexPowerSituation.action";
+				adgDataService.url="/ahboot/getDataXmlFlexPowerSituation.action";
+//				setXmlService.url="http://192.168.32.99:8680/ahboot/getSetXmlFlexPowerSituation.action?resourceNode=-2";
+//				adgDataService.url="http://192.168.32.99:8680/ahboot/getDataXmlFlexPowerSituation.action?resourceNode=-2";
+				
+				setXmlService.send({resourceNode:resourceNode});
+				title.text = "分公司截止"+DateTools.getCnYMDString(DateTools.getUpOrDownDay(new Date(),-1))+"发电量情况";
+			}
+			
+			private function adgDataResult(event:ResultEvent):void{
+				var xmlListData:XMLList = XML(event.result).power;
+				advancedDataGrid.dataProvider = xmlListData;
+				drawGauge(xmlListData[0]);
+				
+				var t:Timer = new Timer(1000*60, 1);
+			    t.addEventListener(TimerEvent.TIMER_COMPLETE, function(e:Event):void {
+					adgDataService.send({resourceNode:resourceNode});
+			    });
+			    t.start();
+			}
+			
+			private function itemClick(event:ListEvent):void{
+            	var data:XML=XML(event.itemRenderer.data);
+				drawGauge1(data);
+            }
+            
+            private function getMaxValue(maxValue:Number):Number{
+            	var intValue:int = int(maxValue);
+            	var valueLength:int = intValue.toString().length;
+            	valueLength-=2;
+            	var i:int;
+            	if(valueLength==-1){
+            		intValue=int(10*maxValue);
+            	}else if(valueLength>=0){
+            		for(i=valueLength;i>0;i--){
+            			intValue/=10;
+            		}
+            	}
+            	intValue = 4-(intValue%4)+intValue;
+            	var resultValue:Number = Number(intValue);
+            	if(valueLength==-1){
+            		resultValue/=10;
+            	}else if(valueLength>=0){
+            		for(i=valueLength;i>0;i--){
+            			resultValue*=10;
+            		}
+            	}
+            	return resultValue;
+            }
+            
+            private function drawGauge1(xmlData:XML):void{
+				var index1:Number=Number(xmlData.@index1);
+				var pIndex1:Number=Number(xmlData.@pIndex1);
+				var index1587:Number=Number(xmlData.@index1587);
+				var pIndex1587:Number=Number(xmlData.@pIndex1587);
+				var index1000:Number=Number(xmlData.@index1000);
+				var pIndex1000:Number=Number(xmlData.@pIndex1000);
+				var index1001:Number=Number(xmlData.@index1001);
+				var pIndex1001:Number=Number(xmlData.@pIndex1001);
+				
+				gauge1.minValue=0;
+				gauge1.maxValue=getMaxValue(pIndex1*1.1);
+				gauge1.setStyle("alertRatios",[pIndex1*0.5,pIndex1,getMaxValue(pIndex1*1.1)]);
+				gauge1.setStyle("alertColors",[0xDD0000,0xFFFF00,0x00FF00]);
+				
+				gauge2.minValue=0;
+				gauge2.maxValue=getMaxValue(pIndex1587*1.2);
+				gauge2.setStyle("alertRatios",[pIndex1587,pIndex1587*1.1,getMaxValue(pIndex1587*1.2)]);
+				gauge2.setStyle("alertColors",[0x00FF00,0xFFFF00,0xDD0000]);
+				
+				gauge3.minValue=0;
+				gauge3.maxValue=getMaxValue(pIndex1000*1.2);
+				gauge3.setStyle("alertRatios",[pIndex1000,pIndex1000*1.1,getMaxValue(pIndex1000*1.2)]);
+				gauge3.setStyle("alertColors",[0x00FF00,0xFFFF00,0xDD0000]);
+				
+				gauge4.minValue=0;
+				gauge4.maxValue=getMaxValue(pIndex1001*1.2);
+				gauge4.setStyle("alertRatios",[pIndex1001,pIndex1001*1.1,getMaxValue(pIndex1001*1.2)]);
+				gauge4.setStyle("alertColors",[0x00FF00,0xFFFF00,0xDD0000]);
+			
+				gauge1.value = index1;
+				msgText11.text="实际："+index1;
+				msgText12.text="计划："+(pIndex1==0?"":pIndex1.toString());
+				msgText13.text="最优："+" ";
+
+				gauge2.value = index1587;
+				msgText21.text="实际："+index1587;
+				msgText22.text="计划："+(pIndex1587==0?"":pIndex1587.toString());
+				msgText23.text="最优："+" ";
+				
+				gauge3.value = index1000;
+				msgText31.text="实际："+index1000;
+				msgText32.text="计划："+(pIndex1000==0?"":pIndex1000.toString());
+				msgText33.text="最优："+" ";
+				
+				gauge4.value = index1001;
+				msgText41.text="实际："+index1001;
+				msgText42.text="计划："+(pIndex1001==0?"":pIndex1001.toString());
+				msgText43.text="最优："+" ";
+			}
+			
+			private function drawGauge(xmlData:XML):void{
+				var index1:Number=Number(xmlData.@index1);
+				var lIndex1:Number=Number(xmlData.@lIndex1);
+				var l2Index1:Number=Number(xmlData.@l2Index1);
+				var pIndex1:Number=Number(xmlData.@pIndex1);
+				var index1587:Number=Number(xmlData.@index1587);
+				var lIndex1587:Number=Number(xmlData.@lIndex1587);
+				var pIndex1587:Number=Number(xmlData.@pIndex1587);
+				var index1000:Number=Number(xmlData.@index1000);
+				var lIndex1000:Number=Number(xmlData.@lIndex1000);
+				var pIndex1000:Number=Number(xmlData.@pIndex1000);
+				var index1001:Number=Number(xmlData.@index1001);
+				var lIndex1001:Number=Number(xmlData.@lIndex1001);
+				var pIndex1001:Number=Number(xmlData.@pIndex1001);
+				
+				var pYIndex1:Number = Number(xmlData.@pYIndex1);
+				var textOfMsgWE:String = "当日"+index1+"万KWh 月累计"+l2Index1+"万KWh 年累计"+lIndex1+"万KWh";
+				if(pYIndex1!=0){
+					textOfMsgWE+=" 完成年计划"+(lIndex1*100/pYIndex1).toPrecision(2)+"%";
+				}
+				msgTextTitle.text=textOfMsgWE;
+				
+				gauge1.minValue=0;
+				gauge1.maxValue=getMaxValue(pIndex1*1.1);
+				gauge1.setStyle("alertRatios",[pIndex1*0.5,pIndex1,getMaxValue(pIndex1*1.1)]);
+				gauge1.setStyle("alertColors",[0xDD0000,0xFFFF00,0x00FF00]);
+				
+				gauge2.minValue=0;
+				gauge2.maxValue=getMaxValue(pIndex1587*1.2);
+				gauge2.setStyle("alertRatios",[pIndex1587,pIndex1587*1.1,getMaxValue(pIndex1587*1.2)]);
+				gauge2.setStyle("alertColors",[0x00FF00,0xFFFF00,0xDD0000]);
+				
+				gauge3.minValue=0;
+				gauge3.maxValue=getMaxValue(pIndex1000*1.2);
+				gauge3.setStyle("alertRatios",[pIndex1000,pIndex1000*1.1,getMaxValue(pIndex1000*1.2)]);
+				gauge3.setStyle("alertColors",[0x00FF00,0xFFFF00,0xDD0000]);
+				
+				gauge4.minValue=0;
+				gauge4.maxValue=getMaxValue(pIndex1001*1.2);
+				gauge4.setStyle("alertRatios",[pIndex1001,pIndex1001*1.1,getMaxValue(pIndex1001*1.2)]);
+				gauge4.setStyle("alertColors",[0x00FF00,0xFFFF00,0xDD0000]);
+			
+				gauge1.value = index1;
+				msgText11.text="实际："+index1;
+				msgText12.text="计划："+(pIndex1==0?"":pIndex1.toString());
+				msgText13.text="最优："+" ";
+
+				gauge2.value = index1587;
+				msgText21.text="实际："+index1587;
+				msgText22.text="计划："+(pIndex1587==0?"":pIndex1587.toString());
+				msgText23.text="最优："+" ";
+				
+				gauge3.value = index1000;
+				msgText31.text="实际："+index1000;
+				msgText32.text="计划："+(pIndex1000==0?"":pIndex1000.toString());
+				msgText33.text="最优："+" ";
+				
+				gauge4.value = index1001;
+				msgText41.text="实际："+index1001;
+				msgText42.text="计划："+(pIndex1001==0?"":pIndex1001.toString());
+				msgText43.text="最优："+" ";
+			}
+			
+			private function onXmlToSet(event:ResultEvent) : void {
+			    var setXml:XML = (XML)(event.result);
+			    if(setXml.name().toString()=="error"){
+		    		Alert.show(setXml.toString(),"提示");
+		    		return;
+			    }
+			    
+				dataColumns = createHeaders(dataColumns,setXml.elements());
+				advancedDataGrid.groupedColumns = dataColumns.children;
+				adgDataService.send({resourceNode:resourceNode});
+			}
+			
+			private function createHeaders(parent:AdvancedDataGridColumnGroup,dataChildren:XMLList) : AdvancedDataGridColumnGroup{
+				var children:Array = new Array(dataChildren.length());
+				for(var i:int;i<dataChildren.length();i++){
+			    	var xml:XML = dataChildren[i];
+			    	var name:String = xml.name().toString();
+			    	if(name=="group"){
+			    		var group:AdvancedDataGridColumnGroup = new AdvancedDataGridColumnGroup();
+					    /**
+					    * 给group设置属性
+					    **/
+			    		group.headerText=xml.@headerText;
+			    		group.setStyle("color",0x00000);
+			    		group.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		
+			    		children[i] = createHeaders(group,xml.children());
+			    	}else if(name=="column"){
+			    		var column:AdvancedDataGridColumn = new AdvancedDataGridColumn();
+					    /**
+					    * 给column设置属性
+					    **/
+			    		column.headerText=xml.@headerText;
+			    		column.width=xml.@width.toString()!=""?xml.@width:100;
+			    		column.dataField=xml.@dataField.toString()!=""?"@"+xml.@dataField:"";
+			    		column.setStyle("color",0x00000);
+			    		column.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		if(xml.@textAlign=="left"){
+			    			column.setStyle("textAlign","left");
+			    		}else if(xml.@textAlign=="center"){
+			    			column.setStyle("textAlign","center");
+			    		}else{
+			    			column.setStyle("textAlign","right");
+			    		}
+			    		
+			    		children[i] = column;
+			    	}
+			    }
+	    		parent.children = children;
+			    return parent;
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="setXmlService" resultFormat="xml" result="onXmlToSet(event)" />
+	<mx:HTTPService id="adgDataService" resultFormat="xml" result="adgDataResult(event)"/>
+	
+	<mx:Canvas x="0" y="0" width="642" height="100%">
+		<mx:AdvancedDataGrid id="advancedDataGrid" 
+			sortableColumns="false" sortExpertMode="true" 
+			itemClick="itemClick(event)" horizontalScrollPolicy="on" 
+			width="635" height="100%" displayItemsExpanded="false" 
+			headerStyleName="header" textAlign="right" 
+			y="254" x="1" color="#000000" styleName="myFont" 
+			fontSize="12" rollOverColor="#EFEFEF" selectionColor="#DFE8F7">
+			<!--mx:dataProvider>
+				<mx:HierarchicalData id="hd"/>
+			</mx:dataProvider-->
+			<mx:groupedColumns>
+				<mx:AdvancedDataGridColumnGroup id="dataColumns">
+				</mx:AdvancedDataGridColumnGroup>
+			</mx:groupedColumns>
+		</mx:AdvancedDataGrid>
+		
+		<!--mx:AdvancedDataGrid x="0" y="0" id="adg1" designViewDataType="tree" width="100%" height="240">
+			<mx:groupedColumns>
+				<mx:AdvancedDataGridColumn fontSize="12" headerText="单位" textAlign="center" dataField="@unitName"/>
+				<mx:AdvancedDataGridColumn  fontSize="12"  textAlign="right" dataField="@setSize">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:Canvas horizontalCenter="0">
+								<mx:Label horizontalCenter="0" text="装机容量" y="12"/>
+								<mx:Label horizontalCenter="0" text="(MW)" y="27"/>
+							</mx:Canvas>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:AdvancedDataGridColumn>
+				<mx:AdvancedDataGridColumn  fontSize="12"  textAlign="right" dataField="@loadNow">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:Canvas horizontalCenter="0">
+								<mx:Label horizontalCenter="0" text="当前出力" y="12"/>
+								<mx:Label horizontalCenter="0" text="(MW)" y="27"/>
+							</mx:Canvas>
+						</mx:Component>
+					</mx:headerRenderer>
+				</mx:AdvancedDataGridColumn>
+				<mx:AdvancedDataGridColumnGroup  fontSize="12">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:Canvas horizontalCenter="0">
+								<mx:Label horizontalCenter="0" text="发电量"/>
+								<mx:Label horizontalCenter="0" text="(万千瓦时)" y="15"/>
+							</mx:Canvas>
+						</mx:Component>
+					</mx:headerRenderer>
+					<mx:children>
+						<mx:AdvancedDataGridColumn  fontSize="12" headerText="昨日"  textAlign="right" dataField="@powerYesterday"/>
+						<mx:AdvancedDataGridColumn  fontSize="12" headerText="本年"  textAlign="right" dataField="@powerNowYear"/>
+					</mx:children>
+				</mx:AdvancedDataGridColumnGroup>
+				<mx:AdvancedDataGridColumnGroup  fontSize="12">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:Canvas horizontalCenter="0">
+								<mx:Label horizontalCenter="0" text="供电煤耗"/>
+								<mx:Label horizontalCenter="0" text="(克/千瓦时)" y="15"/>
+							</mx:Canvas>
+						</mx:Component>
+					</mx:headerRenderer>
+					<mx:children>
+						<mx:AdvancedDataGridColumn  fontSize="12" headerText="昨日"  textAlign="right" dataField="@gdmhYesterday"/>
+						<mx:AdvancedDataGridColumn  fontSize="12" headerText="本年"  textAlign="right" dataField="@gdmhNowYear"/>
+					</mx:children>
+				</mx:AdvancedDataGridColumnGroup>
+				<mx:AdvancedDataGridColumnGroup  fontSize="12">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:Canvas horizontalCenter="0">
+								<mx:Label horizontalCenter="0" text="厂用电率"/>
+								<mx:Label horizontalCenter="0" text="(%)" y="15"/>
+							</mx:Canvas>
+						</mx:Component>
+					</mx:headerRenderer>
+					<mx:children>
+						<mx:AdvancedDataGridColumn  fontSize="12" headerText="昨日"  textAlign="right" dataField="@cydyYesterday"/>
+						<mx:AdvancedDataGridColumn  fontSize="12" headerText="本年"  textAlign="right" dataField="@cydyNowYear"/>
+					</mx:children>
+				</mx:AdvancedDataGridColumnGroup>
+				<mx:AdvancedDataGridColumnGroup  fontSize="12">
+					<mx:headerRenderer>
+						<mx:Component>
+							<mx:Canvas horizontalCenter="0">
+								<mx:Label horizontalCenter="0" text="综合厂用电率"/>
+								<mx:Label horizontalCenter="0" text="(%)" y="15"/>
+							</mx:Canvas>
+						</mx:Component>
+					</mx:headerRenderer>
+					<mx:children>
+						<mx:AdvancedDataGridColumn  fontSize="12" headerText="昨日"  textAlign="right" dataField="@zhcydyYesterday"/>
+						<mx:AdvancedDataGridColumn  fontSize="12" headerText="本年"  textAlign="right" dataField="@zhcydyNowYear"/>
+					</mx:children>
+				</mx:AdvancedDataGridColumnGroup>
+			</mx:groupedColumns>
+		</mx:AdvancedDataGrid-->
+		
+		<!--pointRatios="[160,200,350]"
+		pointColors="{colorArray}"-->
+		<mx:Label id="title" x="4" y="7" text="分公司截止昨日发电量情况" textAlign="left" fontSize="12" fontWeight="bold" color="#F22D0C" styleName="myFont"/>
+		<mx:Label id="msgTextTitle" x="32" y="25" text="" width="608" textAlign="left" fontSize="12" fontWeight="bold" color="#F22D0C" styleName="myFont"/>
+		<mx:Panel x="1" y="49" width="158" height="200" layout="absolute" title="发电量(万kWh)" fontSize="12" alpha="0.8">
+			<ns1:Gauge
+				id="gauge1" 
+				showValue="true"
+				alertAlphas="[.7,.7,.7]"
+				faceColor="0xFFFFFF"
+				ticksColor="0x000000"
+				fontColor="0x000000"
+				pointerColor="0x006699"
+				centerColor="0xA9AAAB"
+				bezelColor="0xDADADA"
+				faceShadowColor="0xC2C2C2"
+				fontSize="12"
+				width="110"
+				height="110" 
+				x="12" 
+				y="2" styleName="myFont">
+			</ns1:Gauge>
+			<mx:Label id="msgText11" x="16" y="110" text="实际：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+			<mx:Label id="msgText12" x="16" y="126" text="计划：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+			<mx:Label id="msgText13" x="16" y="142" text="最优：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+		</mx:Panel>
+		<mx:Panel x="160" y="49" width="158" height="200" layout="absolute" title="供电煤耗(g/kWh)" fontSize="12" alpha="0.8">
+			<ns1:Gauge
+				id="gauge2" 
+				showValue="true"
+				alertAlphas="[.7,.7,.7]"
+				faceColor="0xFFFFFF"
+				ticksColor="0x000000"
+				fontColor="0x000000"
+				pointerColor="0x006699"
+				centerColor="0xA9AAAB"
+				bezelColor="0xDADADA"
+				faceShadowColor="0xC2C2C2"
+				fontSize="12"
+				x="13" y="1" width="110" height="110" styleName="myFont"/>
+			<mx:Label id="msgText21" x="16" y="110" text="实际：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+			<mx:Label id="msgText22" x="16" y="126" text="计划：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+			<mx:Label id="msgText23" x="16" y="142" text="最优：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+		</mx:Panel>
+		<mx:Panel x="320.5" y="49" width="158" height="200" layout="absolute" title="厂用电率(%)" fontSize="12" cornerRadius="1" alpha="0.8">
+			<ns1:Gauge
+				id="gauge3" 
+				showValue="true"
+				alertAlphas="[.7,.7,.7]"
+				faceColor="0xFFFFFF"
+				ticksColor="0x000000"
+				fontColor="0x000000"
+				pointerColor="0x006699"
+				centerColor="0xA9AAAB"
+				bezelColor="0xDADADA"
+				faceShadowColor="0xC2C2C2"
+				fontSize="12"
+				x="13" y="2" width="110" height="110" styleName="myFont"/>
+			<mx:Label id="msgText31" x="16" y="110" text="实际：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+			<mx:Label id="msgText32" x="16" y="126" text="计划：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+			<mx:Label id="msgText33" x="16" y="142" text="最优：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont"  height="15"/>
+		</mx:Panel>
+		<mx:Panel y="49" width="158" height="200" layout="absolute" title="综合厂用电率(%)" fontSize="12" backgroundAlpha="1.0" backgroundColor="#FFFFFF" x="480" alpha="0.8">
+			<ns1:Gauge
+				id="gauge4" 
+				showValue="true"
+				alertAlphas="[.7,.7,.7]"
+				faceColor="0xFFFFFF"
+				ticksColor="0x000000"
+				fontColor="0x000000"
+				pointerColor="0x006699"
+				centerColor="0xA9AAAB"
+				bezelColor="0xDADADA"
+				faceShadowColor="0xC2C2C2"
+				fontSize="12"
+				x="14" y="2" width="110" height="110" styleName="myFont"/>
+			<mx:Label id="msgText41" x="16" y="110" text="实际：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+			<mx:Label id="msgText42" x="16" y="126" text="计划：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont" height="15"/>
+			<mx:Label id="msgText43" x="16" y="142" text="最优：" fontSize="12" color="#000000" fontWeight="normal" styleName="myFont"  height="15"/>
+		</mx:Panel>
+	</mx:Canvas>
+	
+</mx:Application>

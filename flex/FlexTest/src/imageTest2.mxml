@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Style>
+        Button 
+        {
+            upSkin: Embed("assets/fancy_border.png");
+            overSkin: Embed("assets/logo.png");
+            downSkin: Embed("assets/logo.png");
+        }
+    </mx:Style>
+  	<!-- 按扭图片翻转 -->
+    <mx:Button x="216" y="163"/>
+
+</mx:Application>

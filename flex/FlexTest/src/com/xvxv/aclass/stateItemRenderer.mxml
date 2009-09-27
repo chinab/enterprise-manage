@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" backgroundAlpha="0.0" width="100%" initialize="init()" horizontalAlign="center">
+	<mx:Script> 
+	<![CDATA[
+		import mx.controls.advancedDataGridClasses.AdvancedDataGridItemRenderer; 
+		import mx.rpc.events.ResultEvent; 
+		
+        [Embed(source="../resources/yun.png")]
+		private static const yun:Class;
+		[Embed(source="../resources/jian.png")]
+		private static const jian:Class;
+		[Embed(source="../resources/ting.png")]
+		private static const ting:Class;
+		
+		private function init():void{
+		}
+		
+		private function resultHandler():void {
+			this.stateImage.source = getImage(this.data);
+			this.stateImage.source = getImage(this.data);
+		}
+		  
+		private function changeHandler():void {
+			this.stateText.text = getText(this.data);
+			this.stateText.text = getText(this.data);
+		} 
+		
+		private function getImage(data:Object):Object {
+			if(data==null) return null;
+			if("group4"==data.@groupType){
+				if("3"==data.@stateId){return jian;}
+				if("4"==data.@stateId){return ting;}
+				return yun;
+			}
+			return null;
+		}
+		
+		private function getText(data:Object):String {
+			if(data==null) return null;
+			if("group4"==data.@groupType){
+				if("3"==data.@stateId){return "检";}
+				if("4"==data.@stateId){return "备";}
+				return "运";
+			}
+			return null;
+		}
+	]]> 
+	</mx:Script> 
+	<mx:Image id="stateImage" source="{getImage(this.data)}"/>
+	<mx:Label id="stateText" text="{getText(this.data)}"/>
+</mx:HBox>
+
