@@ -1,0 +1,73 @@
+Application
+{
+   background-gradient-colors:	#ffffff, #ffffff;
+   color: 						#000000;
+   font-size: 12px;
+}
+
+.maximizeRestoreButton
+{
+	up-skin:        	Embed("/assets/maximize_up.png");
+	over-skin:      	Embed("/assets/maximize_over.png");
+	down-skin:      	Embed("/assets/maximize_up.png");
+	selected-up-skin:   Embed("/assets/restore_up.png");
+	selected-over-skin: Embed("/assets/restore_over.png");
+	selected-down-skin: Embed("/assets/restore_up.png");
+}
+
+.minimizeButton
+{
+	up-skin:        Embed("/assets/minimize_up.png");
+	over-skin:      Embed("/assets/minimize_over.png");
+	down-skin:      Embed("/assets/minimize_up.png");
+}
+
+Pod
+{
+	padding-top: 10px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	rounded-bottom-corners: false;
+	border-thickness: 1px;
+	border-style: solid;
+	border-color: #999999;
+	header-colors: #cccccc, #999999;
+	highlight-alphas: .9, 0;
+	background-color: #ffffff;
+	corner-radius: 6px;
+	header-height: 22px;
+	shadow-direction: right;
+	drop-shadow-color: #999999;
+}
+
+.podTitle
+{
+	font-size: 12px;
+	font-family: arial;
+	font-weight: bold;
+}
+
+DragHighlight
+{
+	border-color: #CCCCCC;
+	border-thickness: 3px;
+	border-style: solid;
+	background-color: #F3F3F3;
+}
+
+.leftArrowButton
+{
+	up-skin:		Embed("/assets/left_arrow_up.gif");
+	over-skin:		Embed("/assets/left_arrow_over.gif");
+	down-skin:		Embed("/assets/left_arrow_up.gif");
+	disabled-skin:	Embed("/assets/left_arrow_disabled.gif");
+}
+
+.rightArrowButton
+{
+	up-skin:		Embed("/assets/right_arrow_up.gif");
+	over-skin:		Embed("/assets/right_arrow_over.gif");
+	down-skin:		Embed("/assets/right_arrow_up.gif");
+	disabled-skin:	Embed("/assets/right_arrow_disabled.gif");
+}

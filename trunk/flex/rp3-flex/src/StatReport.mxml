@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+                xmlns:ilog="http://www.ilog.com/2007/ilog/flex"
+                xmlns:local="*" 
+                layout="absolute"
+                initialize="load()" xmlns:rtdata="cn.rtdata.*">
+  <mx:Style>
+		Alert{
+			font-size:12;
+		}
+  </mx:Style>
+  <mx:Script>
+    <![CDATA[
+import cn.rtdata.Condition;
+import mx.formatters.DateFormatter;
+import mx.controls.Alert;
+import mx.collections.ArrayCollection;
+import flash.utils.getQualifiedClassName;
+import mx.resources.ResourceManager;  
+import mx.collections.IViewCursor;
+import mx.controls.treeClasses.HierarchicalCollectionView;
+import mx.collections.IList;
+import mx.controls.treeClasses.TreeItemRenderer;
+import mx.controls.Label;
+import mx.formatters.PhoneFormatter;
+import mx.containers.VBox;  
+import mx.managers.PopUpManager;      
+import mx.resources.ResourceBundle;
+import mx.events.CollectionEventKind;
+import mx.events.CollectionEvent;
+import mx.controls.RadioButton;
+import mx.events.PropertyChangeEvent;
+import mx.events.FlexEvent;
+import mx.controls.CheckBox;
+import mx.events.ListEvent;
+import mx.collections.ICollectionView;
+import mx.collections.HierarchicalData;
+import mx.collections.XMLListCollection;
+import ilog.orgchart.OrgChartEvent;
+  
+  [Bindable]
+  private var model:XML;
+//  private var models:ArrayCollection = new ArrayCollection();
+  private var conditions:ArrayCollection = new ArrayCollection();
+  private var condition:Condition;
+  private var modelNo:int = 0;
+  private var resourceNode:String;
+  private var indexId:String;
+  private var unitId:String;
+  private var dateFormatter:DateFormatter = new DateFormatter();
+  private var valueDate:String ;
+  
+  [Embed(source="../resources/fenggongshi.png")]
+  private static const fenggongshi:Class;
+  
+  [Embed(source="../resources/dianchang.png")]
+  private static const dianchang:Class;
+  
+  [Embed(source="../resources/jizhu.png")]
+  private static const jizhu:Class;
+  
+  	private var xmlLoader:URLLoader = new URLLoader();
+	private var xml:XML;
+	
+	private function resetChart(time:int=500):void{
+		var t:Timer = new Timer(time, 1);
+	    t.addEventListener(TimerEvent.TIMER_COMPLETE, function(e:Event):void {
+			chart.zoomBy(0.1,true);
+	    });
+	    t.start();
+	}
+		
+	private function initDataSource(evt:Event):void
+	{
+		switch (evt.type) {
+			case Event.COMPLETE:
+			var ldr:URLLoader = evt.currentTarget as URLLoader;
+			model = XML(ldr.data);
+			if(model.name().toString()=="error"){
+				Alert.show(model.toString(),"提示");
+				return;
+			}
+			chart.viewMode = OrgChart.LOCAL_VIEW_MODE;
+			condition = new Condition("0","0");
+		    conditions.addItem(condition);
+		    chart.dataProvider = model;
+		    chart.fitToContents(true);
+		    chart.enabled = true;
+		    var t:Timer = new Timer(1500, 1);
+		    t.addEventListener(TimerEvent.TIMER_COMPLETE, function(e:Event):void {
+		      dateField.visible = true;
+		      zoomFitButton.visible = true;
+		      zoomInButton.visible = true;
+		      zoomOutButton.visible = true;
+		      perStepButton.visible = true;
+		      nextStepButton.visible = true;
+		      chaxun.visible = true;
+		      perDay.visible = true;
+		      nextDay.visible = true;
+		      level.visible = true;
+		      chart.zoomBy(0.1,true);
+		    });
+		    t.start();
+		    chart.localItem = chart.selectedItems[0];
+			valButtonEnable();
+		}
+	}
+	
+	private function reInitDataSource(evt:Event):void
+	{
+		switch (evt.type) {
+			case Event.COMPLETE:
+			var ldr:URLLoader = evt.currentTarget as URLLoader;
+			model = XML(ldr.data);
+		    chart.dataProvider = model;
+		    chart.localItem = chart.selectedItems[0];
+			valButtonEnable();
+			resetChart();
+		}
+	}
+  
+  public function load():void {
+  		resourceNode = Application.application.parameters["resourceNode"];
+  		dateField.selectedDate = new Date();
+  		dateFormatter.formatString = "YYYY-MM-DD";
+  		valueDate = dateFormatter.format(dateField.selectedDate);
+		xmlLoader = new URLLoader();
+		xmlLoader.addEventListener(Event.COMPLETE, initDataSource);
+		xmlLoader.load(new URLRequest("/ahboot/getModelStatReport.action?resourceNode="+resourceNode+"&valueDate="+valueDate));
+//		xmlLoader.load(new URLRequest("d:/data.xml"));
+  }
+
+  public function reLoad():void {
+    	xmlLoader = new URLLoader();
+		xmlLoader.addEventListener(Event.COMPLETE, reInitDataSource);
+		xmlLoader.load(new URLRequest("/ahboot/getModelStatReport.action?resourceNode="+resourceNode+"&indexId="+indexId+"&unitId="+unitId+"&valueDate="+valueDate));
+//		xmlLoader.load(new URLRequest("d:/data1.xml"));
+  }
+  
+  public function reLoadRoot():void{
+  		xmlLoader = new URLLoader();
+		xmlLoader.addEventListener(Event.COMPLETE, reInitDataSource);
+		xmlLoader.load(new URLRequest("/ahboot/getModelStatReport.action?resourceNode="+resourceNode+"&valueDate="+valueDate));
+//		xmlLoader.load(new URLRequest("d:/data.xml"));
+  }
+
+  private function perStep():void {
+  	if(modelNo-1>=0){
+  		condition = (Condition) (conditions.getItemAt(--modelNo,0));
+	  	if(modelNo==0){
+	  		reLoadRoot();
+	  	}
+	  	else{
+	  		indexId = condition.getIndexId();
+	  		unitId = condition.getUnitId();
+	  		reLoad();
+	  	}
+	    valButtonEnable();
+  	}else{
+  		Alert.show("已经到达最后！","提示",4,null,null,null,4);
+  	}
+  }
+  
+  private function nextStep():void {
+  	if(modelNo+1<conditions.length){
+	  	condition = (Condition) (conditions.getItemAt(++modelNo,0));
+	  	if(modelNo==0){
+	  		reLoadRoot();
+	  	}
+	  	else{
+	  		indexId = condition.getIndexId();
+	  		unitId = condition.getUnitId();
+	  		reLoad();
+	  	}
+	    valButtonEnable();
+   	}else{
+   		Alert.show("已经到达最前！","提示",4,null,null,null,4);
+   	}
+  }
+  
+  private function valButtonEnable():void{
+  	if(modelNo+1>=conditions.length){
+	   	nextStepButton.enabled=false;
+	}else{
+		nextStepButton.enabled=true;
+	}
+	if(modelNo-1<0){
+	  	perStepButton.enabled=false;
+	}else{
+		perStepButton.enabled=true;
+	}
+  }
+  
+  private function initOrgChart():void {
+    chart.addEventListener(PropertyChangeEvent.PROPERTY_CHANGE, propertyChangeHandler);       
+  }
+  
+  /**
+   * Handler to react on local item changes.
+   */
+  private function propertyChangeHandler(event:PropertyChangeEvent):void {
+	if(event.property == "localItem") {
+		chart.fitToContents(false);
+		resetChart();
+	}
+  }
+  
+  private function chartDoubleClick(event:OrgChartEvent):void {
+   	if (event.item == null) {
+		chart.fitToContents(true);
+		resetChart();
+    } else {
+      indexId = getIndexId(event.item);
+      unitId = getUnitId(event.item);
+		if(conditions.length-1>modelNo){
+		for(var i:int=conditions.length-1 ;i>modelNo;i--){
+				conditions.removeItemAt(i);
+			}
+		}
+		condition= new Condition(unitId,indexId);
+		conditions.addItem(condition);
+		modelNo++;
+      reLoad();
+    }
+  }
+  
+  private function getUnitName(data:Object):String {
+    return (data.@unitName);
+  }
+  private function getUnitId(data:Object):String {
+    return (data.@unitId);
+  }
+  private function getIndexId(data:Object):String {
+    return (data.@indexId);
+  }
+  private function getIndexName(data:Object):String {
+    return (data.@indexName);
+  }
+  private function getValue1(data:Object):String {
+    return (data.@valueName1+":"+data.@value1);
+  }
+  
+  private function getValue2(data:Object):String {
+    return (data.@valueName2+":"+data.@value2);
+  }
+  
+  private function getLayout(item:Object):String {
+    if (chart.viewMode == OrgChart.GLOBAL_VIEW_MODE) {
+      return item.@layout; 
+    } else {      
+      if (item.@assistant.toString() == "true") {
+        return "leftHanging";
+      } else {
+        return "rightHanging";
+      }
+    }
+  }
+  
+  private function getImage(data:Object):Object {
+  	if("group2"==data.@groupType){
+	    return fenggongshi;
+  	}else if("group3"==data.@groupType){
+    	return dianchang;
+    }else{
+    	return jizhu;
+    }
+  }
+  
+  private function zoomIn():void {    
+    chart.zoomBy(2, true);          
+  }
+  
+  private function zoomOut():void {
+    chart.zoomBy(0.5, true);   
+  }  
+  
+  private function fitToContents():void {
+    chart.fitToContents(true);  
+  }
+  
+  private function goPerDay():void{
+  	var date:Date = new Date();
+  	date.setTime(dateField.selectedDate.getTime()-1000*60*60*24);
+  	dateField.selectedDate = date;
+  	valueDate = dateFormatter.format(dateField.selectedDate);
+  	if(modelNo==0)
+  		reLoadRoot();
+  	else
+  		reLoad();
+  }
+  private function goChaxun():void{
+  	valueDate = dateFormatter.format(dateField.selectedDate);
+  	if(modelNo==0)
+  		reLoadRoot();
+  	else
+  		reLoad();
+  }
+  private function goNextDay():void{
+  		var date:Date = new Date();
+  	date.setTime(dateField.selectedDate.getTime()+1000*60*60*24);
+  	dateField.selectedDate = date;
+  	valueDate = dateFormatter.format(dateField.selectedDate);
+  	if(modelNo==0)
+  		reLoadRoot();
+  	else
+  		reLoad();
+  }
+	private function changeLevel():void{
+		var levelData:String = level.selectedItem.data;
+		if(levelData=="1"){
+			chart.lowerLevelLimit = 1;
+			chart.fitToContents(true);
+			resetChart();
+		}else{
+			chart.lowerLevelLimit = 4;
+			chart.fitToContents(true);
+			resetChart();
+		}
+	}
+    ]]>
+       
+  </mx:Script>
+  
+  <mx:Metadata>
+    [ResourceBundle("orgchartsample")]
+  </mx:Metadata>
+        <mx:Canvas width="100%" height="100%" verticalScrollPolicy="off" backgroundColor="#FFFFFF" horizontalScrollPolicy="off">
+          <ilog:OrgChart id="chart" width="100%" height="100%" creationComplete="initOrgChart()" doubleClickEnabled="true" 
+                         itemDoubleClick="chartDoubleClick(event)" layoutYPadding="20" initialPosition="fitToContents" 
+                        linkRadius="0" linkThickness="2" layoutXPadding="10" allowNavigation="true" allowSelection="true" 
+                        allowMultipleSelection="true" y="10" minZoomLevel="1" >
+            <ilog:fields>
+            	<ilog:OrgChartFields pictureFunction="{getImage}" nameFunction="getUnitName" positionFunction="getIndexName" emailFunction="getValue1" phoneFunction="getValue2" />
+            </ilog:fields>
+            <ilog:itemRenderer>
+              <mx:Component>
+              	<!--local:ComplexItemRenderer /-->
+                <!--ilog:OrgChartItemRenderer fontAntiAliasType="advanced" fontGridFitType="none" fontSize="12"/-->
+                <rtdata:MyOrgChartItemRenderer  fontAntiAliasType="advanced" fontGridFitType="none" fontSize="12"/>
+              </mx:Component>
+            </ilog:itemRenderer>
+          </ilog:OrgChart>
+          <mx:HBox top="10" left="10" width="724">
+            <mx:Button id="zoomInButton" icon="@Embed(source='../resources/zoom.png')" width="36" height="24" showEffect="fadeIn" click="zoomIn()" visible="false" />  
+            <mx:Button id="zoomOutButton" icon="@Embed(source='../resources/unzoom.png')" width="36" height="24" showEffect="fadeIn" click="zoomOut()" visible="false" />  
+            <mx:Button id="zoomFitButton" icon="@Embed(source='../resources/zoomfit.png')" width="36" height="24" showEffect="fadeIn" click="fitToContents()" visible="false" />  
+            <mx:Button id="perStepButton" icon="@Embed(source='../resources/per.png')" width="36" height="24" showEffect="fadeIn" click="perStep()" visible="false" />  
+            <mx:Button id="nextStepButton" icon="@Embed(source='../resources/next.png')" width="36" height="24" showEffect="fadeIn" click="nextStep()" visible="false" />  
+          	<mx:TextInput id="kong" visible="false" width="30"/>
+
+            <mx:Button id="perDay" fontWeight="normal" fontSize="12" width="67" height="24" showEffect="fadeIn" click="goPerDay()" visible="false" label="上一日"/>  
+          	<mx:DateField id="dateField" fontWeight="normal" fontSize="12" yearNavigationEnabled="true"
+				    dayNames="['日','一','二','三','四','五','六']"
+				    monthNames="['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']"
+				    formatString="YYYY-MM-DD" visible="false"/>
+            <mx:Button id="chaxun" fontWeight="normal" fontSize="12" width="50" height="24" showEffect="fadeIn" click="goChaxun()" visible="false" label="查询"/>
+            <mx:Button id="nextDay" fontWeight="normal" fontSize="12" width="64" height="24" showEffect="fadeIn" click="goNextDay()" visible="false" label="下一日"/>
+          	<mx:TextInput id="kong1" visible="false" fontSize="12" width="30"/>
+          	
+          	<mx:ComboBox id="level" fontWeight="normal" fontSize="12" close="changeLevel()" visible="false">
+          	   <mx:dataProvider>
+	               <mx:Object label="模型简约展示" data="1"/>
+	               <mx:Object label="模型完全展示" data="2"/>
+	           </mx:dataProvider>
+          	</mx:ComboBox>
+          </mx:HBox> 
+        </mx:Canvas>
+</mx:Application>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+
+	<mx:Style>
+		Alert{
+			font-size:12;
+		}
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			/**
+			 * 说明：
+			 * 1、TreeTitleWin客户端组件是一个展示树形结构数据的窗口组件，可以根据设定单个树或多个树，设定节点是否含有选择框，选择节点确定后可以返回节点id
+			 * 2、组件中更改了树节点的图标，所以使用的时候确保含有"../resources/treeLeaf.png"和"../resources/treeRoot.png"两个图片文件
+			 * 3、组件中为了对节点加选择框使用了渲染器，所以使用的时候确保含有"com.test.TreeCheckBoxRenderer"类
+			 * 4、数据文件为xml格式，可采用直接请求一个action返回一个xml串的形式,如：
+			 * 	<company id="1" name="大唐集团发电公司" isLeaf="false" selected="false">
+  			 *		<company id="900" name="安徽分公司" isLeaf="true" selected="false"/>
+  			 *		<company id="1700" name="大唐甘肃发电有限公司" isLeaf="true" selected="false"/>
+ 			 *		<company id="200" name="大唐国际发电股份有限公司" isLeaf="true" selected="false"/>
+  			 *		<company id="1500" name="大唐黑龙江发电有限公司" isLeaf="true" selected="false"/>
+  			 *		<company id="600" name="大唐华银电力股份有限公司" isLeaf="true" selected="false"/>
+  			 *	</company>
+  			 *  其中company元素中的属性如id、name为不能更改项，必须按这个格式写，company元素名可以自行定义。
+  			 * 	id为树节点id，name为树的显示标签，isLeaf主要是用来设置带有选择框的节点是否可选，为false则不可选（例子中设置根为false不可选），selected="false"为默认设置，不要更改。
+  			 * 
+  			 * 作者：zhouyang
+  			 * 2009-06-20
+			 * 
+			 */
+		
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			
+			//把窗口定义成变量的形式，关闭窗口再打开的时候用于判断是否为第一次打开，非第一次打开则不用再new新窗口
+			private var treeTitleW:TreeTitleWin = null;
+			//节点不带选择框时返回的结果。若是有多个树，则以最后查看的树为标准，最后一个树没有选择节点则提示选择节点
+			public var _singleSelectedId:String = "";
+			//节点带选择框时返回的结果。所有被选择的节点，包括不在同一个树中的节点（如果有多个树）
+			public var _multiSelectedIds:Array = new Array();
+			
+			//调用弹出窗口的方法
+			private function showTreeWin():void{
+				if(treeTitleW==null){
+					treeTitleW = new TreeTitleWin();
+					//第一个树的url参数，传入一个字符串；
+					treeTitleW.treeXmlService1.url = "http://192.168.32.25:8080/ahps/getUnitCompanyTreeXmlCompIndexAnalysis.action";
+					//第二个树的url参数，传入一个字符串；只有当singleTree = false且要构造第二个树的时候
+					treeTitleW.treeXmlService2.url = "http://192.168.32.25:8080/ahps/getUnitPowerTreeXmlCompIndexAnalysis.action";
+					//第二个树的url参数，传入一个字符串；只有当singleTree = false且要构造第三个树的时候
+					treeTitleW.treeXmlService3.url = "http://192.168.32.25:8080/ahps/getUnitSetTreeXmlCompIndexAnalysis.action";
+					//设置窗口的标题，传入一个字符串
+					treeTitleW.titleWin = "单位树";
+					//是否是单个树，默认为是true；如果为false，说明至少有一个树，最多有三个树
+					//有多少个树就要传入多少个对应的url参数和树的名字treeName1、treeName2、treeName3
+					treeTitleW.singleTree = false;
+					//只有singleTree为false表示有多个树的时候才设置该参数，表示第一个树的名字
+					treeTitleW.treeName1 = "分子公司";
+					//只有singleTree为false表示有多个树的时候才设置该参数，表示第二个树的名字
+					treeTitleW.treeName2 = "电厂";
+					//只有singleTree为false表示有多个树的时候才设置该参数，表示第三个树的名字
+					treeTitleW.treeName3 = "机组";
+					//树节点前是否需要选择框，默认为不需要false
+					treeTitleW.haveCheckBox = false;
+					//用于设置弹出窗口的位置，这里是相对于触发按钮位置设定
+					treeTitleW.x = indexB.x+10;
+					treeTitleW.y = indexB.y+60;
+				}
+				//调用PopUpManager类弹出窗口，第一个参数表示窗口实例，第二个参数表示所在父窗口，第三个参数表示弹出窗口后父窗口是否为可编辑状态，true表示不能编辑
+				PopUpManager.addPopUp(treeTitleW,this,true);
+			}
+		
+			private function getSelectedId():void{
+				Alert.show(_singleSelectedId);
+				Alert.show(_multiSelectedIds.toString());
+			}
+		]]>
+	</mx:Script>
+	<mx:Button x="135" y="116" id="indexB" label="点击弹出树" fontSize="12" fontWeight="normal" click="showTreeWin()"/>
+	<mx:Button x="260" y="116" id="indexA" label="查看选择结果" fontSize="12" fontWeight="normal" click="getSelectedId()"/>
+</mx:Application>

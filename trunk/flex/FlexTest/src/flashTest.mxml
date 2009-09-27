@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:SWFLoader id="loader1" source="assets/library.swf" width="243" height="252"/>
+	<!--//内嵌入SWF程序-->
+	<mx:SWFLoader id="loader2" source="@Embed(source='assets/library.swf')" x="251" y="10" height="532"/>
+	<!--//还可以在FDS环境下加入MXML文件，要以buttonicon.mxml.swf形式加入，以提示FDS编译该文件。-->
+	<mx:SWFLoader id="loader3" source="assets/library.swf" scaleContent="false" width="243" height="189" x="0" y="260"/> 
+</mx:Application>

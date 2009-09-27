@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2007-2008 ILOG, S.A.
+//  All Rights Reserved.
+//  The following is ILOG Sample Code.  Any usage of the ILOG Sample Code is  
+//  subject to the terms and conditions of the ILOG End User License   
+//  Agreement applicable to this ILOG software product. 
+//
+///////////////////////////////////////////////////////////////////////////////
+-->
+
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+  xmlns:ilog="http://www.ilog.com/2007/ilog/flex"
+  xmlns:local="*"
+  layout="absolute"
+  
+  backgroundColor="0xffffff">
+
+  <mx:Metadata>
+    [ResourceBundle("resourcechartsample")]
+  </mx:Metadata>
+
+  <mx:Style source="../resources/elixirsample.css"/>
+  <mx:Style> 
+    GanttSheet 
+    { 
+      border-style:none; 
+    }
+    CustomTaskItemRenderer 
+    { 
+      fontSize: 10;
+      fontWeight: "bold";
+    }
+  </mx:Style>
+
+  <mx:Script>
+    <![CDATA[
+      import flash.utils.getQualifiedClassName;
+      import mx.events.CloseEvent;
+      import mx.controls.Alert;
+      import ilog.utils.GregorianCalendar;
+      import ilog.gantt.GanttSheet;
+      import ilog.gantt.GanttSheetEvent;
+      import ilog.gantt.TaskItem;
+      import ilog.gantt.TaskItemArea;
+      import ilog.gantt.TaskItemEditKind;
+      import ilog.gantt.TimeUtil;
+      import ilog.utils.TimeUnit;
+
+      import mx.collections.ArrayCollection;
+      import mx.collections.Grouping;
+      import mx.collections.GroupingCollection;
+      import mx.collections.GroupingField;
+      import mx.collections.ICollectionView;
+      import mx.collections.ListCollectionView;
+      import mx.collections.XMLListCollection;
+      import mx.controls.AdvancedDataGrid;
+      import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+      import mx.events.AdvancedDataGridEvent;
+      import mx.events.AdvancedDataGridEventReason;
+      import mx.events.CalendarLayoutChangeEvent;
+      import mx.events.CollectionEventKind;
+      import mx.events.CollectionEvent;
+      import mx.events.ListEvent;
+      import mx.events.PropertyChangeEvent;
+      import mx.formatters.DateFormatter;
+      import mx.resources.ResourceManager;
+      import mx.utils.ObjectProxy;
+      import mx.utils.StringUtil;
+
+      [Embed(source="../resources/user1.png")]
+      private static const maleIconClass:Class;
+      [Embed(source="../resources/user2.png")]
+      private static const femaleIconClass:Class;
+      [Embed(source="../resources/cityblack.png")]
+      private static const cityIconClass:Class;
+
+      private static const ZOOM_OUT_RATIO:Number = 2;
+      private static const ZOOM_IN_RATIO:Number = 1 / ZOOM_OUT_RATIO;
+      
+      [Bindable]
+      private static var timePrecision:Object = {unit:TimeUnit.DAY, steps: 1};
+      [Bindable]
+      private static var minZoomFactor:Number = TimeUnit.DAY.milliseconds/50;
+
+      [Bindable]
+      private var absence:Object;
+      [Bindable]
+      private var employee:Object;
+
+      private var isSynchronizingSelection:Boolean = false;
+
+      private var dateFormatter:DateFormatter = new DateFormatter();
+
+      private var absenceEditTipFormat:String = getString("absence.editing.tip.format");
+      private var absenceTipFormat:String = getString("absence.tip.format");
+      private var reassignPopupFormat:String = getString("reassign.popup.format");
+      private var reassignPopupTitle:String = getString("reassign.popup.title");
+
+      public static var _reasonToLabel:Object;
+      public static function get reasonToLabel():Object {
+        if (!_reasonToLabel) {
+          _reasonToLabel = {
+            Travel: getString("reason.Travel"),
+            Mission: getString("reason.Mission"),
+            Vacation: getString("reason.Vacation"),
+            Sickness: getString("reason.Sickness")
+          }
+        }
+        
+        return _reasonToLabel;
+      }
+      
+      public static function getString(key:String):String {
+        var s:String;
+        try {
+          s = ResourceManager.getInstance().getString("resourcechartsample", "resourcechartsample."+key);
+        } catch (e:Error) {
+          s = null;
+        }
+        return s == null ? key : s;
+      }
+
+      private function init():void
+      {
+        dateFormatter.formatString = getString("absence.tip.date.format");
+        loadDataModel();
+        ganttSheet.zoom(ZOOM_OUT_RATIO);
+      }
+
+      public function loadDataModel():void {
+        var url:String = "model.xml";
+        var myLoader:DataLoader = new DataLoader(resourceManager, getQualifiedClassName(this));
+        myLoader.addEventListener(Event.COMPLETE, xmlLoaded);
+        myLoader.addEventListener(ProgressEvent.PROGRESS, xmlProgress);
+
+        myLoader.load(url);
+      }
+
+      public function xmlProgress(evtObject:ProgressEvent):void {
+        pb.setProgress(evtObject.bytesLoaded, evtObject.bytesTotal);
+      }
+        
+      public function xmlLoaded(evtObj:Event):void
+      {
+        // Hide the progress bar
+        pb.setProgress(100,100);
+        var t:Timer = new Timer(1500, 1);
+        t.addEventListener(TimerEvent.TIMER_COMPLETE, function(e:Event):void {
+          hideProgressBar.play([pb]);
+        });
+        t.start();       
+
+        //Load the data model
+        var data:XML = XML(evtObj.target.data);
+
+        resourceChart.resourceDataProvider = groupData(data.person, "@location");
+        resourceChart.taskDataProvider = data.absence;
+
+        absencePanel.resourceChart = resourceChart;
+        dataGrid.expandAll();
+      }
+
+      private function groupData(data:Object, field:String):Object
+      {
+        var collection:GroupingCollection=new GroupingCollection();
+        collection.source = data;
+        var grouping:Grouping = new Grouping();
+        grouping.fields = [new GroupingField(field)];
+        collection.grouping = grouping;
+        collection.refresh();
+        return collection;
+      }
+
+      private function getItemIcon(item:Object):Class
+      {
+        if (isResource(resourceChart, item))
+        {
+          var genre:String = String(getFieldValue(item, "genre"));
+  
+          if (genre == "female")
+            return femaleIconClass;
+          else if (genre == "male")
+            return maleIconClass;
+          else
+            return null;
+        }
+        else        
+          return cityIconClass;
+      }
+      
+      /**
+       * Returns the value of a field of an object. When the object is
+       * an ActionScript object the value of the field is the value of the 
+       * object's property with that name. When the object is an XML object the
+       * value of the field is the value of the node's attribute with that name.
+       */ 
+      public static function getFieldValue(data:Object, field:String):Object
+      {
+        var r:Object = null;
+
+        if (data is XML) {
+          // Handy for those who forgot @
+          if (field.charAt(0) != "@") {
+            field = "@"+field;        
+          }
+          r = data[field];
+          if (r is XMLList) {
+            r = r.toString();
+          }  
+        } else {
+          if (data.hasOwnProperty(field)) {
+            r = data[field];
+          }
+        }                  
+        return r;
+      }
+      
+      /**
+       * Sets the value of a field of an object. When the object is
+       * an ActionScript object the value of the field is the value of the 
+       * object's property with that name. When the object is an XML object the
+       * value of the field is the value of the node's attribute with that name.
+       */ 
+      public static function setFieldValue(data:Object, field:String, value:Object):void
+      {
+        if (data is XML) {
+          // Handy for those who forgot @
+          if (String(field).charAt(0) != "@") {
+            field = "@"+field;        
+          }
+          data[field] = String(value);
+        } else {
+          data[field] = value;
+        }                  
+      }
+      
+      private function readStartTime(data:Object):Date
+      {
+        // The start and end time are stored in the data provider as simple
+        // dates, with no time.
+        // The start time must be interpreted as the beginning of the day on
+        // the start date; and the end time must be interpreted as the end of
+        // the day on the end date.
+        //
+        // For example:
+        // startTime: "2007-01-10" means "2007-01-10 00:00:00"
+        // endTime: "2007-01-10" means "2007-01-10 23:59:59.999"
+
+        var time:Date = null;
+        var value:Object = getFieldValue(data, "startTime");
+        
+        if (value is Date)
+          time = value as Date;
+        else 
+          time = new Date(String(value));
+
+        time.milliseconds=0;
+        time.seconds=0;
+        time.minutes=0;
+        time.hours=0;
+
+        return time;
+      }
+
+      private function readEndTime(data:Object):Date
+      {
+        // The start and end time are stored in the data provider as simple
+        // dates, with no time.
+        // The start time must be interpreted as the beginning of the day on
+        // the start date; and the end time must be interpreted as the end of
+        // the day on the end date.
+        //
+        // For example:
+        // startTime: "2007-01-10" means "2007-01-10 00:00:00"
+        // endTime: "2007-01-10" means "2007-01-10 23:59:59.999"
+
+        var time:Date = null;
+        var value:Object = getFieldValue(data, "endTime");
+
+        if (value is Date)
+          time = value as Date;
+        else 
+          time = new Date(String(value));
+
+        time.milliseconds=999;
+        time.seconds=59;
+        time.minutes=59;
+        time.hours=23;
+
+        return time;
+      }
+
+      public static function isResource(resourceChart:ResourceChart, item:Object):Boolean
+      {
+        return item && (getFieldValue(item, resourceChart.resourceIdField) != null);        
+      } 
+      
+      private function formatEditingTip(taskItem:TaskItem):String
+      {
+        return StringUtil.substitute(absenceEditTipFormat,
+                                     dateFormatter.format(taskItem.startTime),
+                                     dateFormatter.format(taskItem.endTime));
+      }
+
+      private function formatDataTip(taskItem:TaskItem):String
+      {
+        var data:Object = taskItem.data;
+        var resource:Object = resourceChart.getResource(data);
+
+        if (resource == null)
+          return null;
+
+        var resourceName:String = String(getFieldValue(resource, "fullname"));
+        var reason:String = String(getFieldValue(data, "reason"));
+
+        return StringUtil.substitute(absenceTipFormat,
+                                     resourceName,
+                                     reasonToLabel[reason],
+                                     dateFormatter.format(taskItem.startTime),
+                                     dateFormatter.format(taskItem.endTime));
+      }
+
+      public function newAbsence():void
+      {
+        if (employee == null)
+          return;
+
+        var start:Date = new Date();
+        start.time = (ganttSheet.visibleTimeRangeEnd.time + ganttSheet.visibleTimeRangeStart.time)/2;
+        var end:Date = resourceChart.calendar.addUnits(start, TimeUnit.DAY, 5);
+
+        var newItem:XML = <absence
+          resourceId={getFieldValue(employee, "id")}
+          reason={"Travel"}
+          startTime={start.toDateString()}
+          endTime={end.toDateString()}
+        />;
+        
+        ListCollectionView(resourceChart.taskDataProvider).addItem(newItem);
+
+        absence = newItem;
+        ganttSheet.selectedItem = newItem;
+      }
+
+      public function deleteAbsence():void
+      {
+        if (absence == null)
+          return;
+
+        var dp:ListCollectionView = ListCollectionView(resourceChart.taskDataProvider);
+        dp.removeItemAt(dp.getItemIndex(absence));
+
+        absence = null;
+      }
+
+      /**
+       * Handle change events from the Gantt sheet to update the absence panel
+       * and synchronize the selection with the data grid. 
+       */ 
+      private function onGanttSheetChange(event:GanttSheetEvent):void
+      {
+        absence = ganttSheet.selectedItem;
+
+        // Synchronize the selection on the datagrid: select the resource
+        // associated to the task.
+        if (absence)
+        {
+          employee = resourceChart.getResource(absence);
+          dataGrid.selectedItem = employee;
+        }
+      }
+
+      /**
+       * Handle change events from the data grid 
+       */ 
+      private function onDataGridChange(event:ListEvent):void
+      {
+        handleDataGridChange();
+      }
+
+      /**
+       * Handles the itemClose events from the data grid to update the 
+       * selection when collapsing nodes.
+       */ 
+      private function onDataGridItemClose(event:AdvancedDataGridEvent):void
+      {
+        // The AdvancedDataGrid does not dispatch change events when the 
+        // selection changes due to collapsing nodes.
+        handleDataGridChange();
+      }
+      
+      private function handleDataGridChange():void
+      {
+        var selected:Object = dataGrid.selectedItem;
+        if (selected && isResource(resourceChart, selected))
+          employee = selected;
+        else
+          employee = null;
+
+        // Synchronize the selection on the gantt sheet: unselect the task unless
+        // it is a task of the selected resource.
+        var selectedTask:Object = ganttSheet.selectedItem;
+        if ((employee == null)
+            || (selectedTask && (resourceChart.getResource(selectedTask) != employee)))
+        {
+          absence = null;
+          ganttSheet.selectedItem = null;
+        }
+      }
+      
+      /**
+       * Handles the itemClick events from the Gantt sheet to scroll the view so 
+       * that the complete task is visible.
+       */
+      private function onGanttSheetItemClick(event:GanttSheetEvent):void
+      {
+        var item:Object = event.item;
+        if (item)
+          ganttSheet.scrollToItem(item);
+      }
+      
+      /**
+       * Handle the itemEditResize events from the Gantt sheet to make sure that:
+       *  1 -- the duration of absences is at least 1 day.
+       *  2 -- the end time is in the proper day.
+       */
+      private function onGanttSheetItemEditResize(event:GanttSheetEvent):void
+      {
+        event.preventDefault();
+
+        var ganttSheet:GanttSheet = event.target as GanttSheet;
+        var calendar:GregorianCalendar = ganttSheet.calendar;
+
+        var taskItem:TaskItem = event.itemRenderer.data as TaskItem;
+
+        var startTime:Date = taskItem.startTime;
+        var endTime:Date = taskItem.endTime;
+
+        var duration:Number;
+
+        if (GanttSheet(event.target).editKind == TaskItemEditKind.RESIZE_START)
+        {
+          // Snaps the edited start time on the snapping time precision.
+          startTime = calendar.round(startTime, ganttSheet.snappingTimePrecision.unit, ganttSheet.snappingTimePrecision.steps);
+
+          // Ensure that the duration is at least one day.
+          duration = endTime.time - startTime.time + 1;
+          if (duration < TimeUnit.DAY.milliseconds)
+          {
+            startTime.time = endTime.time - TimeUnit.DAY.milliseconds;
+            // We need to round once again to cope with daylight saving time.
+            startTime = calendar.round(startTime, ganttSheet.snappingTimePrecision.unit, ganttSheet.snappingTimePrecision.steps);
+          }
+          taskItem.startTime = startTime;
+        }
+
+        if (GanttSheet(event.target).editKind == TaskItemEditKind.RESIZE_END)
+        {
+          // Snaps the edited end time on the snapping time precision.
+          endTime = calendar.round(endTime, ganttSheet.snappingTimePrecision.unit, ganttSheet.snappingTimePrecision.steps);
+
+          // We adjust the end time so that is conforms to the storage
+          // constraint. In this application when the user drags the end time
+          // he selects the end date of the absence. We want to display the end
+          // time as the last moment of the end date, whereas the rounding on
+          // the snapping time precision has set the end time as the first
+          // moment of the day following the end date. So we remove 1
+          // millisecond to end time.
+          endTime.time -= 1;
+
+          // Ensure that the duration is at least one day.
+          duration = endTime.time - startTime.time + 1;
+          if (duration < TimeUnit.DAY.milliseconds)
+          {
+            endTime.time = startTime.time + TimeUnit.DAY.milliseconds;
+
+            // We need to round and adjust once again to cope with daylight saving time.
+            endTime = calendar.round(endTime, ganttSheet.snappingTimePrecision.unit, ganttSheet.snappingTimePrecision.steps);
+            endTime.time -= 1;
+          }
+          taskItem.endTime = endTime;
+        }
+      }
+
+      /**
+       * Handle the itemEditReassign events from the Gantt sheet to update the 
+       * selection in the data grid.
+       */
+      private function onGanttSheetItemEditReassign(event:GanttSheetEvent):void
+      {
+        var taskItem:TaskItem = event.itemRenderer.data as TaskItem;
+        if (dataGrid.selectedItem != taskItem.resource)
+          dataGrid.selectedItem = taskItem.resource; 
+      }
+
+      /**
+       * Handle the itemEditEnd events from the Gantt sheet to update the 
+       * data provider item, storing the start and end time with the proper 
+       * format.
+       */
+      private function onGanttSheetItemEditEnd(event:GanttSheetEvent):void
+      {
+        event.preventDefault();
+        var taskItem:TaskItem = event.itemRenderer.data as TaskItem;
+        var item:Object = event.item;
+
+        setFieldValue(item, "startTime", taskItem.startTime.toDateString());
+        setFieldValue(item, "endTime", taskItem.endTime.toDateString());
+        
+        // Confirm reassignment
+        if (getFieldValue(item, "resourceId") != taskItem.resourceId)
+        {
+          var text:String = StringUtil.substitute(reassignPopupFormat,
+                            getFieldValue(taskItem.resource, "fullname"),
+                            Alert.okLabel, Alert.cancelLabel);
+          Alert.buttonWidth = 80; // To make sure Cancel shows up in Japanese.
+          var alert:Alert = Alert.show(text, reassignPopupTitle,  
+                                       Alert.OK | Alert.CANCEL, 
+                                       this, handleReassignConfirmClose);
+
+          alert.width = 250;
+          alert.height = 150;
+          
+          // Set the new value so the task is visually assigned to the new 
+          // resource. The change is rolled back when the user cancels the 
+          // assignment.
+          editedItem = item;
+          oldResourceId = String(getFieldValue(item, "resourceId"));
+          setFieldValue(item, "resourceId", taskItem.resourceId);
+        }
+      } 
+
+      private var editedItem:Object;
+      private var oldResourceId:String;
+      
+      private function handleReassignConfirmClose(event:CloseEvent):void
+      {
+        if (event.detail != Alert.OK)
+        {
+          setFieldValue(editedItem, "resourceId", oldResourceId);
+          ICollectionView(resourceChart.taskDataProvider).itemUpdated(editedItem);
+        }
+        var resource:Object = resourceChart.getResource(editedItem);
+        dataGrid.selectedItem = resource;
+        employee = resource;
+      }
+
+      private function updateZoomButtonState():void
+      {
+        zoomButton.enabled = (ganttSheet.zoomFactor > ganttSheet.minZoomFactor);
+        unzoomButton.enabled = (ganttSheet.visibleTimeRangeStart.time != ganttSheet.minVisibleTime.time ||
+                    ganttSheet.visibleTimeRangeEnd.time != ganttSheet.maxVisibleTime.time);
+      }
+
+      private function zoomIn():void
+      {
+        if (!ganttSheet.selectedItem)
+        {
+          ganttSheet.zoom(ZOOM_IN_RATIO, null, true);
+        }
+        else
+        {
+          var item:Object = ganttSheet.selectedItem;
+          var startTime:Date = new Date(getFieldValue(item, "startTime"));
+          var endTime:Date = new Date(getFieldValue(item, "endTime"));
+          var center:Date = new Date( ( startTime.time + endTime.time ) / 2 );
+          ganttSheet.zoom(ZOOM_IN_RATIO, center, true);
+        }
+      }
+
+    ]]>
+  </mx:Script>
+
+  <mx:Parallel id="hideProgressBar" effectEnd="toolbar.removeChild(pb)">
+    <mx:Fade alphaFrom="1" alphaTo="0" duration="1500"/>    
+  </mx:Parallel>
+  
+  <mx:VBox width="100%" height="100%" verticalGap="1" left="5" right="5" top="5"
+    bottom="5">
+    <local:ElixirSampleBar label="@Resource(bundle='resourcechartsample', key='resourcechartsample.application.title')"
+      splashComplete="init()"
+      miniView="dataGrid.width = 150"
+      normalView="dataGrid.width = 200"
+      />
+    <mx:ApplicationControlBar id="toolbar" width="100%" height="40"
+      fillColors="[#BCC2CD, #FFFFFF]" backgroundColor="#FFFFFF">
+      <mx:HBox>
+        <mx:Button toolTip="@Resource(bundle='resourcechartsample', key='resourcechartsample.button.tip.ExpandAll')" click="dataGrid.expandAll()"
+          icon="@Embed('../resources/expanded.png')" width="47" height="28"/>
+        <!-- fire the event ourselves because of ADG regression -->
+        <mx:Button toolTip="@Resource(bundle='resourcechartsample', key='resourcechartsample.button.tip.CollapseAll')" click="dataGrid.collapseAll();dataGrid.dispatchEvent(new AdvancedDataGridEvent(AdvancedDataGridEvent.ITEM_CLOSE));"
+          icon="@Embed('../resources/unhierarchical.png')" width="47" height="28"/>
+      </mx:HBox>
+      <mx:HBox x="{dataGrid.width + 10}">
+        <mx:Button id="zoomButton" toolTip="@Resource(bundle='resourcechartsample', key='resourcechartsample.button.tip.ZoomIn')" click="zoomIn()"
+          icon="@Embed('../resources/zoom in5.png')" width="47" height="28"/>
+        <mx:Button id="unzoomButton" toolTip="@Resource(bundle='resourcechartsample', key='resourcechartsample.button.tip.ZoomOut')" click="ganttSheet.zoom(ZOOM_OUT_RATIO, null, true)"
+          icon="@Embed('../resources/zoom out7.png')" width="47" height="28"/>
+        <mx:Button click="ganttSheet.showAll(10, true)"
+          icon="@Embed('../resources/zoom fit6.png')" width="47" height="28"
+          toolTip="@Resource(bundle='resourcechartsample', key='resourcechartsample.button.tip.ZoomToFit')"/>
+      </mx:HBox>
+      <mx:ProgressBar id="pb" x="{absencePanel.x}" width="{absencePanel.width}" mode="manual"/>
+    </mx:ApplicationControlBar>
+    <mx:HBox width="100%" height="100%" horizontalGap="0" verticalAlign="top">
+
+      <mx:ApplicationControlBar width="100%" height="100%"
+        fillColors="[#BCC2CD, #FFFFFF]" backgroundColor="#FFFFFF" verticalAlign="top">
+
+        <ilog:ResourceChart id="resourceChart" width="100%" height="100%"
+          left="3" right="3"
+          taskEndTimeFunction="readEndTime"
+          taskStartTimeFunction="readStartTime"
+          >
+          <ilog:dataGrid>
+            <ilog:GanttDataGrid id="dataGrid" dropShadowEnabled="false"
+              rowHeight="32" change="onDataGridChange(event)"
+              itemClose="onDataGridItemClose(event)"
+              iconFunction="getItemIcon"
+              width="200">
+              <ilog:columns>
+                <mx:AdvancedDataGridColumn dataField="@fullname" 
+                                           headerText="@Resource(bundle='resourcechartsample', key='resourcechartsample.column.Name')"
+                                           />
+              </ilog:columns>
+            </ilog:GanttDataGrid>
+          </ilog:dataGrid>
+
+          <ilog:ganttSheet>
+            <ilog:GanttSheet id="ganttSheet"
+              minVisibleTime="{new Date(2006,0,0)}"
+              maxVisibleTime="{new Date(2013,0,0)}"
+              minZoomFactor="{minZoomFactor}"
+              dataTipFunction="formatDataTip"
+              editingTipFunction="formatEditingTip"
+              taskItemRenderer="CustomTaskItemRenderer"
+              change="onGanttSheetChange(event)"
+              itemEditResize="onGanttSheetItemEditResize(event)"
+              itemEditReassign="onGanttSheetItemEditReassign(event)"
+              itemEditEnd="onGanttSheetItemEditEnd(event)"
+              itemClick="onGanttSheetItemClick(event)"
+              snappingTimePrecision="{timePrecision}"
+              visibleTimeRangeChange="updateZoomButtonState()"/>
+          </ilog:ganttSheet>
+        </ilog:ResourceChart>
+
+        <mx:VBox height="100%" width="180">
+          <local:AbsencePanel height="380" width="100%" id="absencePanel" 
+            absenceItem="{absence}" employeeItem="{employee}"/>
+          <mx:Panel id="helpPanel" title="@Resource(bundle='resourcechartsample', key='resourcechartsample.title.Help')" 
+                    width="100%" height="100%" minHeight="0" paddingBottom="0" paddingRight="0">
+            <mx:TextArea width="100%" height="100%" minHeight="0" editable="false" 
+                         selectable="false" focusEnabled="false" borderStyle="none" 
+                         htmlText="@Resource(bundle='resourcechartsample', key='resourcechartsample.help')"/>                   
+          </mx:Panel>
+       </mx:VBox>       
+      </mx:ApplicationControlBar>
+    </mx:HBox>
+  </mx:VBox>
+</mx:Application>

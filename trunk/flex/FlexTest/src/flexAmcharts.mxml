@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+				initialize="init()"
+				layout="absolute"
+				backgroundColor="#FFFFFF" xmlns:aclass="com.xvxv.aclass.*">
+	<mx:Script>
+		<![CDATA[
+			import com.xvxv.aclass.FlexPngExporter;
+			import mx.controls.Alert;
+			import com.xvxv.aclass.AmchartsLoader;
+ 
+			private function init():void
+			{
+				var swfUrl:String=Application.application.parameters["swf_url"];
+				var path:String=Application.application.parameters["path"];
+				var settingsFile:String=Application.application.parameters["settings_file"];
+				var dataFile:String=Application.application.parameters["data_file"];
+				amchartsLoader.swfUrl=swfUrl;
+				amchartsLoader.path=path;
+				amchartsLoader.settingsFile=settingsFile;
+				amchartsLoader.dataFile=dataFile;
+				
+				amchartsLoader.loadChart();
+			}
+		]]>
+	</mx:Script>
+	<aclass:AmchartsLoader id="amchartsLoader" width="676" height="378" x="24" y="7"/>
+	<mx:Button id="button" x="611" y="356" label="导出图片" click="{FlexPngExporter.export(button,button.width,button.height);}"/>
+</mx:Application>

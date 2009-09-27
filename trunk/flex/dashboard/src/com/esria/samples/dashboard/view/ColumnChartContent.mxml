@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PodContentBase
+	xmlns="com.esria.samples.dashboard.view.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:effects="qs.charts.effects.*"
+	xmlns:renderers="qs.charts.renderers.*"
+	width="100%" height="100%" initialize="init();">
+	<mx:Script>
+		<![CDATA[
+			import mx.charts.series.items.ColumnSeriesItem;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.http.HTTPService;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.charts.series.LineSeries;
+			import mx.charts.chartClasses.ChartBase;
+			import mx.charts.chartClasses.Series;
+			import mx.charts.events.ChartItemEvent;
+			import mx.charts.HitData;
+			import mx.charts.series.ColumnSeries;
+			import mx.collections.ArrayCollection;
+			import mx.controls.ComboBox;
+			import mx.events.ListEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			private var dataProvider:XMLList;
+			[Bindable]
+			private var radiosLinkBarArr:Array = new Array();
+			[Bindable]
+			private var buttonsLinkBarArr:Array = new Array();
+			private var drillToIndex:Number;
+			private var radiosName:String = "";
+			private var buttonsName:String = "";
+			
+			override protected function onCreationComplete(e:FlexEvent):void
+			{
+				title = properties.@title;
+				httpService.url = properties.@dataSource;
+				httpService.resultFormat = "e4x";
+				httpService.addEventListener(FaultEvent.FAULT, onFaultHttpService);
+				httpService.addEventListener(ResultEvent.RESULT, onResultHttpService);
+				params[buttonsName] = properties.@buttonDefaultValue;
+				params[radiosName] = properties.@radioDefaultValue;
+				httpService.send(params);
+			}
+			
+			override protected function onResultHttpService(e:ResultEvent):void
+			{
+				var legendXmlList:XMLList = e.result.legend;
+				var series:Array = new Array();
+				for each(var legendXml:XML in legendXmlList){
+					var columnSeries:ColumnSeries = new ColumnSeries();
+					columnSeries.displayName = legendXml.@label;
+					columnSeries.yField = "@"+legendXml.@dataField;
+					series.push(columnSeries);
+				}
+				columnChart.series = series;
+				dataProvider = e.result.item;
+				Pod(parent).title = e.result.@title + title;
+			}
+			
+			private function init():void{
+				radiosName= properties.@radiosName;
+				var radioTextsStr:String = properties.@radioTexts;
+				var radioValuesStr:String = properties.@radioValues;
+				var radioTests:Array = radioTextsStr.split(",");
+				var radioValues:Array = radioValuesStr.split(",");
+				var i:int =0;
+				for(;i<radioTests.length;i++){
+					radiosLinkBarArr.push({label:radioTests[i],data:radioValues[i]});
+				}
+				
+				buttonsName = properties.@buttonsName;
+				var buttonTextsStr:String = properties.@buttonTexts;
+				var buttonValuesStr:String = properties.@buttonValues;
+				var buttonTests:Array = buttonTextsStr.split(",");
+				var buttonValues:Array = buttonValuesStr.split(",");
+				
+				i =0;
+				for(;i<buttonTests.length;i++){
+					buttonsLinkBarArr.push({label:buttonTests[i],data:buttonValues[i]});
+				}
+			}
+			
+			private function columnChartDataTipFunction(o:HitData):String
+			{
+				var columnSeriesItem:ColumnSeriesItem = ColumnSeriesItem(o.chartItem);
+				var yNumber:Number = columnSeriesItem.yNumber;
+				var a:Array = properties.@dataTipUnitLabel.split("*");
+				var s:String = XML(o.item).attribute(properties.@dataTipLabelField) + "\n";
+				s += a[0] + yNumber + a[1] + "\n";
+				return s;
+			}
+			
+			/**
+			 * 点击按扭块时触发的方法
+			 **/
+			private function buttonsLinkBarItemClick(event:ItemClickEvent):void{
+				params[buttonsName] = event.item.data;
+				httpService.send(params);
+			}
+			private function radiosLinkBarItemClick(event:ItemClickEvent):void{
+				params[radiosName] = event.item.data;
+				httpService.send(params);
+			}
+			
+		]]>
+	</mx:Script>
+	<mx:VBox width="100%" height="100%">
+		<mx:HBox width="100%" height="28">
+			<mx:HBox id="radiosCanvas" width="50%" height="28">
+				<mx:LinkBar id="radiosLinkBar" dataProvider="{radiosLinkBarArr}" itemClick="radiosLinkBarItemClick(event)" themeColor="#808080" width="100%" height="25" cornerRadius="0">
+				</mx:LinkBar>
+			</mx:HBox>
+			<mx:HBox id="buttonsCanvas" width="50%" height="28">
+				<mx:LinkBar id="buttonsLinkBar" dataProvider="{buttonsLinkBarArr}" itemClick="buttonsLinkBarItemClick(event)" themeColor="#808080" width="100%" height="25" cornerRadius="0">
+				</mx:LinkBar>
+			</mx:HBox>
+		</mx:HBox>
+		<mx:HBox
+			width="100%" height="100%">
+			<mx:ColumnChart
+				id="columnChart"
+				width="100%" height="100%"
+				dataProvider="{dataProvider}"
+				showDataTips="true"
+				dataTipFunction="columnChartDataTipFunction">
+				<mx:series>
+					<mx:ColumnSeries
+						id="columnSeries"
+						yField="@{properties.@valueField}">
+					</mx:ColumnSeries>
+				</mx:series>
+				<mx:horizontalAxis>
+					<mx:CategoryAxis
+						categoryField="@{properties.@categoryField}" />
+				</mx:horizontalAxis>
+			</mx:ColumnChart>
+			<mx:Legend dataProvider="{columnChart}" height="100%" verticalAlign="bottom"/>
+		</mx:HBox>
+	</mx:VBox>
+</PodContentBase>

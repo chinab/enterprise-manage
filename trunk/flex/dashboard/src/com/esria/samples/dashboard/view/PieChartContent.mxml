@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Displays a PieChart with drill-down functionality.
+ For the demo, random data is generated for the drill-down.
+-->
+<PodContentBase
+	xmlns="com.esria.samples.dashboard.view.*"
+	xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:effects="qs.charts.effects.*"
+	xmlns:renderers="qs.charts.renderers.*"
+	width="100%" height="100%" initialize="init();">
+	
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Label;
+			import com.xvxv.aclass.DateTools;
+			import mx.controls.Alert;
+			import mx.rpc.http.HTTPService;
+			import mx.charts.events.ChartItemEvent;
+			import mx.charts.HitData;
+			import mx.charts.series.items.PieSeriesItem;
+			import mx.collections.ArrayCollection;
+			import mx.rpc.events.ResultEvent;
+			
+			
+			private var initialDataProvider:ArrayCollection;
+			[Bindable]
+			private var dataProvider:ArrayCollection;
+			private var labels:XMLList;
+			
+			private var drillToIndex:Number;
+			
+			private function init():void{
+				var lastMenuName:String;
+				var lastMenuFunction:Function;
+				var nextMenuName:String;
+				var nextMenuFunction:Function;
+				var dateScope:String = properties.@dateScope;
+				
+				if(dateScope=="day"){
+					lastMenuName = "上一日";
+					nextMenuName = "下一日";
+					lastMenuFunction = lastDay;
+					nextMenuFunction = nextDay;
+				}else if(dateScope=="month"){
+					lastMenuName = "上一月";
+					nextMenuName = "下一月";
+					lastMenuFunction = lastMonth;
+					nextMenuFunction = nextMonth;
+				}else if(dateScope=="year"){
+					lastMenuName = "上一年";
+					nextMenuName = "下一年";
+					lastMenuFunction = lastYear;
+					nextMenuFunction = nextYear;
+				}else{
+					return;
+				}
+				
+				var nextDate : ContextMenuItem = new ContextMenuItem(lastMenuName);
+				nextDate.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,lastMenuFunction);
+				var lastDate : ContextMenuItem = new ContextMenuItem(nextMenuName);
+				lastDate.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,nextMenuFunction);
+				
+				var myContextMenu : ContextMenu = new ContextMenu();
+				myContextMenu.customItems.push(nextDate);
+				myContextMenu.customItems.push(lastDate);
+				myContextMenu.hideBuiltInItems();
+				this.contextMenu = myContextMenu;
+				this.parent.contextMenu = myContextMenu;
+				pieChart.contextMenu = myContextMenu;
+			}
+			
+			private function nextYear(event:ContextMenuEvent):void{
+				date.setFullYear(date.getFullYear()+1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYString(date) + title;
+			}
+			private function lastYear(event:ContextMenuEvent):void{
+				date.setFullYear(date.getFullYear()-1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYString(date) + title;
+			}
+			private function nextMonth(event:ContextMenuEvent):void{
+				date = DateTools.getUpOrDownMonth(date,1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYMString(date) + title;
+			}
+			private function lastMonth(event:ContextMenuEvent):void{
+				date = DateTools.getUpOrDownMonth(date,-1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYMString(date) + title;
+			}
+			private function nextDay(event:ContextMenuEvent):void{
+				date = DateTools.getUpOrDownDay(date,1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYMDString(date) + title;
+			}
+			private function lastDay(event:ContextMenuEvent):void{
+				date = DateTools.getUpOrDownDay(date,-1);
+				httpService.send({time:date.getTime()});
+				Pod(parent).title = DateTools.getCnYMDString(date) + title;
+			}
+			
+			override protected function onResultHttpService(e:ResultEvent):void
+			{
+				labels = XMLList(e.result.label);
+				showLabel(labels);
+				var a:Array = xmlListToObjectArray(e.result.item);
+				var ac:ArrayCollection = new ArrayCollection(a);
+				initialDataProvider = ac;
+				dataProvider = ac;
+				
+				pieChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+				
+			}
+			
+			private function showLabel(xmlListData:XMLList):void{
+				pieCanvas.removeAllChildren();
+				if(xmlListData!=null){
+					for each(var xmlData:XML in xmlListData){
+						var x:String = xmlData.@x;
+						var y:String = xmlData.@y;
+						var text:String = xmlData.@text;
+						var fontColor:String = xmlData.@fontColor;
+						var fontSize:String = xmlData.@fontSize;
+						var fontBold:String = xmlData.@fontBold;
+						var horizontalCenter:String = xmlData.@horizontalCenter;
+						var numX:Number = x!=null&&x!=""?Number(x):10;
+						var numY:Number = y!=null&&y!=""?Number(y):10;
+						var dataLabel:Label = new Label();
+						dataLabel.x = numX;
+						dataLabel.y = numY;
+						dataLabel.text = text;
+						dataLabel.setStyle("color",fontColor);
+						dataLabel.setStyle("fontSize",fontSize);
+						dataLabel.setStyle("fontWeight","true"==fontBold?"bold":"normal");
+						dataLabel.setStyle("horizontalCenter",horizontalCenter);
+						pieCanvas.addChild(dataLabel);
+					}
+				}
+			}
+			
+			private function pieChartDataTipFunction(o:HitData):String
+			{
+				var a:Array = properties.@dataTipUnitLabel.split("*");
+				var s:String = o.item[properties.@dataTipLabelField] + "\n";
+				s += a[0] + o.item[properties.@valueField] + a[1] + "\n";
+				s += Math.round(PieSeriesItem(o.chartItem).percentValue) + "%";
+				return s;
+			}
+			
+			// Creates random drill down data.
+			// Assumes initial data is by geographical region and breaks down the region into sub-regions.
+			public function createDrillDownData(data:Object):void
+			{
+				var url:String = data[properties.@urlField];
+				var subHttpService:HTTPService =new HTTPService();
+				subHttpService.url = url;
+				subHttpService.resultFormat = HTTPService.RESULT_FORMAT_E4X;
+				subHttpService.addEventListener(ResultEvent.RESULT,function(e:ResultEvent):void{
+					showLabel(XMLList(e.result.label));
+					var a:Array = xmlListToObjectArray(e.result.item);
+					dataProvider = new ArrayCollection(a);
+				});
+				if(dateScope==null || dateScope=="")
+					subHttpService.send();
+				else{
+					subHttpService.send({time:date.getTime()});
+				}
+			}
+			
+			public function drillDown(e:ChartItemEvent):void
+			{
+				pieChart.showDataTips = false;
+				drillToIndex = e.hitData.chartItem.index
+				drillDownEffect.drillFromIndex = drillToIndex;
+				pieSeries.setStyle("showDataEffect", drillDownEffect);
+				createDrillDownData(Object(e.hitData.chartItem.item)); 
+				
+				pieChart.removeEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+				pieChart.addEventListener(MouseEvent.CLICK, drillUp);
+			}
+			
+			public function drillUp(e:MouseEvent):void
+			{
+				pieChart.showDataTips = false;
+				drillUpEffect.drillToIndex = drillToIndex;
+				pieSeries.setStyle("showDataEffect", drillUpEffect);
+				showLabel(labels);
+				dataProvider = initialDataProvider;
+				
+				pieChart.addEventListener(ChartItemEvent.ITEM_CLICK, drillDown);
+				pieChart.removeEventListener(MouseEvent.CLICK, drillUp);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	<effects:DrillDownEffect id="drillDownEffect" duration="1500" effectEnd="pieChart.showDataTips=true" />
+    <effects:DrillUpEffect id="drillUpEffect" duration="1500" effectEnd="pieChart.showDataTips=true"/>
+	<mx:Array id="pieChartFillArray">
+	    <mx:RadialGradient id="code1">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#BFBFBF" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#202020" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code3">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#BFCFFF" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#3366FF" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code4">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#FFD3B0" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#FF7101" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code5">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#FFC8C8" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#FF0000" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code2">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#D3D0FD" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#766BFA" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code6">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#F0FEC5" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#98CB02" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code7">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#D2FFD2" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#008001" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+    </mx:Array>
+	<mx:Canvas id="pieCanvas" width="100%">
+	</mx:Canvas>
+	<mx:PieChart
+		id="pieChart"
+		width="100%" height="100%"
+		dataProvider="{dataProvider}"
+		dataTipFunction="pieChartDataTipFunction"
+		showDataTips="true">
+		<mx:series>
+			<mx:PieSeries
+				id="pieSeries" 
+				field="{properties.@valueField}"
+				labelPosition="callout" fills="{pieChartFillArray}">
+				<mx:itemRenderer>
+					<mx:Component>
+						<renderers:RollOverWedgeItemRenderer />
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:PieSeries>
+		</mx:series>
+	</mx:PieChart>
+</PodContentBase>

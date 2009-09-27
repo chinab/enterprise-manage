@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Script>
+        <![CDATA[
+            import mx.core.SoundAsset;
+            import flash.media.*;
+            [Embed(source="assets/pie-yan-knee.mp3")]
+            [Bindable]
+          //MP3 的一个新实例
+            public var Song:Class;
+          //将该实例创建为一个 SoundAsset
+            public var mySong:SoundAsset = new Song() as SoundAsset;
+            public var channel:SoundChannel;
+            public var time:Number=0;
+            public var startTime:Date = new Date();
+            public var endDate:Date = new Date();
+          //使用 SoundAsset 类的 play() 方法来播放 MP3 文件的实例  
+            public function playSound():void 
+            {
+                // 先消音，防止同时多次播放
+                clearSound();
+                startTime=new Date();
+                // 播放该音频，并存储返回的SoundChannel对象结束播放。
+                channel = mySong.play(time,0,null);
+            	changePlayStop.label = "stop"
+            }
+            
+            public function startSound():void 
+            {
+                // 先消音，防止同时多次播放
+                clearSound();
+                time = 0;
+                startTime=new Date();
+                // 播放该音频，并存储返回的SoundChannel对象结束播放。
+                channel = mySong.play();
+            	changePlayStop.label = "stop"
+            }
+            
+            public function stopSound():void 
+            {
+                // 当音频播放时，调用SoundChannel对象的 stop() 方法以停止播放
+                if ( channel != null ) channel.stop();
+                endDate = new Date();
+                time =time+endDate.getTime() - startTime.getTime();
+            	changePlayStop.label = "play"
+            }
+            
+            public function clearSound():void 
+            {
+                // 当音频播放时，调用SoundChannel对象的 stop() 方法以停止播放
+                if ( channel != null ) channel.stop();
+            }
+            
+            public function exitSound():void 
+            {
+                // 当音频播放时，调用SoundChannel对象的 stop() 方法以停止播放
+                time = 0;
+                if ( channel != null ) channel.stop();
+            	changePlayStop.label = "play"
+            }
+            
+            public function changeSound():void
+            {
+            	if (changePlayStop.label == "play")
+            	{
+            		playSound();
+            	}
+            	else
+            	{
+            		stopSound();
+            	}
+            }
+        ]]>
+    </mx:Script>
+        <mx:Button label="start" click="startSound();" x="76" y="141"/>
+        <mx:Button id="changePlayStop" label="play" click="changeSound();" x="165" y="141"/>
+        <mx:Button label="end" click="exitSound();" x="256" y="141"/>     
+</mx:Application>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2007-2008 ILOG, S.A.
+//  All Rights Reserved.
+//  The following is ILOG Sample Code.  Any usage of the ILOG Sample Code is  
+//  subject to the terms and conditions of the ILOG End User License   
+//  Agreement applicable to this ILOG software product. 
+//
+///////////////////////////////////////////////////////////////////////////////
+-->
+
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml"
+           xmlns:local="*"
+           borderThickness="1" 
+           borderColor="0xB7BABC" 
+           borderStyle="solid" 
+           creationComplete="enableAbsenceFields(false)">
+
+  <mx:Script>
+    <![CDATA[
+      import mx.collections.ICollectionView;
+      import mx.events.AdvancedDataGridEvent;
+      import mx.events.CalendarLayoutChangeEvent;
+      import mx.events.CollectionEvent;
+      import mx.events.CollectionEventKind;
+      import mx.events.PropertyChangeEvent;
+
+      import ilog.gantt.TaskItem;
+      import ilog.gantt.ResourceChart;
+
+      private static const travelObject:TaskItem = new TaskItem(null, new XML("<absence reason='Travel'/>"));
+      private static const missionObject:TaskItem = new TaskItem(null, new XML("<absence reason='Mission'/>"));
+      private static const vacationObject:TaskItem = new TaskItem(null, new XML("<absence reason='Vacation'/>"));
+      private static const sicknessObject:TaskItem = new TaskItem(null, new XML("<absence reason='Sickness'/>"));
+
+      //------------------------------------------------------------------------
+      //
+      //  Properties
+      //
+      //------------------------------------------------------------------------
+
+      //-------------------------------
+      //  absenceItem
+      //-------------------------------
+
+      /**
+       * The task item that represents the current absence.
+       */
+      private var _absenceItem:Object;
+
+      public function set absenceItem(value:Object):void
+      {
+        this._absenceItem = value;
+
+        enableAbsenceFields(absenceItem != null);
+
+        if (absenceItem)
+        {
+          reasonGroup.selectedValue = humanresources.getFieldValue(absenceItem, "reason");
+          startDC.selectedDate = new Date(humanresources.getFieldValue(absenceItem, "startTime"));
+          endDC.selectedDate = new Date(humanresources.getFieldValue(absenceItem, "endTime"));
+        }
+        else
+        {
+          reasonGroup.selection = null;
+          startDC.selectedDate = null;
+          endDC.selectedDate = null;
+        }
+      }
+
+      public function get absenceItem():Object
+      {
+        return this._absenceItem;
+      }
+
+      private function enableAbsenceFields(value:Boolean):void
+      {
+        delButton.enabled = value;
+
+        reasonGroup.enabled = value;
+
+        if(!value)
+        {
+          startDC.selectedDate = null;
+          endDC.selectedDate = null;          
+          startDC.close();
+          endDC.close();
+          endDC.validateNow();
+          startDC.validateNow();
+        }
+        
+        startDC.enabled = value;
+        endDC.enabled = value;
+        
+        if (!value)
+        {
+          travelRB.selected = false;
+          missionRB.selected = false;
+          vacationRB.selected = false;
+          sicknessRB.selected = false;
+        }
+      }
+
+      //-------------------------------
+      //  employeeItem
+      //-------------------------------
+
+      /**
+       * The resource item that represents the current employee.
+       */
+      private var _employeeItem:Object;
+
+      public function set employeeItem(value:Object):void
+      {
+        this._employeeItem = value;
+
+        var isEmployee:Boolean = humanresources.isResource(resourceChart, employeeItem);
+
+        addButton.enabled = isEmployee;
+        empLabel.text = isEmployee 
+                        ? String(humanresources.getFieldValue(employeeItem, "fullname"))
+                        : "";
+      }
+
+      public function get employeeItem():Object{
+        return this._employeeItem;
+      }
+
+      
+      //-------------------------------
+      //  resourceChart
+      //-------------------------------
+
+      private var _resourceChart:ResourceChart;
+
+      public function set resourceChart(value:ResourceChart):void
+      {
+        if (_resourceChart)
+        {
+          ICollectionView(_resourceChart.taskDataProvider).removeEventListener(CollectionEvent.COLLECTION_CHANGE, handleTaskDataProviderChange);
+          _resourceChart.dataGrid.removeEventListener(AdvancedDataGridEvent.ITEM_CLOSE, handleDataGridCollapse);
+        }
+
+        this._resourceChart = value;
+
+        if (_resourceChart)
+        {
+          ICollectionView(_resourceChart.taskDataProvider).addEventListener(CollectionEvent.COLLECTION_CHANGE, handleTaskDataProviderChange);
+          _resourceChart.dataGrid.addEventListener(AdvancedDataGridEvent.ITEM_CLOSE, handleDataGridCollapse);
+        }
+      }
+
+      public function get resourceChart():ResourceChart
+      {
+        return this._resourceChart;
+      }
+
+      //------------------------------------------------------------------------
+      //
+      //  Event Handlers
+      //
+      //------------------------------------------------------------------------
+
+      private function onAbsenceTimeChange(event:CalendarLayoutChangeEvent):void
+      {
+        if (startDC.selectedDate > endDC.selectedDate)
+        {
+          humanresources.setFieldValue(absenceItem, "startTime", event.newDate.toDateString());
+          humanresources.setFieldValue(absenceItem, "endTime", event.newDate.toDateString());
+          startDC.selectedDate = event.newDate;
+          endDC.selectedDate = event.newDate;
+        }
+        else if (event.currentTarget.id == "startDC")
+          humanresources.setFieldValue(absenceItem, "startTime", event.newDate.toDateString());
+        else
+          humanresources.setFieldValue(absenceItem, "endTime", event.newDate);
+
+        // Notify the change
+        ICollectionView(resourceChart.taskDataProvider).itemUpdated(absenceItem);
+      }
+
+      private function onReasonChange(event:Event):void
+      {
+        if (absenceItem)
+          humanresources.setFieldValue(absenceItem, "reason", reasonGroup.selectedValue);
+
+        // Notify the change
+        ICollectionView(resourceChart.taskDataProvider).itemUpdated(absenceItem);
+      }
+
+      private function handleTaskDataProviderChange(event:CollectionEvent):void
+      {
+        if (event.kind == CollectionEventKind.UPDATE)
+        {
+          for each (var pce:PropertyChangeEvent in event.items)
+          {
+            if (pce.source == absenceItem)
+              // Update the edited absence when it changes in the data provider
+              absenceItem = pce.source;
+          }
+        }
+      }
+
+      private function handleDataGridCollapse(event:AdvancedDataGridEvent):void
+      {
+        if (!_resourceChart.dataGrid.isItemVisible(employeeItem))
+        {
+          employeeItem = null;
+          absenceItem = null;
+        }
+      }
+
+    ]]>
+  </mx:Script>
+
+  <mx:Panel horizontalScrollPolicy="off" width="100%"  height="100%"
+    layout="absolute" backgroundColor="0xEEEEEE" backgroundAlpha="0.7"
+    borderThicknessBottom="0" borderThicknessTop="0" borderThicknessLeft="0" borderThicknessRight="0"
+    borderAlpha="1" cornerRadius="0" dropShadowEnabled="false"
+    title="@Resource(bundle='resourcechartsample', key='resourcechartsample.title.EditAbsence')"
+    headerColors="[0xEEEEEE, 0xFFFFFF]"
+    borderColor="0x0"
+    borderSides=""
+    headerHeight="21"
+    verticalScrollPolicy="auto">
+    <mx:VBox id="rightVBox" height="100%" verticalGap="0" 
+             left="10" top="2" right="20">
+
+      <mx:Spacer height="2"/>
+      <mx:LinkButton id="addButton" enabled="false" label="@Resource(bundle='resourcechartsample', key='resourcechartsample.properties.NewAbsence')" toolTip="@Resource(bundle='resourcechartsample', key='resourcechartsample.properties.tip.NewAbsence')"
+             click="parentApplication.newAbsence()"
+             icon="@Embed(source='../resources/task.png')"
+             width="100%" height="22" textAlign="left"
+             mouseOver="if (addButton.enabled) addButton.setStyle('textDecoration','underline')"
+             mouseOut="addButton.setStyle('textDecoration','none')"
+             color="#0054FF"/>
+      <mx:LinkButton id="delButton" enabled="false" label="@Resource(bundle='resourcechartsample', key='resourcechartsample.properties.DeleteAbsence')" toolTip="@Resource(bundle='resourcechartsample', key='resourcechartsample.properties.tip.DeleteAbsence')"
+             click="parentApplication.deleteAbsence()"
+             icon="@Embed(source='../resources/trashcan.png')"
+             width="100%" height="22" textAlign="left"
+             mouseOver="if (delButton.enabled) delButton.setStyle('textDecoration','underline')"
+             mouseOut="delButton.setStyle('textDecoration','none')"
+             color="#0054FF"/>
+
+      <mx:Spacer height="5" width="100%"/>
+      <mx:Label text="@Resource(bundle='resourcechartsample', key='resourcechartsample.title.Properties')" textAlign="left" width="100%" fontWeight="bold" fontSize="11"/>
+      <mx:HRule width="100%"/>
+      <mx:Label text="@Resource(bundle='resourcechartsample', key='resourcechartsample.properties.Employee')" textAlign="left" width="100%" fontWeight="bold"/>
+      <mx:Label id="empLabel" textAlign="left" width="100%"/>
+      <mx:Spacer height="5"/>
+
+      <mx:Label text="@Resource(bundle='resourcechartsample', key='resourcechartsample.properties.Reason')" textAlign="left" width="100%" fontWeight="bold"/>
+      <mx:VBox verticalGap="2" width="100%">
+        <mx:HBox width="100%" height="100%" horizontalGap="2" verticalAlign="middle">
+          <mx:RadioButtonGroup id="reasonGroup"
+            change="onReasonChange(event)"/>
+          <mx:RadioButton id="travelRB" groupName="reasonGroup"
+            value="Travel"/>
+          <mx:Canvas width="100%">
+            <local:CustomTaskItemRenderer id="travelIR" width="100%" height="30"
+              data="{travelObject}"
+              click="travelRB.dispatchEvent(event)"/>
+          </mx:Canvas>
+        </mx:HBox>
+        <mx:HBox width="100%" height="100%" horizontalGap="2" verticalAlign="middle">
+          <mx:RadioButton id="missionRB" groupName="reasonGroup"
+            value="Mission"/>
+          <mx:Canvas width="100%">
+            <local:CustomTaskItemRenderer id="missionIR" width="100%" height="30"
+              data="{missionObject}"
+              click="missionRB.dispatchEvent(event)"/>
+          </mx:Canvas>
+        </mx:HBox>
+        <mx:HBox width="100%" height="100%" horizontalGap="2" verticalAlign="middle">
+          <mx:RadioButton id="vacationRB" groupName="reasonGroup"
+            value="Vacation"/>
+          <mx:Canvas width="100%">
+            <local:CustomTaskItemRenderer id="vacationIR" width="100%" height="30"
+              data="{vacationObject}"
+              click="vacationRB.dispatchEvent(event)"/>
+          </mx:Canvas>
+        </mx:HBox>
+        <mx:HBox width="100%" height="100%" horizontalGap="2" verticalAlign="middle">
+          <mx:RadioButton id="sicknessRB" groupName="reasonGroup"
+            value="Sickness"/>
+          <mx:Canvas width="100%">
+            <local:CustomTaskItemRenderer id="sicknessIR" width="100%" height="30"
+              data="{sicknessObject}"
+              click="sicknessRB.dispatchEvent(event)"/>
+          </mx:Canvas>
+        </mx:HBox>
+      </mx:VBox>
+
+      <mx:Spacer height="5"/>
+      <mx:Label text="@Resource(bundle='resourcechartsample', key='resourcechartsample.properties.From')" fontWeight="bold" textAlign="right"/>
+      <mx:DateField width="100%" id="startDC" change="onAbsenceTimeChange(event)" enabled="false"/>
+
+      <mx:Label text="@Resource(bundle='resourcechartsample', key='resourcechartsample.properties.To')" fontWeight="bold" textAlign="right"/>
+      <mx:DateField width="100%" id="endDC" change="onAbsenceTimeChange(event)" enabled="false"/>
+
+    </mx:VBox>
+  </mx:Panel>
+</mx:Canvas>

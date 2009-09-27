@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+ layout="absolute" width="362" height="204" title="增加" 
+ cornerRadius="3"  showCloseButton="true" close="close()"
+ fontSize="12" initialize="init()">
+ <mx:Script>
+     <![CDATA[
+     	import com.erp.reponser.AddReponser;
+     	import mx.rpc.AsyncToken;
+     	import com.erp.pojo.Employee;
+     	import hessian.mxml.HessianService;
+     	import mx.collections.ArrayCollection;
+        import mx.managers.PopUpManager;
+        import mx.containers.TitleWindow;
+        import flash.events.*;
+        import mx.managers.PopUpManager;
+        import mx.controls.Button;
+        import mx.core.IFlexDisplayObject;
+        [Bindable]
+        private var winIsOpen:Boolean = false;
+		
+		private var employeeService:HessianService = null;
+		private var testWebservice:hessionTest = null;
+		
+		private function init():void{
+             this.x = this.parent.width / 2 - this.width / 2 ;
+             this.y = this.parent.height / 2 - this.height / 2;
+        }
+		
+		public function add():void{
+			var employee:Employee = new Employee();
+			employee.erpEmployeeName = erpEmployeeName.text;
+			employee.erpEmployeeTypeId = Number(erpEmployeeTypeId.text);
+			var token:AsyncToken  = employeeService.save.send(employee);
+			token.addResponder(new AddReponser(testWebservice));
+			closeDialog();
+		}
+		
+        public function showDialog(parent:DisplayObject,employeeService:HessianService,testWebservice:hessionTest):void {
+        	this.employeeService = employeeService;
+        	this.testWebservice = testWebservice;
+        	if(winIsOpen) closeDialog();
+        	PopUpManager.addPopUp(this, parent, false);
+	        winIsOpen = true;
+        }
+        
+        private function closeDialog():void{
+        	PopUpManager.removePopUp(this);
+	        winIsOpen = false;
+        }
+       	
+        private function close():void{
+             PopUpManager.removePopUp(this);
+        }
+     ]]>
+ </mx:Script>
+ <mx:Label x="70" y="28" text="NAME"/>
+ <mx:TextInput id="erpEmployeeName" fontSize="12" x="112" y="26"/>
+ 
+ <mx:Label x="70" y="58" text="TYPE" height="20"/>
+ <mx:TextInput id="erpEmployeeTypeId" fontSize="12" x="112" y="56"/>
+ 
+ <mx:Button fontSize="12" x="112" y="103" click="add()" label="确定"/>
+ <mx:Button fontSize="12" x="216" y="103" click="closeDialog()" label="取消"/>
+</mx:TitleWindow>

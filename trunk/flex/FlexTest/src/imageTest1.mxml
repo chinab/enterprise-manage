@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	
+	<!--
+		//外载一个富媒体，可使用绝对或者相对路径。
+		但加入SWF文件时，可用use-network参数指定其使用网络或者本地文件二者之一。
+	-->
+	<mx:Image id="myLogo0" source="assets/logo.png" x="61" y="10"/>
+
+
+	<!--
+		//简单地内嵌一个富媒体.png,.jpg,.gif,
+		.swf(可将嵌入的SWF文件的实例当作 MovieClip.MovieClipAsset 类的实例处理,
+		不能直接访问嵌入的SWF文件的属性或方法。
+		但可用 LocalConnection以允许SWF之间进行通信。)，
+		.SVG(可将嵌入的SVG文件的实例当作Sprite.SpriteAsset类的实例处理。)
+	-->
+	<mx:Image id="myLogo1" source="@Embed('assets/logo.png')" x="61" y="105.8"/>
+	
+	<!--
+	//在脚本中定义富媒体对象，然后在MXML中可以多次嵌入
+	-->
+    <mx:Script>
+        <![CDATA[
+            [Embed(source="assets/logo.png")]
+            [Bindable]
+            public var Logo:Class;
+        ]]>
+    </mx:Script>
+    <mx:Image id="myLogo" source="{Logo}" x="61" y="235"/>
+    <mx:Image id="myLogo2" source="{Logo}" x="61" y="354"/>
+<!--
+//在脚本中定义图片的scale-9像框缩放功能就可以保持边框的清晰,
+(旋转嵌入的scale-9 图像的实例会关闭该图像的scale-9功能。)。
+-->
+<mx:Script>
+        <![CDATA[
+            [Embed(
+                source="assets/fancy_border.png", 
+                scaleGridTop="55", scaleGridBottom="137", 
+                scaleGridLeft="57", scaleGridRight="266"
+            )]
+            
+            [Bindable]
+            public var FancyBorderImage:Class;
+        ]]>
+    </mx:Script>
+
+    <mx:Image id="myLogo3" source="{FancyBorderImage}" width="146" height="82" x="61" y="462"/>
+	
+	<!--
+	//嵌入 SWF 库资源
+	 -->
+    <mx:Script>
+    	<![CDATA[
+            [Embed(source="assets/library.swf")]
+
+            [Bindable]
+            public var BadApple:Class;
+        ]]>
+    </mx:Script>
+
+    <mx:Image id="myLogo4" source="{BadApple}" width="468" height="364.8" x="264" y="20"/>
+</mx:Application>

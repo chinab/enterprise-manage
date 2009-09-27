@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" initialize="init()" backgroundAlpha="0" backgroundColor="#FFFFFF" width="806" height="336" fontSize="12" fontFamily="SIMSUN">
+	<mx:Style>
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import com.xvxv.aclass.DateTools;
+			import mx.events.ItemClickEvent;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+			import mx.events.ListEvent;
+			
+			private var _time:String = "";
+			private var _unitId:String = "1200";
+			private var _dataType:String = "";
+			private var _unitType:String = "";
+			private var _unitTypeIndex:int = 0;
+			private var _nowDate:Date = DateTools.getUpOrDownMonth(new Date(),-1);
+			
+			private function init():void{
+				timeService.url="/ahboot/getFinishInvestCircsTimeFinishEach.action";
+				dataGridXmlService.url = "/ahboot/getReportDataFlexReportSet.action";
+				timeService.send();
+			}
+			
+			private function timeResult(event:ResultEvent):void{
+				_time = event.result as String;
+				if(_time=="error"){
+					Alert.show("没数据","提示");
+					return;
+				}
+				_dataType = dataTypes[1].data;
+				_unitType = unitTypes[_unitTypeIndex].data;
+				load();
+				_unitTypeIndex=1;
+				
+				var year:Number = Number(_time.split("-")[0]);
+				var month:Number = Number(_time.split("-")[1]);
+				var date:Date=new Date();
+				date.setFullYear(year);
+				date.setMonth(month-1);
+				dateField.selectedDate = date;
+			}
+			
+			private function load():void{
+				dataGridXmlService.send({time:_time,dataType:_dataType,unitType:_unitType});
+//				Alert.show("load...\ntime:"+_time+",dataType:"+_dataType+",unitType:"+_unitType,"info");
+				loadChart();
+			}
+			
+			private function loadChart():void{
+				ExternalInterface.call("loadMainPageScAmchart",_time,_dataType,_unitId);
+			}
+			
+			private function itemClick(event:ListEvent):void{
+				try{
+	            	var data:XML=XML(event.itemRenderer.data);
+	            	_unitId = data.@unitId;
+	            	loadChart();
+				}catch(e:Error){
+					
+				}
+            }
+            
+			private function dataGridXmlServiceResult(event:ResultEvent) : void {
+			    var setXml:XML = (XML)(event.result);
+			    if(setXml.name().toString()=="error"){
+		    		Alert.show(setXml.toString(),"提示");
+		    		return;
+			    }
+				dataColumns = createHeaders(dataColumns,setXml.header[0].elements());
+				advancedDataGrid.groupedColumns = dataColumns.children;
+				hd.source = setXml.datas[0].data;
+
+			    _unitId = setXml.datas[0].data[0].@unitId;
+	            loadChart();
+			}
+            
+            private function createHeaders(parent:AdvancedDataGridColumnGroup,dataChildren:XMLList) : AdvancedDataGridColumnGroup{
+				var children:Array = new Array(dataChildren.length());
+				for(var i:int;i<dataChildren.length();i++){
+			    	var xml:XML = dataChildren[i];
+			    	var name:String = xml.name().toString();
+			    	if(name=="group"){
+			    		var group:AdvancedDataGridColumnGroup = new AdvancedDataGridColumnGroup();
+					    /**
+					    * 给group设置属性
+					    **/
+			    		group.headerText=xml.@headerText;
+			    		group.setStyle("color",0x00000);
+			    		group.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		
+			    		children[i] = createHeaders(group,xml.children());
+			    	}else if(name=="column"){
+			    		var column:AdvancedDataGridColumn = new AdvancedDataGridColumn();
+					    /**
+					    * 给column设置属性
+					    **/
+			    		column.headerText=xml.@headerText;
+			    		column.width=xml.@width.toString()!=""?xml.@width:100;
+			    		column.dataField=xml.@dataField.toString()!=""?"@"+xml.@dataField:"";
+			    		column.setStyle("color",0x00000);
+			    		column.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		if(xml.@textAlign=="left"){
+			    			column.setStyle("textAlign","left");
+			    		}else if(xml.@textAlign=="center"){
+			    			column.setStyle("textAlign","center");
+			    		}else{
+			    			column.setStyle("textAlign","right");
+			    		}
+			    		
+			    		children[i] = column;
+			    	}
+			    }
+	    		parent.children = children;
+			    return parent;
+			}
+			
+			private function linkBarItemClick(event:ItemClickEvent):void{
+				_dataType = event.item.data;
+				load();
+			}
+			
+			private function linkButtoClick():void{
+				_unitType = unitTypes[_unitTypeIndex].data;
+				load();
+				_unitTypeIndex=(_unitTypeIndex==0?1:0);
+				linkButton.label = unitTypes[_unitTypeIndex].label;
+			}
+			
+			private function selectDataByDate():void{
+				_time = DateTools.getYMString(dateField.selectedDate);
+				load();
+			}
+			
+			private function getPerMonth():void{
+				dateField.selectedDate = DateTools.getUpOrDownMonth(dateField.selectedDate,-1);
+				selectDataByDate();
+			}
+			
+			private function getNextMonth():void{
+				dateField.selectedDate = DateTools.getUpOrDownMonth(dateField.selectedDate);
+				valDate();
+				selectDataByDate();
+			}
+			
+			private function valDate():void{
+				if(dateField.selectedDate!=null)
+					dateField.selectedDate=_nowDate.getTime()>dateField.selectedDate.getTime()?dateField.selectedDate:_nowDate;
+				else dateField.selectedDate=_nowDate;
+			}
+		]]>
+	</mx:Script>
+	<mx:HTTPService id="timeService" resultFormat="text" result="timeResult(event)" />
+	<mx:HTTPService id="dataGridXmlService" resultFormat="xml" result="dataGridXmlServiceResult(event)" />
+	<mx:AdvancedDataGrid id="advancedDataGrid" 
+		sortableColumns="false" sortExpertMode="true" change="itemClick(event)"
+		itemClick="itemClick(event)" horizontalScrollPolicy="on" 
+		width="795" height="299" displayItemsExpanded="true" 
+		headerStyleName="header" textAlign="right" 
+		y="31" x="5" color="#000000" styleName="myFont" 
+		fontSize="12" rollOverColor="#EFEFEF" selectionColor="#DFE8F7" fontFamily="SIMSUN">
+		<mx:dataProvider>
+			<mx:HierarchicalData id="hd"/>
+		</mx:dataProvider>
+		<mx:groupedColumns>
+			<mx:AdvancedDataGridColumnGroup id="dataColumns">
+			</mx:AdvancedDataGridColumnGroup>
+		</mx:groupedColumns>
+	</mx:AdvancedDataGrid>
+	<mx:LinkBar x="5" y="3" itemClick="linkBarItemClick(event)">
+		<mx:Array id="dataTypes">
+	         <mx:Object label="投资" data="invest10000" />
+	         <mx:Object label="资金" data="fund10000" />
+	         <mx:Object label="资本金" data="invest100" />
+	    </mx:Array>
+	</mx:LinkBar>
+	<mx:Array id="unitTypes">
+         <mx:Object label="分公司" data="fgs" />
+         <mx:Object label="四川水电" data="scsd" />
+    </mx:Array>
+	<mx:LinkButton id="linkButton" x="698" y="5" label="四川水电" click="linkButtoClick()"/>
+	
+	<mx:Button id="perMonth" fontWeight="normal" fontSize="12" width="67" height="24" showEffect="fadeIn" click="getPerMonth()" visible="true" label="上一月" x="242.5" y="3"/>  
+  	<mx:DateField id="dateField" fontWeight="normal" fontSize="12" yearNavigationEnabled="true"
+		    dayNames="['日','一','二','三','四','五','六']"
+		    monthNames="['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']"
+		    formatString="YYYY-MM-DD" visible="true" x="342" y="4" width="65" close="valDate()"/>
+    <mx:Button id="chaxun" fontWeight="normal" fontSize="12" width="50" height="24" showEffect="fadeIn" click="selectDataByDate()" visible="true" label="查询" x="421.5" y="3"/>
+    <mx:Button id="nextMonth" fontWeight="normal" fontSize="12" width="64" height="24" showEffect="fadeIn" click="getNextMonth()" visible="true" label="下一月" x="499.5" y="3"/>
+</mx:Application>

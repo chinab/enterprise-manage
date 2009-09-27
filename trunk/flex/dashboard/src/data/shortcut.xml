@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datagrid>
+	<header>
+		<column fontSize="12" width="90" dataField="menu" headerText="菜单" textAlign="left" />
+		<column fontSize="12" width="58" dataField="loginSize" headerText="登录次数" textAlign="right" />
+		<column fontSize="12" width="125" dataField="loginTime" headerText="最近登录时间" textAlign="right" />
+		<column fontSize="12" width="5" dataField="" headerText="" textAlign="" />
+	</header>
+	<datas>
+		<data id="01" menu="功能加构维护" loginSize="1" loginTime="2009-05-06 11:03:36"  red="true" onclick="indexPage.reverseOpenMenu" arg="917"/>
+		<data id="02" menu="主要经济指标" loginSize="Ok" loginTime="2009-05-06 11:03:01" onclick="indexPage.reverseOpenMenu" arg="917"/>
+	</datas>
+</datagrid>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:ilog="http://www.ilog.com/2007/ilog/flex" initialize="init()">
+	<mx:Style>
+		Application {  
+            fontSize: 12px; 
+		}
+		ToolTip{
+			font-size:12px;
+        }
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.ICollectionView;
+			import mx.collections.SortField;
+			import mx.collections.Sort;
+			import mx.utils.ObjectUtil;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.StringUtil;
+			import mx.formatters.Formatter;
+			import mx.formatters.DateFormatter;
+			import ilog.gantt.TaskItem;
+			import mx.collections.GroupingField;
+			import mx.collections.Grouping;
+			import mx.collections.GroupingCollection;
+			
+			[Embed(source="../resources/fenggongshi.png")]
+			private static const fenggongshi:Class;
+			  
+			[Embed(source="../resources/dianchang.png")]
+			private static const dianchang:Class;
+			  
+			[Embed(source="../resources/jizhu.png")]
+			private static const jizhu:Class;
+			private function getImage(item:Object):Object {
+				if (item && item is XML)
+					return jizhu;
+				else
+          			return dianchang;
+			}
+			
+			private function init():void{
+			  	var resourceNode:String = Application.application.parameters["resourceNode"];
+			  	try{
+					xmlService.send({resourceNode:resourceNode});
+			  	}catch(e:IOError){
+			  		Alert.show("请求服务器错误","提示");
+			  	}
+			}
+			
+			public function formatTip(item:TaskItem):String {
+        		var dateFormatter:DateFormatter  = new DateFormatter();
+        		dateFormatter.formatString = "YYYY-MM-DD JJ:NN:SS";
+        		var r:String = "";
+    			var rd:String = item.data.@reasonDesc;
+        		if(item.data.@reason=="R1"){
+        			r = rd&&rd!=null&&rd!=""?rd:"运行";
+        		}else if(item.data.@reason=="R2"){
+        			r = rd&&rd!=null&&rd!=""?rd:"非停";
+        		}else if(item.data.@reason=="R3"){
+        			r = rd&&rd!=null&&rd!=""?rd:"检修";
+        		}else if(item.data.@reason=="R4"){
+        			r = rd&&rd!=null&&rd!=""?rd:"停备";
+        		}
+		        return StringUtil.substitute("{0} \n {1} \n {2} \n {3}",
+		                         item.resource.@fullname,
+		                         r,
+		                         "开始:"+dateFormatter.format(item.startTime),
+		                         "结束:"+dateFormatter.format(item.endTime));
+		     }
+			
+			private function onXmlTOData(event:ResultEvent) : void {
+			    var xml:XML = (XML)(event.result);
+			    var startDate:Date = new Date();
+				var endDate:Date = new Date();
+				startDate.setMonth(0,01);
+				endDate.setFullYear(endDate.getFullYear()+1);
+				endDate.setMonth(0,01);
+				ganttSheet.visibleTimeRangeStart = startDate;
+				ganttSheet.visibleTimeRangeEnd = endDate;
+				 var resourceCollection:ICollectionView = ICollectionView(resourceChart.resourceDataProvider);
+				 var sort:Sort = new Sort();
+		         sort.fields = [new SortField("@fullname")];
+		         resourceCollection.sort = sort;
+
+				var collection:GroupingCollection=new GroupingCollection();
+		        collection.source = xml.person;
+		        var grouping:Grouping = new Grouping();
+		        grouping.fields = [new GroupingField("@location")];
+		        collection.grouping = grouping;
+		        collection.refresh();
+		        resourceChart.resourceDataProvider = collection;
+		        resourceChart.taskDataProvider = xml.absence;
+		        dataGrid.expandAll();
+			}
+		]]>
+	</mx:Script>
+	<mx:HTTPService id="xmlService" resultFormat="xml" url="file:///D:/getModelDataRunStatus.action.xml" result="onXmlTOData(event)" />
+	<!--
+	<mx:HTTPService id="xmlService" resultFormat="xml" url="/ahboot/getModelDataRunStatus.action" result="onXmlTOData(event)" />
+	-->
+	<ilog:ResourceChart id="resourceChart" x="0" y="0" width="100%" height="100%">
+		<ilog:dataGrid>
+            <ilog:GanttDataGrid id="dataGrid" dropShadowEnabled="false"
+              rowHeight="23" iconFunction="getImage"
+              width="120">
+              <ilog:columns>
+                <mx:AdvancedDataGridColumn dataField="@fullname" headerText="名称"/>
+              </ilog:columns>
+            </ilog:GanttDataGrid>
+          </ilog:dataGrid>
+
+          <ilog:ganttSheet>
+            <ilog:GanttSheet id="ganttSheet"
+              taskItemRenderer="CustomTaskItemRenderer"
+              dataTipFunction="formatTip"
+              resizeEnabled="false"
+              reassignEnabled="false"
+              moveEnabled="false"/>
+          </ilog:ganttSheet>
+	</ilog:ResourceChart>
+</mx:Application>

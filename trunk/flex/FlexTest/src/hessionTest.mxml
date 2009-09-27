@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+        layout="vertical" initialize="loadData()"
+        verticalAlign="middle"
+        backgroundColor="white" viewSourceURL="srcview/index.html">
+
+<mx:Script>
+	<![CDATA[
+		import com.erp.reponser.DeleteReponser;
+		import flash.utils.setTimeout;
+		import mx.events.FlexEvent;
+		import mx.events.CloseEvent;
+		import com.erp.window.WinOfInfo;
+		import com.erp.reponser.AddReponser;
+		import com.erp.reponser.LoadReponser;
+		import mx.utils.ArrayUtil;
+		import mx.controls.Alert;
+		import mx.rpc.events.ResultEvent;
+		import mx.rpc.AsyncToken;
+		import com.erp.pojo.Employee;
+            
+		public function loadData():void{
+			var token:AsyncToken = employeeService.getAllArr.send();
+			token.a
+			token.addResponder(new LoadReponser(employeeDG));
+		}
+		private function deleteData():void{
+			var array:Array = employeeDG.selectedItems;
+			if(array==null || array.length<=0){
+				Alert.show("请选择一条记录","提示");
+				return;
+			}
+			for(var i:int=0;i<array.length;i++){
+				var employee:Employee = (Employee)(array[i]);
+				var token:AsyncToken = employeeService.deleteEmp.send(employee.id);
+				token.addResponder(new DeleteReponser(this));
+			}
+		}
+		private function addData():void{
+			var winOfInfo:WinOfInfo = new WinOfInfo();
+			winOfInfo.showDialog(this,employeeService,this);
+		}
+	]]>
+</mx:Script>
+	<hessian:HessianService xmlns:hessian="hessian.mxml.*" requestTimeout="10000" id="employeeService" destination="http://192.168.32.28:8080/java-st/hessian/employeeService">
+	</hessian:HessianService>
+	<mx:DataGrid id="employeeDG" width="70%" height="50%" allowMultipleSelection="true">
+		<mx:columns>
+			<mx:DataGridColumn headerText="id" dataField="id"/>
+			<mx:DataGridColumn headerText="erpEmployeeName" dataField="erpEmployeeName"/>
+			<mx:DataGridColumn headerText="erpEmployeeTypeId" dataField="erpEmployeeTypeId"/>
+			<mx:DataGridColumn headerText="hessianTypeName" dataField="hessianTypeName"/>
+		</mx:columns>
+	</mx:DataGrid>
+	<mx:Button label="Load data" click="loadData()"/>
+	<mx:Button label="delete" click="deleteData()"/>
+	<mx:Button label="add" click="addData()"/>
+</mx:Application>

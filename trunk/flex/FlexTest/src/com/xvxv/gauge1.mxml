@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="400" height="300" xmlns:controls="com.brightPoint.controls.*">
+	<mx:Script>
+		<![CDATA[
+			private var colorArray:Array =[0x0000FF,0x8B008B,0x1E90FF,0x218868,0xCD2626,0x8B2252,0x7FFF00];
+			private function init():void
+			{
+				gauge.minValue=0;
+				gauge.maxValue=400;
+				gauge.value = 100;
+				gauge.setStyle("alertRatios",[50,100,350]);
+				gauge.setStyle("alertColors",[0xDD0000,0xFFFF00,0x00FF00]);
+				gauge.setStyle("alertAlphas",[.7,.9,.6]);
+				
+				gauge.setStyle("pointRatios",[160,200,350]);
+				gauge.setStyle("pointColors",colorArray);
+				gauge.setStyle("pointAlphas",[.7,.9,.6]);
+				
+				gauge.setStyle("faceColor",0x7EC3EE);
+				gauge.setStyle("ticksColor",0x000000);
+				gauge.setStyle("fontColor",0xFFFFFF);
+				gauge.setStyle("pointerColor",0xFF0000);
+				gauge.setStyle("centerColor",0xFFFF00);
+				gauge.setStyle("bezelColor",0x99BDD0);
+				gauge.setStyle("faceShadowColor",0x4993ED);
+				gauge.setStyle("fontSize",12);
+			}
+		]]>
+	</mx:Script>
+	<controls:Gauge 
+		id="gauge" 
+		showValue="true"
+		alertRatios="[50,100,350]"
+		alertColors="[0xDD0000,0xFFFF00,0x00FF00]"
+		alertAlphas="[.7,.9,.6]"
+		pointRatios="[160,200,350]"
+		pointColors="colorArray"
+		pointAlphas="[.7,.9,.6]"
+		faceColor="0x7EC3EE"
+		ticksColor="0x000000"
+		fontColor="0xFFFFFF"
+		pointerColor="0xFF0000"
+		centerColor="0xFFFF00"
+		bezelColor="0x99BDD0"
+		faceShadowColor="0x4993ED"
+		fontSize="12"
+		width="100%" 
+		height="100%" 
+		x="0" 
+		y="0"/>
+</mx:Canvas>

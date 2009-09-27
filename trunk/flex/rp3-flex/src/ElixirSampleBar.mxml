@@ -1,0 +1,166 @@
+<!--
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Copyright (C) 2007-2008 ILOG, S.A.
+//  All Rights Reserved.
+//  The following is ILOG Sample Code.  Any usage of the ILOG Sample Code is  
+//  subject to the terms and conditions of the ILOG End User License   
+//  Agreement applicable to this ILOG software product. 
+//
+///////////////////////////////////////////////////////////////////////////////
+-->
+
+<mx:ApplicationControlBar 
+  width="100%" 
+  height="65" 
+  xmlns:mx="http://www.adobe.com/2006/mxml" 
+  initialize="init()" >
+  <mx:Metadata> 
+      [Event(name="splashComplete", type="flash.events.Event")]
+      [Event(name="normalView", type="flash.events.Event")]
+      [Event(name="miniView", type="flash.events.Event")]
+  </mx:Metadata> 
+
+  <mx:Script>
+    <![CDATA[
+      import mx.core.UIComponent;
+      import mx.events.FlexEvent;
+      import mx.effects.WipeRight;
+      import mx.core.Application;
+      
+      public static var SPLASH_COMPLETE:String = "splashComplete";
+      public static var MINIMIZED_VIEW:String = "miniView";
+      public static var NORMAL_VIEW:String = "normalView";
+
+      private var dlCache:Dictionary = new Dictionary();
+      
+      public function removeObject(o:DisplayObject):void
+      {
+        dlCache[o] = [o.parent, o.parent.getChildIndex(o)];
+        o.parent.removeChild(o);
+      }
+      
+      public function addObject(o:DisplayObject):void
+      {
+        var par:DisplayObjectContainer = dlCache[o][0];
+        var pos:int = dlCache[o][1];
+        par.addChildAt(o, pos); 
+      }
+      
+      private function end():void {
+        dispatchEvent(new Event(SPLASH_COMPLETE));
+      }
+      
+      private function init():void
+      {
+        var s:String = systemManager.loaderInfo.parameters.barEffect;
+        if(s == "false") 
+        {
+          removeObject(this);
+          callLater(end);
+          return;
+        }
+        Application.application.setStyle("backgroundGradientColors", [0xFFFFFF, 0xFFFFFF]);
+        Application.application.setStyle("backgroundGradientAlphas", [1, 1]);
+        Application.application.addEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+        for (var i:int = 0; i < Application.application.numChildren; i++)
+        {
+          var c:DisplayObject = Application.application.getChildAt(i);
+          c.visible = false;
+        }
+        
+        removeChild(elixir400);
+        Application.application.addChild(elixir400);
+        elixir400.width = 400;
+        elixir400.height = 400;
+        elixir400.visible = true;
+        elixir400.x = Application.application.width/2 - elixir400.width/2;
+        elixir400.y = Application.application.height/2 - elixir400.height/2;
+        logoAnimation.play([elixir400]);
+      }
+
+      private function keyDown(e:KeyboardEvent):void
+      {
+        // Catch Ctrl-F12
+        if (e.ctrlKey && e.keyCode == 123)
+        {
+          if (parent)
+          {
+            removeObject(this);
+            dispatchEvent(new Event("miniView"));
+          }
+          else
+          {
+            addObject(this);
+            dispatchEvent(new Event("normalView"));
+          }
+        }
+      }
+
+      private function endAnimation():void
+      {
+        for (var i:int = 0; i < Application.application.numChildren; i++)
+        {
+          var c:DisplayObject = Application.application.getChildAt(i);
+          c.visible = true;
+        }
+        Application.application.removeChild(elixir400);
+        
+        Application.application.setStyle("backgroundGradientColors", [0xEEEEEE, 0xCCCCCC]);        
+        dispatchEvent(new Event(SPLASH_COMPLETE));
+      }
+      
+      private function goToURL(url:String):void {
+        try {
+          navigateToURL(new URLRequest(url), '_blank');
+        } catch (e:SecurityError) {
+          trace("Local sandbox: cannot navigate to URL "+url);
+        }
+      }      
+    ]]>
+  </mx:Script>
+  
+  
+  <mx:Image
+    id="elixir60"
+    source="@Embed(source='../resources/elixir60.png')" 
+    scaleContent="false"
+    click="goToURL('http://elixir.ilog.com')"
+    filters="{[new GlowFilter(0xFFFFFF, 0.7, 10, 10)]}"
+    buttonMode="true"
+    />
+  
+  <mx:Image
+    id="elixir400" 
+    source="@Embed(source='../resources/elixir400.png')" 
+    scaleContent="false"
+    click="{logoAnimation.duration = 0}"
+    />
+  
+  <mx:Label text="{this.label}" letterSpacing="0" fontSize="22" fontWeight="bold" color="0xEEEEEE"/>
+  <mx:Canvas width="100%" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+    <mx:Image
+      right="5"
+      id="elixirlogo" 
+      source="@Embed(source='../resources/logo2.swf')" 
+      scaleContent="true"
+      width="110"
+      height="50"
+      filters="{[new GlowFilter(0xFFFFFF, 0.7, 10, 10)]}"
+      click="goToURL('http://www.ilog.com/products/visualization/')"
+      buttonMode="true"
+    />
+
+  </mx:Canvas>
+    <mx:Sequence id="logoAnimation">
+    <mx:Parallel>
+      <mx:AnimateProperty property="alpha" fromValue="0" toValue="1" duration="3000"/>
+      <mx:Blur blurXFrom="20" blurXTo="0" blurYFrom="20" blurYTo="0"  
+        duration="2000"/>
+    </mx:Parallel>
+    <mx:Parallel >
+      <mx:Zoom zoomWidthTo="0.15" zoomHeightTo="0.15"/>
+      <mx:Move xTo="19" yTo="16" effectEnd="endAnimation()"/>
+    </mx:Parallel>
+  </mx:Sequence>
+</mx:ApplicationControlBar>

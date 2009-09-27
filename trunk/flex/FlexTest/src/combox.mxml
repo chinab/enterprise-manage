@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Script>
+        <![CDATA[
+        	import mx.collections.ArrayCollection;
+            private var i:int = 1;
+            /**
+             * 使用[Bindable]元数据标签(属性非默认绑定,必须明确的声明被绑定的属性)，
+             * 将控件绑定到使用 ActionScript定义的现有 Array 或 Collection。
+            */
+            [Bindable]
+            private var comboBoxDatas:ArrayCollection = new ArrayCollection
+                (
+                    [
+                        {data:0, label:"Print"},
+                        {data:1, label:"Website"},
+                    ]
+                ); 
+                
+              private var dataChange:Function = function():void{
+              		comboBoxDatas.addItem("comboBox"+i++);
+              }
+         
+        ]]>
+    </mx:Script>
+				
+				<mx:ComboBox id="userRating" dataProvider="{comboBoxDatas}" change="dataChange()" width="180" x="59" y="85" selectedIndex="0" editable="true" enabled="true">
+                </mx:ComboBox>
+				<mx:ComboBox id="userRating1" width="192" x="312" y="85" selectedIndex="1" editable="true" enabled="true">
+					<!-- 直接在MXML标签中加入数据，将 Array 或 Collection 定义为取得数据提供程序的控件的子标签。
+						 该方法具有实施快速的优点, 适合与静态数据一起使用及用于原型设计-->
+					<mx:Array>
+						<mx:Object data="0" label="Print"/>
+						<mx:Object data="1" label="Website"/>
+					</mx:Array>
+                </mx:ComboBox>
+				<mx:DataGrid x="79" y="218" editable="true">
+								<mx:columns>
+												<mx:DataGridColumn headerText="Column 1" dataField="col1" editable="false"/>
+												<mx:DataGridColumn headerText="Column 2" dataField="col2"/>
+												<mx:DataGridColumn headerText="Column 3" dataField="col3"/>
+								</mx:columns>
+				</mx:DataGrid>
+</mx:Application>

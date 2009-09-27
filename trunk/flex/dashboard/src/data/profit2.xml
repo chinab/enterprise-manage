@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items title="2000年9月">
+	<item month="Jan" value="11.2" value2=""/>
+	<item month="Feb" value="13" value2="7"/>
+	<item month="Mar" value="1.7" value2="7"/>
+	<item month="Apr" value="15" value2="7"/>
+	<item month="May" value="12.3" value2="7"/>
+	<item month="June" value="14.5" value2="7"/>
+	<item month="July" value="16.6" value2="7"/>
+	<item month="Aug" value="12" value2="7"/>
+	<item month="Sept" value="13.1" value2="7"/>
+	<item month="Oct" value="14" value2="7"/>
+	<item month="Nov" value="16" value2="7"/>
+	<item month="Dec" value="15.5" value2="7"/>
+	<legend label="计划开工" dataField="value"/>
+	<legend label="完成情况" dataField="value2"/>
+</items>

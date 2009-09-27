@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<mx:Script>
+		<![CDATA[
+			public function print():void{
+				trace("hello world!");
+			}
+		]]>
+	</mx:Script>
+	<mx:Button id="a33" click="print();" label="print">
+		
+	</mx:Button>
+	
+</mx:Application>

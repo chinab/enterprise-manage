@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	<!--//在Model数据中使用{}语句来绑定数据 -->
+    <mx:Model id="thing1">
+        <data>
+            <part>{input1.text}</part>
+        </data>
+    </mx:Model>
+    <!--//用<mx:Binding>标签来绑定数据 -->
+    <mx:Binding source="input2.text" destination="thing1.part"/>
+
+    <mx:TextInput id="input1" x="203" y="66"/>
+    <mx:TextInput id="input2" x="203" y="115"/>
+    <mx:TextArea text="{thing1.part}" x="203" y="159"/>
+
+</mx:Application>

@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" backgroundColor="#FFFFFF" layout="absolute" xmlns:ns1="com.brightPoint.controls.*" xmlns:xvxv="com.xvxv.*" initialize="init()" xmlns:aclass="com.xvxv.aclass.*" borderColor="#FFFFFF" width="100%" height="95%">
+	<mx:Style>
+		Alert{
+	        fontFamily:"SIMSUN";
+			font-size:10;
+		}
+		.header{
+	        fontFamily:"SIMSUN";
+			font-color:#000000;
+			text-align:center;
+		}
+		.myFont{
+	        fontFamily:"SIMSUN";
+	        fontColor:#000000;
+        }
+		Application{
+	        fontFamily:"SIMSUN";
+			font-size:12px;
+	        fontColor:#000000;
+		}
+		ColumnChart{
+	        fontFamily:"SIMSUN";
+			font-size:12px;
+	        fontColor:#000000;
+		}
+		LegendItem{
+	        fontFamily:"SIMSUN";
+			font-size:12px;
+			font-weight:normal;
+        }
+        PieChart{
+	        fontFamily:"SIMSUN";
+			font-size:12px;
+			font-weight:normal;
+        }
+        DataTip{
+	        fontFamily:"SIMSUN";
+        	font-size:12px;
+        }
+        ComboBox{
+        	fontFamily:"SIMSUN";
+			font-size:12px;
+			font-weight:normal;
+        }
+	</mx:Style>
+	<mx:Script>
+		<![CDATA[
+			import mx.collections.HierarchicalData;
+			import mx.controls.AdvancedDataGrid;
+			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumnGroup;
+			import mx.events.MenuEvent;
+			import com.xvxv.aclass.XmlTools;
+			import mx.messaging.messages.ErrorMessage;
+			import mx.collections.ArrayCollection;
+			import mx.charts.series.items.PieSeriesItem;
+			import mx.charts.HitData;
+			import mx.charts.events.ChartItemEvent;
+			import mx.charts.chartClasses.IAxis;
+			import com.xvxv.aclass.MyIFactoryOfHeader; 
+			import mx.events.ListEvent;
+			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumn;
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+			[Bindable]
+			private var colorArray:Array =[0x0000FF,0x8B008B,0x1E90FF,0x218868,0xCD2626,0x8B2252,0x7FFF00];
+			private var _unitId:String = "";
+			private var _year:String = "";
+			private var _projectItemId:String = "10000";
+			private var _projectParentItemId:String = "10000";
+			private var _projectItemName:String = "";
+			private var _unitName:String = "";
+			private var isInitUnit:int = 0;
+			
+			[Embed(source="../resources/fenggongshi.png")]
+			private static const fenggongshi:Class;
+			[Embed(source="../resources/dianchang.png")]
+			private static const dianchang:Class;
+			[Embed(source="../resources/jizhu.png")]
+			private static const jizhu:Class;
+			[Embed(source="../resources/jizhu1.png")]
+			private static const jizhu1:Class;
+			[Embed(source="../resources/jizhu2.png")]
+			private static const jizhu2:Class;
+			
+			private var resourceNode:String="";
+			private function getImage(data:Object):Object {
+				if(data==null) return null;
+				if("group2"==data.@groupType){
+					return fenggongshi;
+				}else if("group3"==data.@groupType){
+					return dianchang;
+				}
+				return jizhu;
+			}
+			
+			private function init():void{
+//				comboxArrayService.url = "http://192.168.32.28:8080/ahboot/getUsersFinishEach.action";
+//				dataGridXmlService.url="http://192.168.32.28:8080/ahboot/getFinishInvestConstDataFinishEach.action";
+				comboxArrayService.url = "/ahboot/getUsersFinishEach.action";
+				dataGridXmlService.url="/ahboot/getFinishInvestConstDataFinishEach.action";
+				_year = yearComBoxArr[0].label;
+				comboxArrayService.send({year:_year});
+			}
+			private function comboxArrayServiceResult(event:ResultEvent):void{
+				var comboxArr:XML = XML(event.result);
+				unitMenuBar.dataProvider = comboxArr.item;
+				if(isInitUnit++==0){
+					_unitId = comboxArr.item[0].item[0].@data;
+					_unitName = comboxArr.item[0].item[0].@label;
+				}
+				load();
+			}
+			
+			private function columnLoad(projectItemId:String):void{
+				_projectItemId = projectItemId;
+				load();
+			}
+			private function groupLoad():void{
+				_projectItemId = _projectParentItemId;
+				load();
+			}
+			
+			private function load():void{
+				try{
+					dataGridXmlService.send({year:_year,projectItemId:_projectItemId,unitId:_unitId});
+				}catch(e:IOError){
+					Alert.show("请求后台失败！","提示");
+				}
+			}
+			
+			private function itemClick(event:ListEvent):void{
+            	var dataXml:XML=XML(event.itemRenderer.data);
+            	drawPie(dataXml);
+            }
+            
+			private var clomes:XMLList = null;
+			private function dataGridXmlServiceResult(event:ResultEvent) : void {
+			    var setXml:XML = (XML)(event.result);
+			    if(setXml.name().toString()=="error"){
+		    		Alert.show(setXml.toString(),"提示");
+		    		return;
+			    }
+			    _projectItemName = setXml.header[0].group[0].@headerText;
+				title1.text = _unitName+_year+"年"+_projectItemName+"构成分析";
+				title2.text = _unitName+_year+"年"+_projectItemName+"趋势图";
+				title3.text = _unitName+_year+"年"+_projectItemName+"构成对比";
+			    
+				advancedDataGrid.groupedColumns = createHeaders(dataColumns,setXml.header[0].elements()).children;
+				hd.source = setXml.datas[0].data;
+				
+				clomes = setXml.header[0].group[0].column;
+				_projectParentItemId=setXml.header[0].group[0].@dataField.toString().replace("col","");
+				columnchart.dataProvider = XmlTools.getReverseXmlList(setXml.datas[0].*.*.data);
+				columnchartSerise.displayName = setXml.header[0].group[0].@headerText;
+				columnchartSerise.yField = "@"+clomes[clomes.length()-2].@dataField;
+				piechartSeries.displayName = setXml.header[0].group[0].@headerText;
+				drawPie(setXml.datas[0].data[0]);
+			}
+			
+			private function drawPie(dataXml:XML):void{
+				var pieObjArr:Array =new Array(clomes.length()-2);
+				for(var i:int;i<clomes.length()-2;i++){
+					pieObjArr[i] = {name:clomes[i].@headerText.toString(),value:Number(dataXml.attribute(clomes[i].@dataField))};
+				}
+				piechart.dataProvider = pieObjArr;
+				var timeStr:String = dataXml.@time.toString();
+				if(timeStr.indexOf("年")!=-1)
+					title3.text = _unitName+dataXml.@time+_projectItemName+"构成对比";
+				else
+					title3.text = _unitName+_year+"年"+dataXml.@time+_projectItemName+"构成对比";
+			}
+			
+			private function createHeaders(parent:AdvancedDataGridColumnGroup,dataChildren:XMLList) : AdvancedDataGridColumnGroup{
+				var children:Array = new Array(dataChildren.length());
+				for(var i:int;i<dataChildren.length();i++){
+			    	var xml:XML = dataChildren[i];
+			    	var name:String = xml.name().toString();
+			    	if(name=="group"){
+			    		var group:AdvancedDataGridColumnGroup = new AdvancedDataGridColumnGroup();
+					    /**
+					    * 给group设置属性
+					    **/
+			    		if(xml.@hasClick=="true"){
+				    		group.headerText=xml.@headerText+" (点击返回上级科目)";
+			    			group.headerRenderer = new MyIFactoryOfHeader(groupLoad);
+			    		}else{
+				    		group.headerText=xml.@headerText;
+			    		}
+			    		group.setStyle("color",0x00000);
+			    		group.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		
+			    		children[i] = createHeaders(group,xml.children());
+			    	}else if(name=="column"){
+			    		var column:AdvancedDataGridColumn = new AdvancedDataGridColumn();
+					    /**
+					    * 给column设置属性
+					    **/
+			    		column.headerText=xml.@headerText;
+			    		if(xml.@hasClick=="true") column.headerRenderer = new MyIFactoryOfHeader(columnLoad);
+			    		column.width=xml.@width.toString()!=""?xml.@width:100;
+			    		column.dataField=xml.@dataField.toString()!=""?"@"+xml.@dataField:"";
+			    		column.setStyle("color",0x00000);
+			    		column.setStyle("fontSize",xml.@fontSize.toString()!=""?xml.@fontSize:12);
+			    		if(xml.@textAlign=="left"){
+			    			column.setStyle("textAlign","left");
+			    		}else if(xml.@textAlign=="center"){
+			    			column.setStyle("textAlign","center");
+			    		}else{
+			    			column.setStyle("textAlign","right");
+			    		}
+			    		
+			    		children[i] = column;
+			    	}
+			    }
+	    		parent.children = children;
+			    return parent;
+			}
+			
+            private function linearAxis_labelFunc(item:Object, prevValue:Object, axis:IAxis):String {
+               return numberFormatter.format(item);
+			}
+			
+			private function pieSeries_labelFunc(item:Object, field:String, index:Number, percentValue:Number):String {
+                return percentValue.toFixed(2)+"%";
+            }
+            
+            
+			private function pieChart_itemClick(evt:ChartItemEvent,chartId:String):void {
+                var arr:Array = [];
+				arr[evt.hitData.chartItem.index] = 0.1;
+				piechartSeries.perWedgeExplodeRadius = arr;
+            }
+            
+            private function pieDataTipFunction(item:HitData):String {
+                var pSI:PieSeriesItem = item.chartItem as PieSeriesItem;
+				return "<b>" + pSI.item.name + "</b><br />" +
+                     pSI.item.value + "万元 <br />(<i>" +
+                    pSI.percentValue.toFixed(2) + "%</i>)";
+            }
+            
+           private function unitIdChange(e:MenuEvent):void{
+            	if(e.item.@data=="-100" || e.item.@data==""){
+            		return;
+            	}
+            	_unitId = e.item.@data;
+            	_unitName = e.item.@label;
+            	load();
+            }
+            
+            private function yearChange():void{
+            	_year = yearComBox.selectedItem.data;
+            	comboxArrayService.send({year:_year});
+            }
+            private function upYear():void{
+            	if(yearComBox.selectedIndex<(yearComBoxArr.length)){
+	            	yearComBox.selectedIndex=yearComBox.selectedIndex+1;
+	            	yearChange();
+            	}
+            }
+            private function downYear():void{
+            	if(yearComBox.selectedIndex>0){
+	            	yearComBox.selectedIndex=yearComBox.selectedIndex-1;
+	            	yearChange();
+            	}
+            }
+		]]>
+	</mx:Script>
+	
+	<mx:HTTPService id="dataGridXmlService" resultFormat="xml" result="dataGridXmlServiceResult(event)" />
+	<mx:HTTPService id="comboxArrayService" resultFormat="xml" result="comboxArrayServiceResult(event)" />
+	<mx:NumberFormatter id="numberFormatter" precision="0" />
+	<mx:SeriesInterpolate id="interpolate" elementOffset="10"/>
+	<mx:Array id="pieChartFillArray">
+	    <mx:RadialGradient id="code1">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#DEFE7E" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#98CB02" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code2">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#FFD3B0" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#FF7101" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code3">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#BFCFFF" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#3366FF" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code4">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#FF7101" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#FF0000" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+	    <mx:RadialGradient id="code5">
+	        <mx:entries>
+	            <mx:Array>
+	                <mx:GradientEntry color="#FFFFFF" ratio="0" alpha="0.8"/>
+	                <mx:GradientEntry color="#FFD00E" ratio="1" alpha="0.8"/>
+	            </mx:Array>
+	        </mx:entries>
+	    </mx:RadialGradient>
+    </mx:Array>
+	<mx:Canvas x="0" y="0" width="805" height="100%">
+		
+		<mx:AdvancedDataGrid id="advancedDataGrid" 
+			sortableColumns="false" sortExpertMode="true" change="itemClick(event)"
+			itemClick="itemClick(event)" horizontalScrollPolicy="on" 
+			width="785" height="287" displayItemsExpanded="true" 
+			headerStyleName="header" textAlign="right" 
+			y="52" x="10" color="#000000" styleName="myFont" 
+			fontSize="12" rollOverColor="#EFEFEF" selectionColor="#DFE8F7" fontFamily="SIMSUN">
+			<mx:dataProvider>
+				<mx:HierarchicalData id="hd"/>
+			</mx:dataProvider>
+			<mx:groupedColumns>
+				<mx:AdvancedDataGridColumnGroup id="dataColumns">
+				</mx:AdvancedDataGridColumnGroup>
+			</mx:groupedColumns>
+		</mx:AdvancedDataGrid>
+		<mx:ColumnChart x="10" y="382" id="columnchart" width="488" height="205" showDataTips="true" color="#000000">
+			<mx:horizontalAxis>
+	            <mx:CategoryAxis id="ca" categoryField="@time" />
+	        </mx:horizontalAxis>
+	        <mx:verticalAxis>
+	            <mx:LinearAxis labelFunction="linearAxis_labelFunc" />
+	        </mx:verticalAxis>
+	        <mx:horizontalAxisRenderers>
+	            <mx:AxisRenderer axis="{ca}" />
+	        </mx:horizontalAxisRenderers>
+			<mx:series>
+				<mx:ColumnSeries id="columnchartSerise" xField="@time" fill="{code1}"/>
+			</mx:series>
+		</mx:ColumnChart>
+		<mx:PieChart showDataTips="true" dataTipFunction="pieDataTipFunction" x="619" y="431" id="piechart" width="183" height="156"  itemClick="{pieChart_itemClick(event,'pieChart1');}" hideEffect="Fide"  color="#000000">
+			<mx:series>
+				<mx:PieSeries id="piechartSeries" nameField="name" field="value" labelFunction="pieSeries_labelFunc" labelPosition="inside" fills="{pieChartFillArray}" showDataEffect="{interpolate}"/>
+			</mx:series>
+		</mx:PieChart>
+		<mx:Legend dataProvider="{piechart}" x="506" y="382" height="205" width="289" color="#000000"/>
+		<mx:Canvas  x="0"
+				   y="1"
+				   width="805"
+				   height="27"
+				   backgroundColor="#E3E5F1"
+				   borderColor="#EBF2F6">
+			<mx:Button x="580" y="4" label="上一年" fontWeight="normal" click="upYear()" color="#000000"/>
+			<mx:Button x="733" y="4" label="下一年" fontWeight="normal" click="downYear()" color="#000000"/>
+			<mx:ComboBox id="yearComBox" x="656" y="4" width="69" close="yearChange()" color="#000000">
+				<mx:Array id="yearComBoxArr">
+					<mx:Object data="2009" label="2009"/>
+					<mx:Object data="2008" label="2008"/>
+					<mx:Object data="2007" label="2007"/>
+					<mx:Object data="2006" label="2006"/>
+					<mx:Object data="2005" label="2005"/>
+				</mx:Array>
+			</mx:ComboBox>
+			<mx:MenuBar id="unitMenuBar" x="10" y="2" labelField="@label" itemClick="unitIdChange(event)"></mx:MenuBar>
+		</mx:Canvas>
+		<mx:Label text="分公司建筑工程费用构成分析" id="title1" horizontalCenter="0" y="35" fontWeight="bold" color="#000000"/>
+		<mx:Label x="10" y="357" id="title2" text="分公司建筑工程费用构成分析" fontWeight="bold" color="#000000"/>
+		<mx:Label x="502" y="357" id="title3" text="分公司建筑工程费用构成分析" fontWeight="bold" color="#000000"/>
+		<mx:Label x="660" y="35" text="(单位:万元)" width="111" textAlign="right" color="#000000"/>
+	</mx:Canvas>
+	
+</mx:Application>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+  <mx:Script>
+    <![CDATA[
+      [Bindable]
+      private var dp:Array=[1,2,3,4];
+      private var i:int =0;
+    ]]>
+  </mx:Script>
+  <mx:ArrayCollection id="myAC" source="{dp}"/>
+  <!--使用REPEATER: 是非可视控件，类似于编程语言里的For循环，
+  	可在执行期复制其它组件。<mx:Repeater>的卷标要自己输入，
+  	而 dataProvider可在<mx:Script>区段之中，以[Bindable]的Metadata定义之数组作连结。
+  	REPEATER还可嵌套使用。
+  	-->
+  <mx:Repeater id="r" dataProvider="{myAC}">
+	  <mx:Button id="repbutton" label="button{r.currentItem}" x="75" y="{++i*25}"/>
+  </mx:Repeater>
+</mx:Application>

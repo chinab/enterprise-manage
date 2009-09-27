@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	    <mx:Script>
+        <![CDATA[
+        	import mx.collections.ArrayCollection;
+        	private var i:int = 0;
+        	/**
+             * 使用[Bindable]元数据标签(属性非默认绑定,必须明确的声明被绑定的属性)，
+             * 将控件绑定到使用 ActionScript定义的现有 Array 或 Collection。
+            */
+            [Bindable]
+            private var subscriptions:ArrayCollection = new ArrayCollection
+                (
+                    [
+                        {data:0, label:"Print"},
+                        {data:1, label:"Website"},
+                    ]
+                ); 
+            
+               
+              private var dataChange:Function = function():void{
+              		subscriptions.addItem("comboBox"+i++);
+              }
+         
+        ]]>
+    </mx:Script>
+            <mx:FormItem label="Subscriptions:" width="85" x="60" y="84">
+             </mx:FormItem>
+            <mx:List 
+                id="userSubscriptions" rowCount="3"
+                allowMultipleSelection="true" width="203"
+                dataProvider="{subscriptions}"
+                change="dataChange()"
+             x="153" y="84" height="172"/>
+</mx:Application>
