@@ -124,7 +124,7 @@ public class FileToolsAction extends BaseActionSupport{
     					FileTools.DOC_FILE_PATH, FileTools.EXCEPTION_FILE_PATH,
     					FileTools.MEDIA_FILE_PATH, FileTools.OTHER_FILE_PATH };
     			for (String bizfieldTemp : bizfields) {
-    				FileTools.creataFolder(FileTools.getAppFilesPathByBusiness(bizfieldTemp));
+    				FileTools.createFolder(FileTools.getAppFilesPathByBusiness(bizfieldTemp));
     				FileBean fileBean = new FileBean(bizfieldTemp,FileTools.getFileByBusiness(bizfieldTemp, "/"));
     				fileArrToJsonArr(jsonArray, fileFilter, fileBean);
     			}
