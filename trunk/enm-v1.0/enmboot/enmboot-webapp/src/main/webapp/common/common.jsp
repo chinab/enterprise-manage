@@ -38,6 +38,7 @@
 <script type="text/javascript" src="/jscript/common/swfobject.js"></script>
 <script type="text/javascript" src="${contextPath}/jscript/common/Ext.ux.UploadFile.js"></script>
 <script type="text/javascript" src="${contextPath}/jscript/common/Ext.ux.VTypes.js"></script>
+<script type="text/javascript" src="${contextPath}/jscript/common/Ext.ux.UploadDialog.packed.js""></script>
 <!-- 
 <script type="text/javascript" src="${contextPath}/jscript/common/Ext.ux.gird.DynamicGrid.js"></script>
  -->
