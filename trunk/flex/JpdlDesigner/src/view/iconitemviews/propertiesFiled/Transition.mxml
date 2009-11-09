@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="640">
+	<mx:Script>
+		<![CDATA[
+			import components.FlowIcon;
+			import mx.core.Application;
+			import components.ArrowLine;
+			
+			[Bindable]
+			private var _line:ArrowLine;
+			
+			public function get line():ArrowLine{
+				return _line;
+			}
+			
+			public function set line(v:ArrowLine):void{
+				_line = v;
+			}
+			
+			public function save():void{
+				_line.name = nameInput.text;
+				_line.toIcon = FlowIcon(toIconInput.selectedItem);
+				_line.action = actionInput.text;
+			}
+		]]>
+	</mx:Script>
+	<mx:Label text="线条" fontWeight="bold" width="37" textAlign="right"/>
+				
+	<mx:Label text="名称:" textAlign="right"/>
+	<mx:TextInput width="130" id="nameInput" text="{_line.name}"/>
+	<mx:Label text="转向:" textAlign="right"/>
+	<mx:ComboBox width="141" id="toIconInput" selectedIndex="{Application.application.iconArray.getItemIndex(_line.toIcon)}" labelField="name" dataProvider="{Application.application.iconArray}"></mx:ComboBox>
+	<mx:Label text="动作:" textAlign="right"/>
+	<mx:TextInput width="150"  id="actionInput" text="{_line.action}"></mx:TextInput>
+</mx:HBox>

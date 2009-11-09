@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	要解决的问题：
+	1.优化线条视觉效果，让线条圆点智能在四个角移动，而不仅仅位于左上角，不友好 [已解决 2008-8-25]
+	2.双击图标在画布的中心生成新图标
+	3.不要用圆角表示线条方向，用箭头
+	4.(高优)从属性对话框中改变图标的name属性时，线条的fromIcon和toIcon都必须要改[已解决 2008-8-25]
+	5.可以像删除图标一样删除线条
+-->
+
+<mx:Application resize="onApplicationReSize(event);"
+	 creationComplete="onApplicationReSize(event); onCanvasContextMenu(event);" xmlns:mx="http://www.adobe.com/2006/mxml" keyUp="onKeyUp(event);" layout="absolute" fontSize="12" xmlns:workflow="controls.*" backgroundGradientAlphas="[1.0, 1.0]" backgroundGradientColors="[#71A7D5, #92E8E9]">
+	<mx:Script>
+		<![CDATA[
+			import util.Utils;
+			import mx.controls.Alert;
+			import components.icons.EndIcon;
+			import components.icons.StartIcon;
+			import components.icons.JoinIcon;
+			import components.icons.ForkIcon;
+			import components.icons.DecisionIcon;
+			import components.icons.NodeIcon;
+			import components.icons.TaskIcon;
+			
+			private function onKeyUp(event:KeyboardEvent):void{
+				switch(event.keyCode){
+					case Keyboard.DELETE:
+						removeIconsFlow();
+						break;
+					case 65:
+						if(event.ctrlKey) drawBorders();
+						break;
+				}
+			}
+
+		]]>
+	</mx:Script>
+	
+	<mx:Script source="controls/index.as"/>
+	<mx:Glow id="glow1" blurXFrom="0" color="0xFF0000" blurXTo="15" blurYFrom="0" blurYTo="15" />
+	<mx:Glow id="glow2" alphaFrom="50" alphaTo="0" blurXFrom="15" color="0x00FF00" blurXTo="0" blurYFrom="15" blurYTo="0" />
+	
+	<mx:HBox x="10" y="10" width="496" id="btnBar" height="24">
+			<mx:Button label="打开" click="{Utils.browseFlow();}"></mx:Button>
+			<mx:Button label="新建" click="{newFlow();}"></mx:Button>
+			<mx:Button label="保存" click="{Utils.saveFlow(flowData);}"></mx:Button>
+			<mx:Button label="另存为" click="{Utils.saveAsFlow(flowData);}"></mx:Button>
+			<mx:Button label="全选" click="{drawBorders();}"></mx:Button>
+			<mx:Button label="删除" click="{removeIconsFlow();}"></mx:Button>
+			<mx:Button label="发布" click="{Utils.deploy(flowData,xmlContent());}"></mx:Button>
+	</mx:HBox>
+	
+	<mx:HDividedBox y="42" width="813" height="478" id="hdbox">
+		<mx:VDividedBox height="100%" width="271">
+			<mx:Panel x="10" y="51" width="100%" height="239" layout="absolute" title="添加控件">
+				<mx:TileList id="icons" doubleClickEnabled="true" x="0" y="0" width="100%" height="100%">
+					<mx:Object label="选择" icon="@Embed('asserts/select.png')"></mx:Object>
+					<mx:Object label="连线" icon="@Embed('asserts/transition.png')"></mx:Object>
+					<mx:Object label="结点" icon="@Embed('asserts/node.png')" iconType="{NodeIcon.TYPE}"></mx:Object>
+					<mx:Object label="任务" icon="@Embed('asserts/task.png')" iconType="{TaskIcon.TYPE}"></mx:Object>
+					<mx:Object label="判定" icon="@Embed('asserts/decision.png')" iconType="{DecisionIcon.TYPE}"></mx:Object>
+					<mx:Object label="分叉" icon="@Embed('asserts/fork.png')" iconType="{ForkIcon.TYPE}"></mx:Object>
+					<mx:Object label="聚合" icon="@Embed('asserts/join.png')" iconType="{JoinIcon.TYPE}"></mx:Object>
+					<mx:Object label="开始" icon="@Embed('asserts/start.png')" iconType="{StartIcon.TYPE}"></mx:Object>
+					<mx:Object label="结束" icon="@Embed('asserts/end.png')" iconType="{EndIcon.TYPE}"></mx:Object>
+				</mx:TileList>
+			</mx:Panel>
+			<mx:Panel title="属性对话框" width="100%">
+				<mx:DataGrid id="dgProp" width="100%" height="100%" editable="true" itemEditEnd="onGridEditEnd(event);">
+					<mx:columns>
+						<mx:DataGridColumn sortable="false" headerText="属性" width="80" dataField="label" editable="false"/>
+						<mx:DataGridColumn sortable="false" headerText="值" dataField="value" wordWrap="true"/>
+					</mx:columns>
+					<mx:dataProvider>
+						{properties}
+					</mx:dataProvider>
+				</mx:DataGrid>
+			</mx:Panel>
+		</mx:VDividedBox>
+		
+		
+		<mx:VBox id="vbox" verticalGap="0" width="517" height="430">
+			<mx:TabBar itemClick="onTabIndexChanged(event)" x="0" y="0" dataProvider="viewstack1" id="tabBar"/>
+			<mx:ViewStack id="viewstack1" width="100%" height="321">
+				<workflow:CrossCanvas id="flow" borderStyle="solid" label="{flowData.flowName + '-流程图'}" 
+					width="100%" height="100%"
+					mouseDown="onFlowCanvasMouseDown(event);">
+				</workflow:CrossCanvas>
+				<mx:Canvas id="xmlCanvas" borderStyle="solid" label="XML">
+					<mx:TextArea fontSize="14" creationComplete="onXmlHTMLComplete(event)" x="0" y="0" width="100%" height="100%" id="xmlHTML"/>
+				</mx:Canvas>
+			</mx:ViewStack>
+		</mx:VBox>
+	</mx:HDividedBox>
+	
+</mx:Application>

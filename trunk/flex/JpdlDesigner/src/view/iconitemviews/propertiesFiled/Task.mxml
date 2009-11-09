@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="640">
+	<mx:Script>
+		<![CDATA[
+			import components.bean.TaskBean;
+			import components.FlowIcon;
+			import mx.core.Application;
+			
+			[Bindable]
+			private var _taskBean:TaskBean;
+			
+			private var _deleteTask:Function;
+			
+			public function set taskBean(v:TaskBean):void{
+				_taskBean = v;
+			}
+			
+			public function get taskBean():TaskBean{
+				return _taskBean;
+			}
+			
+			public function set deleteTask(v:Function):void{
+				_deleteTask = v;
+			}
+			
+			public function save():void{
+				_taskBean.name = nameInput.text;
+				_taskBean.assignment = actionInput.text;
+			}
+			
+			public function onDelete():void{
+				_deleteTask.call(this,this);
+			}
+		]]>
+	</mx:Script>
+	<mx:Label text="任务" fontWeight="bold" width="37" textAlign="right"/>
+				
+	<mx:Label text="名称:" textAlign="right"/>
+	<mx:TextInput width="130" id="nameInput" text="{_taskBean.name}"/>
+	<mx:Label text="动作:" textAlign="right"/>
+	<mx:TextInput width="150"  id="actionInput" text="{_taskBean.assignment}"></mx:TextInput>
+	<mx:Button click="onDelete();" label="删除"/>
+</mx:HBox>
