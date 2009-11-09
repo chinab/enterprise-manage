@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" title="结点属性" show="onCreationComplete();" creationComplete="{onCreationComplete();}" initialize="init();" showCloseButton="true" close="closeMyself();" layout="absolute" width="680" >
+	<mx:Script>
+		<![CDATA[
+			import view.iconitemviews.propertiesFiled.Task;
+			import components.bean.TaskBean;
+			import components.icons.TaskIcon;
+			import mx.core.Application;
+			import mx.collections.ArrayCollection;
+			import components.ArrowLine;
+			import view.iconitemviews.propertiesFiled.Transition;
+			import mx.containers.HBox;
+			import mx.managers.PopUpManager;
+			
+			private var _taskIcon:TaskIcon;
+			private var transitionArray:ArrayCollection = new ArrayCollection();
+			private var taskArray:ArrayCollection = new ArrayCollection();
+			[Bindable]
+			private var signalItems:Array = ['unsynchronized','never','first','first-wait','last','last-wait'];
+			
+			private function closeMyself():void{
+				PopUpManager.removePopUp(this);
+			}
+			
+			private function init():void{
+				
+			}
+			
+			public function set taskIcon(v:TaskIcon):void{
+				_taskIcon = v;
+			}
+			
+			private function onCreationComplete():void{
+				signalComboBox.selectedIndex = signalItems.indexOf(_taskIcon.signal);
+				propertiesContext.removeAllChildren();
+				transitionArray.removeAll();
+				taskArray.removeAll();
+				for each(var line:ArrowLine in _taskIcon.outLines){
+					var transition:Transition = new Transition();
+					transition.line = line;
+					propertiesContext.addChild(transition);
+					transitionArray.addItem(transition);
+				}
+				for each(var taskBean:TaskBean in _taskIcon.taskBeanArray){
+					var task:Task = new Task();
+					task.taskBean = taskBean;
+					task.deleteTask = deleteTask;
+					propertiesContext.addChild(task);
+					taskArray.addItem(task);
+				}
+			}
+			
+			private function addTask():void{
+				var taskBean:TaskBean = new TaskBean("","");
+				_taskIcon.taskBeanArray.addItem(taskBean);
+				
+				var task:Task = new Task();
+				task.taskBean = taskBean;
+				task.deleteTask = deleteTask;
+				propertiesContext.addChild(task);
+				taskArray.addItem(task);
+			}
+			
+			private function deleteTask(task:Task):void{
+				_taskIcon.taskBeanArray.removeItemAt(_taskIcon.taskBeanArray.getItemIndex(task.taskBean));
+				taskArray.removeItemAt(taskArray.getItemIndex(task));
+				propertiesContext.removeChild(task);
+			}
+			
+			private function saveProperties():void{
+				this._taskIcon.signal = signalComboBox.text;
+				for each(var transition:Transition in transitionArray){
+					transition.save();
+				}
+				for each(var task:Task in taskArray){
+					task.save();
+				}
+				
+				Application.application.reDrawIconAll();
+				closeMyself();
+			}
+		]]>
+	</mx:Script>
+	<mx:VBox width="100%" height="100%">
+		<mx:HBox>
+			<mx:Label/>
+		</mx:HBox>
+		<mx:HBox id="propertiesContextInit" width="100%">
+			<mx:Label text="同步" width="37" textAlign="right" fontWeight="bold" height="23"/>
+			<mx:ComboBox id="signalComboBox" selectedIndex="0" dataProvider="{signalItems}" height="27"></mx:ComboBox>
+		</mx:HBox>
+		<mx:VBox id="propertiesContext" width="100%">
+		</mx:VBox>
+		<mx:Canvas width="100%" height="25">
+			<mx:Button label="添加任务" click="addTask()" right="50"/>
+		</mx:Canvas>
+		<mx:HBox>
+			<mx:Label/>
+		</mx:HBox>
+		<mx:HBox width="100%" height="50" horizontalAlign="center">
+			<mx:Button label="保存" click="saveProperties();"/>
+			<mx:Button label="关闭" click="closeMyself();"/>
+		</mx:HBox>
+	</mx:VBox>
+</mx:TitleWindow>
