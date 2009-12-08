@@ -396,7 +396,7 @@
 
 	<repositories>
 		<repository>
-			<id>central</id>
+			<id>centra2</id>
 			<url>http://repo2.maven.org/maven2</url>
 		</repository>
 		<repository>
@@ -416,11 +416,11 @@
 			<url>http://www.ibiblio.org/maven</url>
 		</repository>
 		<repository>
-			<id>ibiblio</id>
+			<id>json-lib</id>
 			<url>http://json-lib.sourceforge.net</url> 
 		</repository>
 		<repository>
-			<id>ibiblio</id>
+			<id>json-taglib</id>
 			<url>http://json-taglib.sourceforge.net</url> 
 		</repository>
 	</repositories>
