@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean name="jdwUserManager"
+		class="com.juduowang.yongbaota.service.impl.JdwUserManagerImpl">
+		<constructor-arg>
+			<bean class="com.juduowang.common.dao.hibernate.HibernateEntityDao">
+				<constructor-arg value="com.juduowang.yongbaota.model.JdwUser" />
+				<property name="sessionFactory" ref="sessionFactory" />
+			</bean>
+		</constructor-arg>
+	</bean>
+</beans>
