@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+       default-lazy-init="true">
+    <!-- =================================================================== -->
+    <!-- AOP: Configuration and Aspects                                      -->
+    <!-- =================================================================== -->
+    <aop:config>
+        <aop:advisor id="managerTx" advice-ref="txAdvice" pointcut="execution(* *..service.*Manager.*(..))"/>
+    </aop:config>
+    
+    <!-- Enable @Transactional support -->
+    <tx:annotation-driven/>
+    
+    <!-- Enable @AspectJ support -->
+    <aop:aspectj-autoproxy/>
+    
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" read-only="true" propagation="REQUIRED"/>
+            <tx:method name="find*" read-only="true" propagation="REQUIRED"/>   
+            <tx:method name="add*" read-only="false" propagation="REQUIRED"/>   
+            <tx:method name="update*" read-only="false" propagation="REQUIRED"/>   
+            <tx:method name="delete*" read-only="false" propagation="REQUIRED"/>
+            <tx:method name="remove*" read-only="false" propagation="REQUIRED"/>
+            <tx:method name="save*" read-only="false" propagation="REQUIRED"/>
+            <tx:method name="deploy*" read-only="false" propagation="REQUIRED"/>
+            <tx:method name="*" read-only="true" propagation= "REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+    
+    <!-- Transaction manager for a single Hibernate SessionFactory (alternative to JTA) -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <!-- =================================================================== -->
+    <!-- Acegi Security Manager                                              -->
+    <!-- =================================================================== -->
+	
+    <!-- =================================================================== -->
+    <!-- Managers: For accessing DAOs                                        -->
+    <!-- =================================================================== -->
+    <bean id="universalDao" class="com.juduowang.common.dao.hibernate.HibernateUniversalDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="jdbcEntityDao" class="com.juduowang.common.dao.ibatis.IbatisEntityDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="dataSetManager" class="com.juduowang.common.service.impl.DataSetManagerImpl">
+        <property name="dao" ref="universalDao"/>
+    </bean>
+    <bean id="universalManager" class="com.juduowang.common.service.impl.UniversalManagerImpl">
+        <property name="dao" ref="universalDao"/>
+    </bean>
+    <bean id="jdbcManager" class="com.juduowang.common.service.impl.JdbcManagerImpl">
+        <property name="jdbcEntityDao" ref="jdbcEntityDao"/>
+    </bean>
+    <bean id="universalComponentManager" class="com.juduowang.common.service.impl.UniversalComponentManager">
+    	<property name="universalDao" ref="universalDao"></property>
+    	<property name="treeAndProcedureManager" ref="treeAndProcedureManager"/>
+    </bean>
+    <bean id="treeAndProcedureManager" class="com.juduowang.common.service.impl.TreeAndProcedureManagerImpl">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="universalComponentAction" class="com.juduowang.common.web.action.UniversalComponentAction">
+    	<property name="universalComponent" ref="universalComponentManager"></property>
+    	<property name="treeAndProcedureManager" ref="treeAndProcedureManager"></property>
+    </bean>
+    <bean id="fileToolsAction" class="com.juduowang.common.web.action.FileToolsAction"/>
+    
+    <!--  
+    <bean id="namingStrategy"
+          class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+        <property name="staticField">
+            <value>org.hibernate.cfg.ImprovedNamingStrategy.INSTANCE</value>
+        </property>
+    </bean>
+
+    <bean id="extendedFinderNamingStrategy"
+        class="com.juduowang.common.dao.generic.finder.impl.ExtendedFinderNamingStrategy" />
+
+    <bean id="finderIntroductionAdvisor" class="com.juduowang.common.dao.generic.finder.impl.FinderIntroductionAdvisor"/>
+    <bean id="abstractDaoTarget"
+          class="com.juduowang.common.dao.generic.impl.GenericDaoHibernateImpl" abstract="true">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+        <property name="namingStrategy">
+            <ref bean="extendedFinderNamingStrategy" />
+        </property>
+    </bean>
+    <bean id="abstractDao"
+          class="org.springframework.aop.framework.ProxyFactoryBean" abstract="true">
+        <property name="interceptorNames">
+            <list>
+                <value>finderIntroductionAdvisor</value>
+            </list>
+        </property>
+    </bean>
+    -->
+</beans>
