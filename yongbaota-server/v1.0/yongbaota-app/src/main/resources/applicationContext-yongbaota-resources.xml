@@ -19,10 +19,10 @@
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="jdbc:oracle:thin:@localhost:1521:XE" />
-		<property name="username" value="yongbaota" />
-		<property name="password" value="yongbaota" />
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/yongbaota" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
 		<!-- <property name="maxActive" value="100"/> <property name="maxIdle" 
 			value="30"/> <property name="maxWait" value="1000"/> <property name="defaultAutoCommit" 
 			value="true"/> <property name="removeAbandoned" value="true"/> <property 
@@ -43,14 +43,14 @@
 		</property>
 		<property name="hibernateProperties">
 			<value>
-				hibernate.dialect=org.hibernate.dialect.Oracle9Dialect
+				hibernate.dialect=org.hibernate.dialect.MySQLDialect
 				hibernate.query.substitutions=true 'Y', false 'N'
 				hibernate.cache.use_second_level_cache=true
 				hibernate.cache.provider_class=org.hibernate.cache.EhCacheProvider
 				hibernate.show_sql=true
 			</value>
 		</property>
-		<property name="packagesToScan" value="com.juduowang.yongbaota.model.*" />
+		<property name="packagesToScan" value="com.juduowang.yongbaota.model" />
 	</bean>
 
 </beans>
