@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="400" height="300">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.vo.PaginatorObjUtil;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			
+			import spark.events.GridSelectionEvent;
+			
+			protected function dataGrid_creationCompleteHandler(event:FlexEvent):void {
+				getAllAccountsPagerResult.token=accountRO.getAllAccountsPager();
+			}
+			
+			public function refresh():void {
+				getAllAccountsPagerResult.token=accountRO.getAllAccountsPager();
+			}
+			
+			public function getDatas():ArrayCollection {
+				return getAllAccountsPagerResult.lastResult;
+			}
+			
+			protected function dataGrid_selectionChangeHandler(event:GridSelectionEvent):void {
+				dispatchEvent(event);
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:CallResponder id="getAllAccountsPagerResult"/>
+		<ro:AccountRO id="accountRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:DataGrid id="dataGrid" left="0" right="0" top="0" bottom="0" creationComplete="dataGrid_creationCompleteHandler(event)"
+				requestedRowCount="4" selectionMode="singleRow" selectionChange="dataGrid_selectionChangeHandler(event)">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="displayName" headerText="displayName">
+				</s:GridColumn>
+				<s:GridColumn dataField="accountCode" headerText="accountCode">
+				</s:GridColumn>
+				<s:GridColumn dataField="username" headerText="username">
+				</s:GridColumn>
+				<s:GridColumn dataField="accountType" headerText="accountType">
+				</s:GridColumn>
+				<s:GridColumn dataField="companyId" headerText="companyId">
+				</s:GridColumn>
+				<s:GridColumn dataField="address" headerText="address">
+				</s:GridColumn>
+				<s:GridColumn dataField="email" headerText="email">
+				</s:GridColumn>
+				<s:GridColumn dataField="telephone" headerText="telephone">
+				</s:GridColumn>
+				<s:GridColumn dataField="mobile" headerText="mobile">
+				</s:GridColumn>
+				<s:GridColumn dataField="createTime" headerText="createTime">
+				</s:GridColumn>
+				<s:GridColumn dataField="modifyTime" headerText="modifyTime">
+				</s:GridColumn>
+				<s:GridColumn dataField="createBy" headerText="createBy">
+				</s:GridColumn>
+				<s:GridColumn dataField="modifyBy" headerText="modifyBy">
+				</s:GridColumn>
+				<s:GridColumn dataField="isForbidden" headerText="isForbidden">
+				</s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+		<s:AsyncListView list="{getAllAccountsPagerResult.lastResult}"/>
+	</s:DataGrid>
+</s:Group>
