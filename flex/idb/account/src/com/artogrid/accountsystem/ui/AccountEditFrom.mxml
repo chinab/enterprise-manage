@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:vo="com.artogrid.accountsystem.vo.*" xmlns:ro="com.artogrid.accountsystem.ro.*" width="906"
+		 height="405">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.bl.InitData;
+			import com.artogrid.accountsystem.ro.AccountRO;
+
+			import mx.collections.IList;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ValidationResultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.utils.UIDUtil;
+			import mx.validators.Validator;
+
+			import spark.layouts.HorizontalLayout;
+			import spark.layouts.TileLayout;
+			import spark.layouts.supportClasses.LayoutBase;
+			public var accountRO:AccountRO=AccountRO.getMe();
+
+			protected function updateAccount_clickHandler(event:MouseEvent):void {
+				if (!vals()) {
+					return;
+				}
+				//如果已为 AccountDTO 启用了数据管理并且 updateAccount 用作 create 函数，请取消对下行的注释。
+				// var accountDTO:AccountDTO = new AccountDTO();
+				accountDTO.isForbidden=isForbiddenCheckBox.selected ? InitData.enable : InitData.disable;
+				if (passwordTextInput.text != null && passwordTextInput.text != "") {
+					if (!valPassword()) {
+						return;
+					}
+					accountDTO.password=MD5.getMe().getMD5(passwordTextInput.text);
+				}
+				accountDTO.accountCode=accountCodeTextInput.text;
+				accountDTO.username=usernameTextInput.text;
+				accountDTO.email=emailTextInput.text;
+				accountDTO.address=addressTextInput.text;
+				accountDTO.accountType=accountTypeList.selectedItem.value;
+				accountDTO.companyId=companyIdList.selectedItem.id;
+				accountDTO.displayName=displayNameTextInput.text;
+				accountDTO.telephone=telephoneTextInput.text;
+				accountDTO.mobile=mobileTextInput.text;
+				updateAccountResult.token=accountRO.updateAccount(accountDTO);
+			}
+
+			protected function addAccount_clickHandler(event:MouseEvent):void {
+				if (!vals()) {
+					return;
+				}
+				if (!valPassword()) {
+					return;
+				}
+				var newAccountDTO:AccountDTO=new AccountDTO();
+				newAccountDTO.isForbidden=isForbiddenCheckBox.selected ? InitData.enable : InitData.disable;
+				newAccountDTO.password=MD5.getMe().getMD5(passwordTextInput.text);
+				newAccountDTO.accountCode=accountCodeTextInput.text;
+				newAccountDTO.username=usernameTextInput.text;
+				newAccountDTO.email=emailTextInput.text;
+				newAccountDTO.address=addressTextInput.text;
+				newAccountDTO.accountType=accountTypeList.selectedItem.value;
+				newAccountDTO.companyId=companyIdList.selectedItem.id;
+				newAccountDTO.displayName=displayNameTextInput.text;
+				newAccountDTO.telephone=telephoneTextInput.text;
+				newAccountDTO.mobile=mobileTextInput.text;
+				saveAccountResult.token=accountRO.saveAccount(newAccountDTO);
+			}
+
+			private function accountDTOFromResult(event:ResultEvent):void {
+				var accountDTOResult:AccountDTO=event.currentTarget.lastResult;
+				if (accountDTOResult.message == "success") {
+					InitData.copyProperties(accountDTO, accountDTOResult, ["modifyBy", "modifyTime"]);
+				} else {
+					Alert.show(accountDTOResult.message, "提示");
+				}
+			}
+
+			private function addAccountDTOFromResult(event:ResultEvent):void {
+				var accountDTOResult:AccountDTO=event.currentTarget.lastResult;
+				if (accountDTOResult.message == "success") {
+					accountDTO=accountDTOResult;
+					dispatchEvent(new Event("add_new_account_to_list"));
+				} else {
+					Alert.show(accountDTOResult.message, "提示");
+				}
+			}
+
+			private function vals():Boolean {
+				var validateAll:Array=Validator.validateAll(validators);
+				if (validateAll == null || validateAll.length == 0) {
+					return true;
+				}
+				return false;
+			}
+
+			private function valPassword():Boolean {
+				var validateAll:Array=Validator.validateAll([passwordVal]);
+				if (validateAll == null || validateAll.length == 0) {
+					return true;
+				}
+				return false;
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<vo:AccountDTO id="accountDTO"/>
+		<!--
+		<ro:AccountRO id="accountRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		-->
+		<s:CallResponder id="updateAccountResult" result="accountDTOFromResult(event)"/>
+		<s:CallResponder id="saveAccountResult" result="addAccountDTOFromResult(event)"/>
+
+		<mx:StringValidator id="passwordVal" source="{passwordTextInput}" property="text" minLength="6" maxLength="32"/>
+
+		<fx:Array id="validators">
+			<mx:StringValidator source="{displayNameTextInput}" property="text" minLength="4" maxLength="32"/>
+			<mx:StringValidator source="{accountCodeTextInput}" property="text" minLength="4" maxLength="32"/>
+			<mx:StringValidator source="{usernameTextInput}" property="text" minLength="4" maxLength="32"/>
+			<!--
+			<mx:StringValidator source="{passwordTextInput}" property="text" minLength="6" maxLength="32"/>
+			-->
+			<mx:StringValidator source="{addressTextInput}" property="text" minLength="6" maxLength="50"/>
+			<mx:EmailValidator source="{emailTextInput}" property="text"/>
+			<mx:PhoneNumberValidator source="{telephoneTextInput}" property="text"/>
+			<mx:PhoneNumberValidator source="{mobileTextInput}" property="text"/>
+		</fx:Array>
+	</fx:Declarations>
+	<s:layout>
+		<s:HorizontalLayout/>
+	</s:layout>
+	<s:Form width="450" defaultButton="{addAccount}">
+		<s:FormItem label="AccountCode">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="用户代号4-32">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:TextInput id="accountCodeTextInput" text="{accountDTO.accountCode}" width="150" right="10"/>
+		</s:FormItem>
+		<s:FormItem label="Username">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="登录名4-32">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:TextInput id="usernameTextInput" text="{accountDTO.username}" width="150" right="10"/>
+		</s:FormItem>
+		<s:FormItem label="CompanyId">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="所属公司">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:DropDownList id="companyIdList" dataProvider="{InitData.getAllCompanysResult.lastResult}" labelField="name" selectedIndex="{InitData.getIndexFromList(InitData.getAllCompanysResult.lastResult,'id',accountDTO.companyId)}"/>
+			<!--
+			<s:TextInput id="companyIdTextInput" text="{accountDTO.companyId}" width="150" right="10"/>
+			-->
+		</s:FormItem>
+		<s:FormItem label="Address">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="地址6-50">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:TextInput id="addressTextInput" text="{accountDTO.address}" width="150" right="10"/>
+		</s:FormItem>
+		<s:FormItem label="Telephone">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="电话号码">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:TextInput id="telephoneTextInput" text="{accountDTO.telephone}" width="150" right="10"/>
+		</s:FormItem>
+		<s:FormItem label="可用">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="是否激活">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:CheckBox id="isForbiddenCheckBox" selected="{accountDTO.isForbidden==InitData.enable}"/>
+			<!--
+			<s:TextInput id="isForbiddenTextInput" text="{accountDTO.isForbidden}" width="150" right="10"/>
+			-->
+		</s:FormItem>
+	</s:Form>
+	<s:Form width="450">
+		<s:FormItem label="DisplayName">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="用户名4-32">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:TextInput id="displayNameTextInput" text="{accountDTO.displayName}" validationSubField="" width="150" right="10"/>
+		</s:FormItem>
+		<s:FormItem label="Password">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="登录密码6-32">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:TextInput id="passwordTextInput" text="{}" displayAsPassword="true" width="150" right="10"/>
+		</s:FormItem>
+		<s:FormItem label="AccountType">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="用户类型">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:DropDownList id="accountTypeList" dataProvider="{InitData.useTypes}" labelField="name" selectedIndex="{InitData.getIndexFromList(InitData.useTypes,'value',accountDTO.accountType)}">
+			</s:DropDownList>
+			<!--
+			<s:TextInput id="accountTypeTextInput" text="{accountDTO.accountType}" width="150" right="10"/>
+			-->
+		</s:FormItem>
+		<s:FormItem label="Email">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="电子邮箱">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:TextInput id="emailTextInput" text="{accountDTO.email}" width="150" right="10"/>
+		</s:FormItem>
+		<s:FormItem label="Mobile">
+			<s:helpContent>
+				<s:VGroup>
+					<s:Label text="用户移到电话">
+					</s:Label>
+				</s:VGroup>
+			</s:helpContent>
+			<s:TextInput id="mobileTextInput" text="{accountDTO.mobile}" width="150" right="10"/>
+		</s:FormItem>
+		<s:Group width="354" height="46">
+			<s:layout>
+				<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center"/>
+			</s:layout>
+			<s:Button id="updateAccount" label="Update Account" click="updateAccount_clickHandler(event)" enabled="{accountDTO.id!=null}"/>
+			<s:Button id="addAccount" label="Add Account" click="addAccount_clickHandler(event)"/>
+		</s:Group>
+
+	</s:Form>
+
+</s:Group>

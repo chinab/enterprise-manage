@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="900" height="400">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.bl.InitData;
+			import com.artogrid.accountsystem.ro.AccountRO;
+			import com.artogrid.accountsystem.vo.AccountDTO;
+			import com.artogrid.accountsystem.vo.PaginatorObjUtil;
+
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+
+			import spark.events.GridSelectionEvent;
+
+			public var accountRO:AccountRO=AccountRO.getMe();
+			private var willDeleteAccountDTO:AccountDTO;
+
+			protected function dataGrid_creationCompleteHandler(event:FlexEvent):void {
+				getAllAccountsPagerResult.token=accountRO.getAllAccountsPager();
+			}
+
+			public function getDatas():ArrayCollection {
+				return getAllAccountsPagerResult.lastResult;
+			}
+
+			protected function dataGrid_selectionChangeHandler(event:GridSelectionEvent):void {
+				dispatchEvent(event);
+			}
+
+			private function dateLabelFunction(item:Object, column:GridColumn):String {
+				var date:Date=(item[column.dataField] as Date);
+				return dateFormatter.format(date);
+			}
+
+			private function typeLabelFunction(item:Object, column:GridColumn):String {
+				var accountType:String=(item[column.dataField] as String);
+				return InitData.getOtherValueFromListByName(InitData.useTypes, "value", accountType, "name");
+			}
+
+			private function companyIdLabelFunction(item:Object, column:GridColumn):String {
+				var companyId:String=(item[column.dataField] as String);
+				return InitData.getOtherValueFromListByName(InitData.getAllCompanysResult.lastResult, "id", companyId, "name");
+			}
+
+			protected function linkbar1_itemClickHandler(event:ItemClickEvent):void {
+				if (event.item == deleteBtn) {
+					var accountDTO:AccountDTO=dataGrid.selectedItem as AccountDTO;
+					if (dataGrid.selectedItem != null) {
+						willDeleteAccountDTO=accountDTO;
+						deleteAccountResult.token=accountRO.deleteAccount(accountDTO);
+					}
+				} else if (event.item == refreshBtn) {
+					getAllAccountsPagerResult.token=accountRO.getAllAccountsPager();
+				}
+			}
+
+			protected function deleteAccountResult_resultHandler(event:ResultEvent):void {
+				if (deleteAccountResult.lastResult == true && willDeleteAccountDTO != null) {
+					dataGrid.dataProvider.removeItemAt(dataGrid.dataProvider.getItemIndex(willDeleteAccountDTO));
+				}
+				willDeleteAccountDTO=null;
+			}
+
+			protected function deleteAccountResult_faultHandler(event:FaultEvent):void {
+				willDeleteAccountDTO=null;
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:CallResponder id="getAllAccountsPagerResult"/>
+		<s:CallResponder id="deleteAccountResult" result="deleteAccountResult_resultHandler(event)" fault="deleteAccountResult_faultHandler(event)"/>
+		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="yyyy-MM-dd hh:mm:ss"/>
+	</fx:Declarations>
+	<s:DataGrid id="dataGrid" left="0" right="0" top="29" bottom="0" creationComplete="dataGrid_creationCompleteHandler(event)"
+				requestedRowCount="4" selectionMode="singleRow" selectionChange="dataGrid_selectionChangeHandler(event)">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="displayName" headerText="显示名">
+				</s:GridColumn>
+				<s:GridColumn dataField="accountCode" headerText="代号">
+				</s:GridColumn>
+				<s:GridColumn dataField="username" headerText="登录名">
+				</s:GridColumn>
+				<s:GridColumn dataField="accountType" headerText="类型" labelFunction="typeLabelFunction">
+				</s:GridColumn>
+				<s:GridColumn dataField="companyId" headerText="公司" labelFunction="companyIdLabelFunction">
+				</s:GridColumn>
+				<s:GridColumn dataField="address" headerText="地址" visible="false">
+				</s:GridColumn>
+				<s:GridColumn dataField="email" headerText="邮箱" visible="false">
+				</s:GridColumn>
+				<s:GridColumn dataField="telephone" headerText="电话" visible="false">
+				</s:GridColumn>
+				<s:GridColumn dataField="mobile" headerText="手机" visible="false">
+				</s:GridColumn>
+				<s:GridColumn dataField="createTime" headerText="创建时间" labelFunction="dateLabelFunction">
+				</s:GridColumn>
+				<s:GridColumn dataField="modifyTime" headerText="修改时间" labelFunction="dateLabelFunction">
+				</s:GridColumn>
+				<s:GridColumn dataField="createBy" headerText="创建者">
+				</s:GridColumn>
+				<s:GridColumn dataField="modifyBy" headerText="修改者">
+				</s:GridColumn>
+				<s:GridColumn dataField="isForbidden" headerText="是否可用">
+					<s:itemRenderer>
+						<fx:Component>
+							<s:GridItemRenderer>
+								<fx:Script>
+									<![CDATA[
+										import com.artogrid.accountsystem.bl.InitData;
+									]]>
+								</fx:Script>
+								<s:Image source="{data.isForbidden==InitData.disable?'assets/disable.png':'assets/enable.png'}" horizontalCenter="0" verticalCenter="0"/>
+							</s:GridItemRenderer>
+						</fx:Component>
+					</s:itemRenderer>
+				</s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+		<s:AsyncListView list="{getAllAccountsPagerResult.lastResult}"/>
+	</s:DataGrid>
+	<mx:LinkBar right="0" top="0" iconField="icon" labelField="label" itemClick="linkbar1_itemClickHandler(event)">
+		<mx:dataProvider>
+			<fx:Object icon="@Embed('assets/delete.png')" label="删除" id="deleteBtn"/>
+			<fx:Object icon="@Embed('assets/refresh.png')" label="刷新" id="refreshBtn"/>
+		</mx:dataProvider>
+	</mx:LinkBar>
+</s:Group>
