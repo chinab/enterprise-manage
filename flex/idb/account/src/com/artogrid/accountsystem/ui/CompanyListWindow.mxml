@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" xmlns:vo="com.artogrid.accountsystem.vo.*" width="912"
+			   height="480" close="PopUpManager.removePopUp(this)" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="经济人公司管理">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.bl.InitData;
+			import com.artogrid.accountsystem.controls.MyAlert;
+			
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			
+			import spark.events.GridSelectionEvent;
+			private static var me:CompanyListWindow;
+
+			public static function getMe():CompanyListWindow {
+				if (me == null) {
+					me=new CompanyListWindow();
+				}
+				return me;
+			}
+
+			protected function add_clickHandler(event:MouseEvent):void {
+				//如果已为 CompanyDTO 启用了数据管理并且 updateCompany 用作 create 函数，请取消对下行的注释。
+				var newCompanyDTO:CompanyDTO=new CompanyDTO();
+				newCompanyDTO.enName=enNameTextInput.text;
+				newCompanyDTO.address=addressTextInput.text;
+				newCompanyDTO.name=nameTextInput.text;
+				newCompanyDTO.code=codeTextInput.text;
+				newCompanyDTO.contact=contactTextInput.text;
+				newCompanyDTO.telephome=telephomeTextInput.text;
+
+				saveDepartmentResult.token=companyRO.saveCompany(newCompanyDTO);
+			}
+
+			protected function update_clickHandler(event:MouseEvent):void {
+				//如果已为 CompanyDTO 启用了数据管理并且 updateCompany 用作 create 函数，请取消对下行的注释。
+				// var companyDTO:CompanyDTO = new CompanyDTO();
+				companyDTO.enName=enNameTextInput.text;
+				companyDTO.address=addressTextInput.text;
+				companyDTO.name=nameTextInput.text;
+				companyDTO.code=codeTextInput.text;
+				companyDTO.contact=contactTextInput.text;
+				companyDTO.telephome=telephomeTextInput.text;
+
+				updateCompanyResult.token=companyRO.updateCompany(companyDTO);
+			}
+
+			protected function saveDepartmentResult_resultHandler(event:ResultEvent):void {
+				if (saveDepartmentResult.lastResult is CompanyDTO) {
+					dataGrid.dataProvider.addItem(saveDepartmentResult.lastResult);
+					MyAlert.showSuccess("数据添加完成！");
+				} else {
+					MyAlert.showAlert("添加失败");
+				}
+			}
+
+			protected function updateCompanyResult_resultHandler(event:ResultEvent):void {
+				if (!(updateCompanyResult.lastResult is CompanyDTO)) {
+					MyAlert.showAlert("更新失败");
+				}else{
+					MyAlert.showSuccess("数据更新完成！");
+				}
+			}
+
+			protected function dataGrid_selectionChangeHandler(event:GridSelectionEvent):void {
+				if (event.selectionChange) {
+					var rowIndex:int=event.selectionChange.rowIndex;
+					if (rowIndex != -1) {
+						companyDTO=InitData.getAllCompanysResult.lastResult.getItemAt(rowIndex) as CompanyDTO;
+					} else {
+						companyDTO=new CompanyDTO();
+					}
+				} else {
+					companyDTO=new CompanyDTO();
+				}
+			}
+
+			protected function closeBtn_clickHandler(event:MouseEvent):void {
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function deleteBtn_clickHandler(event:MouseEvent):void {
+				if (dataGrid.selectedIndex != -1) {
+					MyAlert.showConfirm("确定要删除公司？", function(closeEvent:CloseEvent):void {
+						if (closeEvent.detail == Alert.YES) {
+							var companyDTO:CompanyDTO=(dataGrid.selectedItem as CompanyDTO);
+							if (companyDTO != null) {
+								deleteCompanyByIdResult.token=companyRO.deleteCompanyById(companyDTO.id);
+							}
+						}
+					});
+				} else {
+					MyAlert.showAlert("请选择你要删除的数据");
+				}
+			}
+
+			protected function deleteCompanyByIdResult_resultHandler(event:ResultEvent):void {
+				if (deleteCompanyByIdResult.lastResult == true) {
+					dataGrid.dataProvider.removeItemAt(dataGrid.dataProvider.getItemIndex(companyDTO));
+					companyDTO = new CompanyDTO();
+					MyAlert.showSuccess("数据删除完成！");
+				} else {
+					MyAlert.showAlert("无法删除公司，存在账号属于此公司！");
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:CallResponder id="saveDepartmentResult" result="saveDepartmentResult_resultHandler(event)"/>
+		<s:CallResponder id="updateCompanyResult" result="updateCompanyResult_resultHandler(event)"/>
+		<s:CallResponder id="deleteCompanyByIdResult" result="deleteCompanyByIdResult_resultHandler(event)"/>
+		<ro:CompanyRO id="companyRO" fault="MyAlert.showAlert(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<vo:CompanyDTO id="companyDTO"/>
+	</fx:Declarations>
+	<s:DataGrid id="dataGrid" left="10" right="10" top="40" bottom="168" requestedRowCount="4"
+				selectionChange="dataGrid_selectionChangeHandler(event)">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="name" headerText="name">
+				</s:GridColumn>
+				<s:GridColumn dataField="code" headerText="code">
+				</s:GridColumn>
+				<s:GridColumn dataField="enName" headerText="enName">
+				</s:GridColumn>
+				<s:GridColumn dataField="contact" headerText="contact">
+				</s:GridColumn>
+				<s:GridColumn dataField="telephome" headerText="telephome">
+				</s:GridColumn>
+				<s:GridColumn dataField="address" headerText="address">
+				</s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+		<s:AsyncListView list="{InitData.getAllCompanysResult.lastResult}"/>
+	</s:DataGrid>
+	<s:HGroup x="0" y="287" width="888" height="110">
+		<s:Form>
+			<s:FormItem label="Name">
+				<s:TextInput id="nameTextInput" text="{companyDTO.name}"/>
+			</s:FormItem>
+			<s:FormItem label="Contact">
+				<s:TextInput id="contactTextInput" text="{companyDTO.contact}"/>
+			</s:FormItem>
+		</s:Form>
+		<s:Form>
+			<s:FormItem label="Code">
+				<s:TextInput id="codeTextInput" text="{companyDTO.code}"/>
+			</s:FormItem>
+			<s:FormItem label="Telephome">
+				<s:TextInput id="telephomeTextInput" text="{companyDTO.telephome}"/>
+			</s:FormItem>
+		</s:Form>
+		<s:Form>
+			<s:FormItem label="EnName">
+				<s:TextInput id="enNameTextInput" text="{companyDTO.enName}"/>
+			</s:FormItem>
+			<s:FormItem label="Address">
+				<s:TextInput id="addressTextInput" text="{companyDTO.address}"/>
+			</s:FormItem>
+		</s:Form>
+	</s:HGroup>
+	<s:Button id="updateButton" bottom="20" label="更新" click="update_clickHandler(event)" horizontalCenter="0" enabled="{companyDTO.id!=null}"/>
+	<s:Button id="addButton" bottom="20" label="添加" click="add_clickHandler(event)" horizontalCenter="-90"/>
+	<s:Button bottom="20" label="关闭" horizontalCenter="90" id="closeBtn" click="closeBtn_clickHandler(event)"/>
+	<mx:LinkButton id="deleteBtn" y="20" right="10" label="删除" click="deleteBtn_clickHandler(event)" icon="@Embed('assets/delete.png')"
+				   toolTip="删除部门和角色的关系"/>
+</s:TitleWindow>

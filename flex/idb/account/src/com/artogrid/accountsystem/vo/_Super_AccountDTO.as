@@ -53,19 +53,19 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     private var _internal_modifyBy : String;
     private var _internal_status : String;
     private var _internal_isForbidden : String;
-    private var _internal_createBy : String;
     private var _internal_password : String;
-    private var _internal_message : String;
+    private var _internal_createBy : String;
     private var _internal_id : String;
+    private var _internal_message : String;
     private var _internal_accountCode : String;
     private var _internal_username : String;
-    private var _internal_address : String;
     private var _internal_email : String;
+    private var _internal_address : String;
     private var _internal_accountType : String;
     private var _internal_companyId : String;
     private var _internal_displayName : String;
-    private var _internal_telephone : String;
     private var _internal_modifyTime : Date;
+    private var _internal_telephone : String;
     private var _internal_mobile : String;
 
     private static var emptyArray:Array = new Array();
@@ -115,27 +115,27 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get createBy() : String
-    {
-        return _internal_createBy;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get password() : String
     {
         return _internal_password;
     }
 
     [Bindable(event="propertyChange")]
-    public function get message() : String
+    public function get createBy() : String
     {
-        return _internal_message;
+        return _internal_createBy;
     }
 
     [Bindable(event="propertyChange")]
     public function get id() : String
     {
         return _internal_id;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get message() : String
+    {
+        return _internal_message;
     }
 
     [Bindable(event="propertyChange")]
@@ -151,15 +151,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get address() : String
-    {
-        return _internal_address;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get email() : String
     {
         return _internal_email;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get address() : String
+    {
+        return _internal_address;
     }
 
     [Bindable(event="propertyChange")]
@@ -181,15 +181,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get telephone() : String
-    {
-        return _internal_telephone;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get modifyTime() : Date
     {
         return _internal_modifyTime;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get telephone() : String
+    {
+        return _internal_telephone;
     }
 
     [Bindable(event="propertyChange")]
@@ -242,15 +242,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set createBy(value:String) : void
-    {
-        var oldValue:String = _internal_createBy;
-        if (oldValue !== value)
-        {
-            _internal_createBy = value;
-        }
-    }
-
     public function set password(value:String) : void
     {
         var oldValue:String = _internal_password;
@@ -260,12 +251,12 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set message(value:String) : void
+    public function set createBy(value:String) : void
     {
-        var oldValue:String = _internal_message;
+        var oldValue:String = _internal_createBy;
         if (oldValue !== value)
         {
-            _internal_message = value;
+            _internal_createBy = value;
         }
     }
 
@@ -275,6 +266,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         if (oldValue !== value)
         {
             _internal_id = value;
+        }
+    }
+
+    public function set message(value:String) : void
+    {
+        var oldValue:String = _internal_message;
+        if (oldValue !== value)
+        {
+            _internal_message = value;
         }
     }
 
@@ -296,21 +296,21 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set address(value:String) : void
-    {
-        var oldValue:String = _internal_address;
-        if (oldValue !== value)
-        {
-            _internal_address = value;
-        }
-    }
-
     public function set email(value:String) : void
     {
         var oldValue:String = _internal_email;
         if (oldValue !== value)
         {
             _internal_email = value;
+        }
+    }
+
+    public function set address(value:String) : void
+    {
+        var oldValue:String = _internal_address;
+        if (oldValue !== value)
+        {
+            _internal_address = value;
         }
     }
 
@@ -341,21 +341,21 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set telephone(value:String) : void
-    {
-        var oldValue:String = _internal_telephone;
-        if (oldValue !== value)
-        {
-            _internal_telephone = value;
-        }
-    }
-
     public function set modifyTime(value:Date) : void
     {
         var oldValue:Date = _internal_modifyTime;
         if (oldValue !== value)
         {
             _internal_modifyTime = value;
+        }
+    }
+
+    public function set telephone(value:String) : void
+    {
+        var oldValue:String = _internal_telephone;
+        if (oldValue !== value)
+        {
+            _internal_telephone = value;
         }
     }
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="366" height="352"
+			   close="PopUpManager.removePopUp(this);" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="修改角色">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.bl.InitData;
+			import com.artogrid.accountsystem.controls.MyAlert;
+			import com.artogrid.accountsystem.vo.RoleDTO;
+			
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			private static var me:ModifyRoleFrom;
+			private var _roleDTO:RoleDTO;
+
+			[Bindable]
+			public function get roleDTO():RoleDTO {
+				return _roleDTO;
+			}
+
+			public function set roleDTO(value:RoleDTO):void {
+				_roleDTO=value;
+			}
+
+			public static function getMe(roleDTO:RoleDTO):ModifyRoleFrom {
+				if (me == null) {
+					me=new ModifyRoleFrom();
+				}
+				me.roleDTO=roleDTO;
+				return me;
+			}
+
+			protected function saveBtn_clickHandler(event:MouseEvent):void {
+				//如果已为 RoleDTO 启用了数据管理并且 updateRole 用作 create 函数，请取消对下行的注释。
+				// var roleDTO:RoleDTO = new RoleDTO();
+				roleDTO.description=descriptionTextInput.text;
+				roleDTO.name=nameTextInput.text;
+				roleDTO.accountType=accountTypeList.selectedItem.value;
+				roleDTO.level = int(levelTextInput.text);
+
+				updateRoleResult.token=roleRO.updateRole(roleDTO);
+			}
+
+			protected function updateRoleResult_resultHandler(event:ResultEvent):void {
+				if (updateRoleResult.lastResult is RoleDTO) {
+					PopUpManager.removePopUp(this);
+				} else {
+					MyAlert.showAlert("更新失败");
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<ro:RoleRO id="roleRO" fault="MyAlert.showAlert(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<s:CallResponder id="updateRoleResult" result="updateRoleResult_resultHandler(event)"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Form height="310" defaultButton="{cancelBtn}" horizontalCenter="0" verticalCenter="0">
+		
+		<s:FormItem label="Name">
+			<s:TextInput id="nameTextInput" width="150" text="{roleDTO.name}"/>
+		</s:FormItem>
+		<s:FormItem label="AccountType">
+			<s:DropDownList id="accountTypeList" dataProvider="{InitData.useTypes}" labelField="name" selectedIndex="{InitData.getIndexFromList(InitData.useTypes,'value',roleDTO.accountType)}"/>
+		</s:FormItem>
+		<s:FormItem label="Level">
+			<s:TextInput id="levelTextInput" width="150" text="{roleDTO.level}"/>
+		</s:FormItem>
+		<s:FormItem label="Description">
+			<s:TextArea id="descriptionTextInput" width="150" height="92" text="{roleDTO.description}"/>
+		</s:FormItem>
+		<s:HGroup width="100%" gap="20" horizontalAlign="center" verticalAlign="bottom">
+			<s:Button id="saveBtn" label="保存" click="saveBtn_clickHandler(event)"/>
+			<s:Button label="取消" id="cancelBtn" click="PopUpManager.removePopUp(this);"/>
+		</s:HGroup>
+	</s:Form>
+</s:TitleWindow>
