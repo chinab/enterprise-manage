@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="404" height="292"
+			   close="PopUpManager.removePopUp(this)" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="添加部门">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.controls.MyAlert;
+			import com.artogrid.accountsystem.vo.DepartmentDTO;
+			
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			private static var me:AddDepartmentFrom;
+			private var accountRelationWindow:AccountRelationWindow;
+
+			public static function getMe(accountRelationWindow:AccountRelationWindow):AddDepartmentFrom {
+				if (me == null) {
+					me=new AddDepartmentFrom();
+				}
+				me.accountRelationWindow=accountRelationWindow;
+				return me;
+			}
+
+			protected function saveBtn_clickHandler(event:MouseEvent):void {
+				//如果已为 DepartmentDTO 启用了数据管理并且 saveDepartment 用作 create 函数，请取消对下行的注释。
+				var departmentDTO:DepartmentDTO=new DepartmentDTO();
+				departmentDTO.description=descriptionTextInput.text;
+				departmentDTO.name=nameTextInput.text;
+				departmentDTO.departmentCode=departmentCodeTextInput.text;
+
+				saveDepartmentResult.token=departmentRO.saveDepartment(departmentDTO);
+			}
+
+			protected function saveDepartmentResult_resultHandler(event:ResultEvent):void {
+				if (saveDepartmentResult.lastResult is DepartmentDTO) {
+					accountRelationWindow.departmentDatagrid.dataProvider.addItem(saveDepartmentResult.lastResult);
+					PopUpManager.removePopUp(this);
+				} else {
+					MyAlert.showAlert("添加失败");
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<ro:DepartmentRO id="departmentRO" fault="MyAlert.showAlert(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<s:CallResponder id="saveDepartmentResult" result="saveDepartmentResult_resultHandler(event)"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Form height="267" defaultButton="{cancelBtn}" horizontalCenter="0" verticalCenter="0">
+		<s:FormItem label="Name">
+			<s:TextInput id="nameTextInput" width="150"/>
+		</s:FormItem>
+		<s:FormItem label="DepartmentCode">
+			<s:TextInput id="departmentCodeTextInput" width="150"/>
+		</s:FormItem>
+		<s:FormItem label="Description">
+			<s:TextArea id="descriptionTextInput" width="150" height="92"/>
+		</s:FormItem>
+		<s:HGroup width="100%" gap="20" horizontalAlign="center" verticalAlign="bottom">
+			<s:Button id="saveBtn" label="保存" click="saveBtn_clickHandler(event)"/>
+			<s:Button label="取消" id="cancelBtn" click="PopUpManager.removePopUp(this);"/>
+		</s:HGroup>
+	</s:Form>
+</s:TitleWindow>

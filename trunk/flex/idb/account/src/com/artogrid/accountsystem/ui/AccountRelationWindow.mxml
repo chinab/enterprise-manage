@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="894" height="408"
+			   close="PopUpManager.removePopUp(this)" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="用户部门与角色维护-{_accountDTO.displayName}">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.bl.InitData;
+			import com.artogrid.accountsystem.controls.MyAlert;
+			import com.artogrid.accountsystem.events.AccountDataEvent;
+			import com.artogrid.accountsystem.vo.AccountDTO;
+			import com.artogrid.accountsystem.vo.AccountRoleRelationDTO;
+			import com.artogrid.accountsystem.vo.DepartmentDTO;
+			import com.artogrid.accountsystem.vo.RoleDTO;
+
+			import mx.collections.ArrayCollection;
+			import mx.collections.IList;
+			import mx.core.FlexGlobals;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			private static var me:AccountRelationWindow;
+			[Bindable]
+			private var _accountDTO:AccountDTO;
+			private var relationCopy:ArrayCollection;
+
+			public function setAccountDTO(value:AccountDTO):void {
+				_accountDTO=value;
+				getAccountRoleRelationsByAccountIdResult.token=accountRO.getAccountRoleRelationsByAccountId(_accountDTO.id);
+			}
+
+			public static function getMe(accountDTO:AccountDTO):AccountRelationWindow {
+				if (me == null) {
+					me=new AccountRelationWindow();
+				}
+				me.setAccountDTO(accountDTO);
+				return me;
+			}
+
+			protected function dataGrid_creationCompleteHandler(event:FlexEvent):void {
+				getAllDepartmentsResult.token=departmentRO.getAllDepartments();
+				getAllRolesResult.token=roleRO.getAllRoles();
+			}
+
+			private function departmentLabelFunction(item:Object, column:GridColumn):String {
+				return InitData.getOtherValueFromListByName(getAllDepartmentsResult.lastResult, "id", item[column.dataField], "name");
+			}
+
+			private function roleLabelFunction(item:Object, column:GridColumn):String {
+				return InitData.getOtherValueFromListByName(getAllRolesResult.lastResult, "id", item[column.dataField], "name");
+			}
+
+			protected function deleteBtn_clickHandler(event:MouseEvent):void {
+				if (dataGrid.selectedItem) {
+					dataGrid.dataProvider.removeItemAt(dataGrid.selectedIndex);
+				} else {
+					MyAlert.showAlert("请选择你要删除的行！");
+				}
+			}
+
+			protected function addBtn_clickHandler(event:MouseEvent):void {
+				if (departmentDatagrid.selectedItem && roleDatagrid.selectedItem) {
+					var departmentDTO:DepartmentDTO=departmentDatagrid.selectedItem as DepartmentDTO;
+					var roleDTO:RoleDTO=roleDatagrid.selectedItem as RoleDTO;
+					if (roleDTO.accountType != _accountDTO.accountType) {
+						MyAlert.showAlert("请选择用户类型为" + InitData.getOtherValueFromListByName(InitData.useTypes, "value", _accountDTO.accountType, "name") + "的角色");
+					} else {
+						var dataProvider:IList=dataGrid.dataProvider;
+						var addable:Boolean=true;
+						for (var i:int=0; i < dataProvider.length; i++) {
+							var accountRoleRelation:AccountRoleRelationDTO=AccountRoleRelationDTO(dataProvider.getItemAt(i));
+							if (accountRoleRelation.departmentId == departmentDTO.id && accountRoleRelation.roleId == roleDTO.id) {
+								addable=false;
+								break;
+							}
+						}
+						if (addable) {
+							var newAccountRoleRelation:AccountRoleRelationDTO=new AccountRoleRelationDTO();
+							newAccountRoleRelation.accountId=_accountDTO.id;
+							newAccountRoleRelation.departmentCode=departmentDTO.departmentCode;
+							newAccountRoleRelation.departmentId=departmentDTO.id;
+							newAccountRoleRelation.roleId=roleDTO.id;
+							dataProvider.addItem(newAccountRoleRelation);
+						} else {
+							MyAlert.showAlert("添加的数据已存在");
+						}
+					}
+				} else {
+					MyAlert.showAlert("请选择你要添加的部门和角色！");
+				}
+			}
+
+			protected function cancelBtn_clickHandler(event:MouseEvent):void {
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function saveBtn_clickHandler(event:MouseEvent):void {
+				var list:IList=(getAccountRoleRelationsByAccountIdResult.lastResult as IList);
+				var addArray:ArrayCollection=new ArrayCollection();
+
+				for (var i:int=0; i < list.length; i++) {
+					var valItem:AccountRoleRelationDTO=list.getItemAt(i) as AccountRoleRelationDTO;
+					var addable:Boolean=true;
+					var disdelItem:AccountRoleRelationDTO;
+					for each (var item:AccountRoleRelationDTO in relationCopy) {
+						if (valItem.departmentId == item.departmentId && valItem.roleId == item.roleId) {
+							disdelItem=item;
+							addable=false;
+							break;
+						}
+					}
+					if (addable) {
+						addArray.addItem(valItem);
+					} else {
+						relationCopy.removeItemAt(relationCopy.getItemIndex(disdelItem));
+					}
+				}
+
+				addAndRemoveAccountRoleRelationsResult.token=accountRO.addAndRemoveAccountRoleRelations(addArray, relationCopy);
+			}
+
+			protected function getAccountRoleRelationsByAccountIdResult_resultHandler(event:ResultEvent):void {
+				relationCopy=new ArrayCollection();
+				var list:IList=(getAccountRoleRelationsByAccountIdResult.lastResult as IList);
+				for (var i:int=0; i < list.length; i++) {
+					relationCopy.addItem(list.getItemAt(i));
+				}
+			}
+
+			protected function addAndRemoveAccountRoleRelationsResult_resultHandler(event:ResultEvent):void {
+				if (addAndRemoveAccountRoleRelationsResult.lastResult == true) {
+					PopUpManager.removePopUp(this);
+				} else {
+					MyAlert.showAlert("保存数据失败！");
+				}
+			}
+
+			protected function department_itemClickHandler(event:ItemClickEvent):void {
+				var departmentDTO:DepartmentDTO=departmentDatagrid.selectedItem as DepartmentDTO;
+				if (event.item == addDepartmentBtn) {
+					var addDepartmentFrom:AddDepartmentFrom=AddDepartmentFrom.getMe(this);
+					PopUpManager.addPopUp(addDepartmentFrom, FlexGlobals.topLevelApplication as DisplayObject, true);
+					PopUpManager.centerPopUp(addDepartmentFrom);
+				} else if (event.item == deleteDepartmentBtn) {
+					MyAlert.showConfirm("确定要删除部门？", function(closeEvent:CloseEvent):void {
+						if (departmentDTO) {
+							deleteDepartmentByIdResult.token=departmentRO.deleteDepartmentById(departmentDTO.id);
+						}
+					});
+				} else if (event.item == editDepartmentBtn) {
+					if (departmentDTO) {
+						var modifyDepartmentFrom:ModifyDepartmentFrom=ModifyDepartmentFrom.getMe(departmentDTO);
+						PopUpManager.addPopUp(modifyDepartmentFrom, FlexGlobals.topLevelApplication as DisplayObject, true);
+						PopUpManager.centerPopUp(modifyDepartmentFrom);
+					}
+				}
+			}
+
+			protected function role_itemClickHandler(event:ItemClickEvent):void {
+				var roleDTO:RoleDTO=roleDatagrid.selectedItem as RoleDTO;
+				if (event.item == addRoleBtn) {
+					var addRoleFrom:AddRoleFrom=AddRoleFrom.getMe(this);
+					PopUpManager.addPopUp(addRoleFrom, FlexGlobals.topLevelApplication as DisplayObject, true);
+					PopUpManager.centerPopUp(addRoleFrom);
+				} else if (event.item == deleteRoleBtn) {
+					MyAlert.showConfirm("确定要删除角色？", function(closeEvent:CloseEvent):void {
+						if (roleDTO) {
+							deleteRoleByIdResult.token=roleRO.deleteRoleById(roleDTO.id);
+						}
+					});
+				} else if (event.item == editRoleBtn) {
+					if (roleDTO) {
+						var modifyRoleFrom:ModifyRoleFrom=ModifyRoleFrom.getMe(roleDTO);
+						PopUpManager.addPopUp(modifyRoleFrom, FlexGlobals.topLevelApplication as DisplayObject, true);
+						PopUpManager.centerPopUp(modifyRoleFrom);
+					}
+				}
+			}
+
+			private function typeLabelFunction(item:Object, column:GridColumn):String {
+				var accountType:String=(item[column.dataField] as String);
+				return InitData.getOtherValueFromListByName(InitData.useTypes, "value", accountType, "name");
+			}
+
+			protected function deleteDepartmentByIdResult_resultHandler(event:ResultEvent):void {
+				if (deleteDepartmentByIdResult.lastResult == true) {
+					MyAlert.showSuccess("数据删除完成！");
+					departmentDatagrid.dataProvider.removeItemAt(departmentDatagrid.selectedIndex);
+				} else {
+					MyAlert.showAlert("部门删除失败，存在用户关联了此部门！");
+				}
+			}
+
+			protected function deleteRoleByIdResult_resultHandler(event:ResultEvent):void {
+				if (deleteRoleByIdResult.lastResult == true) {
+					MyAlert.showSuccess("数据删除完成！");
+					roleDatagrid.dataProvider.removeItemAt(roleDatagrid.selectedIndex);
+				} else {
+					MyAlert.showAlert("角色删除失败，存在用户关联了此角色！");
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<s:CallResponder id="getAllDepartmentsResult" result="getAccountRoleRelationsByAccountIdResult.token=accountRO.getAccountRoleRelationsByAccountId(_accountDTO.id);"/>
+		<s:CallResponder id="getAllRolesResult" result="getAccountRoleRelationsByAccountIdResult.token=accountRO.getAccountRoleRelationsByAccountId(_accountDTO.id);"/>
+		<s:CallResponder id="getAccountRoleRelationsByAccountIdResult" result="getAccountRoleRelationsByAccountIdResult_resultHandler(event)"/>
+		<ro:DepartmentRO id="departmentRO" fault="MyAlert.showAlert(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<ro:RoleRO id="roleRO" fault="MyAlert.showAlert(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<ro:AccountRO id="accountRO" fault="MyAlert.showAlert(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<s:CallResponder id="addAndRemoveAccountRoleRelationsResult" result="addAndRemoveAccountRoleRelationsResult_resultHandler(event)"/>
+		<s:CallResponder id="deleteDepartmentByIdResult" result="deleteDepartmentByIdResult_resultHandler(event)"/>
+		<s:CallResponder id="deleteRoleByIdResult" result="deleteRoleByIdResult_resultHandler(event)"/>
+	</fx:Declarations>
+	<mx:LinkButton id="addBtn" x="590" y="129" label="添加" click="addBtn_clickHandler(event)" icon="@Embed('assets/add.png')"
+				   toolTip="添加部门和角色"/>
+	<mx:LinkButton id="deleteBtn" x="802" y="20" label="删除" click="deleteBtn_clickHandler(event)" icon="@Embed('assets/delete.png')"
+				   toolTip="删除部门和角色的关系"/>
+	<s:Button id="saveBtn" bottom="20" label="保存" click="saveBtn_clickHandler(event)" horizontalCenter="-70"/>
+	<s:Button id="cancelBtn" bottom="20" label="取消" click="cancelBtn_clickHandler(event)" horizontalCenter="70"/>
+	<s:DataGrid id="departmentDatagrid" x="18" top="45" bottom="65" width="230" creationComplete="dataGrid_creationCompleteHandler(event)"
+				requestedRowCount="4">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="name" headerText="部门名">
+				</s:GridColumn>
+				<s:GridColumn dataField="departmentCode" headerText="代号">
+				</s:GridColumn>
+				<s:GridColumn dataField="description" headerText="描述">
+				</s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+		<s:AsyncListView list="{getAllDepartmentsResult.lastResult}"/>
+	</s:DataGrid>
+
+	<s:DataGrid id="roleDatagrid" x="281" top="45" bottom="65" width="300" creationComplete="dataGrid_creationCompleteHandler(event)"
+				requestedRowCount="4">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="name" headerText="名称">
+				</s:GridColumn>
+				<s:GridColumn dataField="accountType" headerText="账号类型" width="65" labelFunction="typeLabelFunction">
+				</s:GridColumn>
+				<s:GridColumn dataField="level" headerText="级别">
+				</s:GridColumn>
+				<s:GridColumn dataField="description" headerText="描述">
+				</s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+		<s:AsyncListView list="{getAllRolesResult.lastResult}"/>
+	</s:DataGrid>
+	<s:DataGrid id="dataGrid" x="659" top="45" bottom="65" width="205" creationComplete="dataGrid_creationCompleteHandler(event)"
+				requestedRowCount="4">
+		<s:columns>
+			<s:ArrayList>
+				<s:GridColumn dataField="departmentId" headerText="部门" labelFunction="departmentLabelFunction">
+				</s:GridColumn>
+				<s:GridColumn dataField="roleId" headerText="角色" labelFunction="roleLabelFunction">
+				</s:GridColumn>
+			</s:ArrayList>
+		</s:columns>
+		<s:AsyncListView list="{getAccountRoleRelationsByAccountIdResult.lastResult}"/>
+	</s:DataGrid>
+	<s:Label x="18" y="25" fontWeight="normal" text="部门 :"/>
+	<s:Label x="281" y="25" text="角色 :"/>
+	<s:Label x="659" y="25" text="已关联的部门和角色 :"/>
+	<mx:LinkBar right="644" top="16" toolTipField="toolTip" itemClick="department_itemClickHandler(event)">
+		<mx:dataProvider>
+			<fx:Object icon="@Embed('assets/add.png')" label="添加" id="addDepartmentBtn" toolTip="添加部门"/>
+			<fx:Object icon="@Embed('assets/edit.png')" label="编辑" id="editDepartmentBtn" toolTip="编辑选中部门"/>
+			<fx:Object icon="@Embed('assets/delete.png')" label="删除" id="deleteDepartmentBtn" toolTip="删除选中部门"/>
+		</mx:dataProvider>
+	</mx:LinkBar>
+	<mx:LinkBar right="311" top="16" toolTipField="toolTip" itemClick="role_itemClickHandler(event)">
+		<mx:dataProvider>
+			<fx:Object icon="@Embed('assets/add.png')" label="添加" id="addRoleBtn" toolTip="添加角色"/>
+			<fx:Object icon="@Embed('assets/edit.png')" label="编辑" id="editRoleBtn" toolTip="编辑选中角色"/>
+			<fx:Object icon="@Embed('assets/delete.png')" label="删除" id="deleteRoleBtn" toolTip="删除选中角色"/>
+		</mx:dataProvider>
+	</mx:LinkBar>
+</s:TitleWindow>

@@ -50,12 +50,12 @@ public class _Super_LoginStatusDTO extends flash.events.EventDispatcher implemen
      */
     private var _internal_id : String;
     private var _internal_accountId : String;
-    private var _internal_token : String;
     private var _internal_status : String;
+    private var _internal_token : String;
     private var _internal_server : String;
     private var _internal_activation : String;
-    private var _internal_ip : String;
     private var _internal_clientType : String;
+    private var _internal_ip : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -92,15 +92,15 @@ public class _Super_LoginStatusDTO extends flash.events.EventDispatcher implemen
     }
 
     [Bindable(event="propertyChange")]
-    public function get token() : String
-    {
-        return _internal_token;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get status() : String
     {
         return _internal_status;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get token() : String
+    {
+        return _internal_token;
     }
 
     [Bindable(event="propertyChange")]
@@ -116,15 +116,15 @@ public class _Super_LoginStatusDTO extends flash.events.EventDispatcher implemen
     }
 
     [Bindable(event="propertyChange")]
-    public function get ip() : String
-    {
-        return _internal_ip;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get clientType() : String
     {
         return _internal_clientType;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get ip() : String
+    {
+        return _internal_ip;
     }
 
     public function clearAssociations() : void
@@ -155,16 +155,6 @@ public class _Super_LoginStatusDTO extends flash.events.EventDispatcher implemen
         }
     }
 
-    public function set token(value:String) : void
-    {
-        var oldValue:String = _internal_token;
-        if (oldValue !== value)
-        {
-            _internal_token = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "token", oldValue, _internal_token));
-        }
-    }
-
     public function set status(value:String) : void
     {
         var oldValue:String = _internal_status;
@@ -172,6 +162,16 @@ public class _Super_LoginStatusDTO extends flash.events.EventDispatcher implemen
         {
             _internal_status = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "status", oldValue, _internal_status));
+        }
+    }
+
+    public function set token(value:String) : void
+    {
+        var oldValue:String = _internal_token;
+        if (oldValue !== value)
+        {
+            _internal_token = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "token", oldValue, _internal_token));
         }
     }
 
@@ -195,16 +195,6 @@ public class _Super_LoginStatusDTO extends flash.events.EventDispatcher implemen
         }
     }
 
-    public function set ip(value:String) : void
-    {
-        var oldValue:String = _internal_ip;
-        if (oldValue !== value)
-        {
-            _internal_ip = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "ip", oldValue, _internal_ip));
-        }
-    }
-
     public function set clientType(value:String) : void
     {
         var oldValue:String = _internal_clientType;
@@ -212,6 +202,16 @@ public class _Super_LoginStatusDTO extends flash.events.EventDispatcher implemen
         {
             _internal_clientType = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "clientType", oldValue, _internal_clientType));
+        }
+    }
+
+    public function set ip(value:String) : void
+    {
+        var oldValue:String = _internal_ip;
+        if (oldValue !== value)
+        {
+            _internal_ip = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "ip", oldValue, _internal_ip));
         }
     }
 

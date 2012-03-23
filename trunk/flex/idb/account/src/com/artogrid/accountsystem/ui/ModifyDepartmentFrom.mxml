@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="366" height="308"
+			   close="PopUpManager.removePopUp(this);" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="修改部门">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.controls.MyAlert;
+			import com.artogrid.accountsystem.vo.DepartmentDTO;
+			
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			private static var me:ModifyDepartmentFrom;
+			private var _departmentDTO:DepartmentDTO;
+
+			[Bindable]
+			public function get departmentDTO():DepartmentDTO {
+				return _departmentDTO;
+			}
+
+			public function set departmentDTO(value:DepartmentDTO):void {
+				_departmentDTO=value;
+			}
+
+			public static function getMe(departmentDTO:DepartmentDTO):ModifyDepartmentFrom {
+				if (me == null) {
+					me=new ModifyDepartmentFrom();
+				}
+				me.departmentDTO=departmentDTO;
+				return me;
+			}
+
+			protected function saveBtn_clickHandler(event:MouseEvent):void {
+				//如果已为 DepartmentDTO 启用了数据管理并且 updateDepartment 用作 create 函数，请取消对下行的注释。
+				// var departmentDTO:DepartmentDTO = new DepartmentDTO();
+				departmentDTO.description=descriptionTextInput.text;
+				departmentDTO.name=nameTextInput.text;
+				departmentDTO.departmentCode=departmentCodeTextInput.text;
+
+				updateDepartmentResult.token=departmentRO.updateDepartment(departmentDTO);
+			}
+
+			protected function updateDepartmentResult_resultHandler(event:ResultEvent):void {
+				if (updateDepartmentResult.lastResult is DepartmentDTO) {
+					PopUpManager.removePopUp(this);
+				} else {
+					MyAlert.showAlert("更新失败");
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<ro:DepartmentRO id="departmentRO" fault="MyAlert.showAlert(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<s:CallResponder id="updateDepartmentResult" result="updateDepartmentResult_resultHandler(event)"/>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:Form height="267" defaultButton="{cancelBtn}" horizontalCenter="0" verticalCenter="0">
+		<s:FormItem label="Name">
+			<s:TextInput id="nameTextInput" width="150" text="{departmentDTO.name}"/>
+		</s:FormItem>
+		<s:FormItem label="DepartmentCode">
+			<s:TextInput id="departmentCodeTextInput" width="150" text="{departmentDTO.departmentCode}"/>
+		</s:FormItem>
+		<s:FormItem label="Description">
+			<s:TextArea id="descriptionTextInput" width="150" height="92" text="{departmentDTO.description}"/>
+		</s:FormItem>
+		<s:HGroup width="100%" gap="20" horizontalAlign="center" verticalAlign="bottom">
+			<s:Button id="saveBtn" label="保存" click="saveBtn_clickHandler(event)"/>
+			<s:Button label="取消" id="cancelBtn" click="PopUpManager.removePopUp(this);"/>
+		</s:HGroup>
+	</s:Form>
+</s:TitleWindow>

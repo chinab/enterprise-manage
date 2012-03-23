@@ -3,14 +3,17 @@
 	<fx:Script>
 		<![CDATA[
 			import com.artogrid.accountsystem.bl.InitData;
+			import com.artogrid.accountsystem.controls.MyAlert;
+			import com.artogrid.accountsystem.events.AccountDataEvent;
 			import com.artogrid.accountsystem.ro.AccountRO;
 			import com.artogrid.accountsystem.vo.AccountDTO;
-			import com.artogrid.accountsystem.vo.PaginatorObjUtil;
 
-			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.events.ItemClickEvent;
+			import mx.managers.PopUpManager;
 			import mx.rpc.events.FaultEvent;
 			import mx.rpc.events.ResultEvent;
 
@@ -20,15 +23,28 @@
 			private var willDeleteAccountDTO:AccountDTO;
 
 			protected function dataGrid_creationCompleteHandler(event:FlexEvent):void {
-				getAllAccountsPagerResult.token=accountRO.getAllAccountsPager();
-			}
-
-			public function getDatas():ArrayCollection {
-				return getAllAccountsPagerResult.lastResult;
+				getAllAccountsResult.token=accountRO.getAllAccounts();
 			}
 
 			protected function dataGrid_selectionChangeHandler(event:GridSelectionEvent):void {
-				dispatchEvent(event);
+				var e:AccountDataEvent=new AccountDataEvent(AccountDataEvent.DATA_GRID_ITEM_CHANGE);
+				if (event.selectionChange) {
+					var rowIndex:int=event.selectionChange.rowIndex;
+					if (rowIndex != -1) {
+						e.data=getAllAccountsResult.lastResult.getItemAt(rowIndex) as AccountDTO;
+					} else {
+						e.data=new AccountDTO();
+					}
+				} else {
+					e.data=new AccountDTO();
+				}
+				dispatchEvent(e);
+			}
+
+			private function clearFrom():void {
+				var e:AccountDataEvent=new AccountDataEvent(AccountDataEvent.DATA_GRID_ITEM_CHANGE);
+				e.data=new AccountDTO();
+				dispatchEvent(e);
 			}
 
 			private function dateLabelFunction(item:Object, column:GridColumn):String {
@@ -47,20 +63,43 @@
 			}
 
 			protected function linkbar1_itemClickHandler(event:ItemClickEvent):void {
+				var accountDTO:AccountDTO=dataGrid.selectedItem as AccountDTO;
 				if (event.item == deleteBtn) {
-					var accountDTO:AccountDTO=dataGrid.selectedItem as AccountDTO;
-					if (dataGrid.selectedItem != null) {
-						willDeleteAccountDTO=accountDTO;
-						deleteAccountResult.token=accountRO.deleteAccount(accountDTO);
+					if (accountDTO != null) {
+						MyAlert.showConfirm("确定要删除账号？", function(closeEvent:CloseEvent):void {
+							if (closeEvent.detail == Alert.YES) {
+								willDeleteAccountDTO=accountDTO;
+								deleteAccountResult.token=accountRO.deleteAccount(accountDTO);
+							}
+						});
+					} else {
+						MyAlert.showAlert("请选择要删除的账号!");
 					}
 				} else if (event.item == refreshBtn) {
-					getAllAccountsPagerResult.token=accountRO.getAllAccountsPager();
+					dataGrid.scroller.verticalScrollBar.value=dataGrid.scroller.verticalScrollBar.minimum;
+//					dataGrid.dataProvider.removeAll();
+					getAllAccountsResult.token=accountRO.getAllAccounts();
+					clearFrom();
+				} else if (event.item == relationBtn) {
+					if (accountDTO != null) {
+						var accountRelationWindow:AccountRelationWindow=AccountRelationWindow.getMe(accountDTO);
+						PopUpManager.addPopUp(accountRelationWindow, FlexGlobals.topLevelApplication as DisplayObject, true);
+						PopUpManager.centerPopUp(accountRelationWindow);
+					} else {
+						MyAlert.showAlert("请选择要维护关系的账号!");
+					}
+				} else if (event.item == companyEditBtn) {
+					var companyListWindow:CompanyListWindow=CompanyListWindow.getMe();
+					PopUpManager.addPopUp(companyListWindow, FlexGlobals.topLevelApplication as DisplayObject, true);
+					PopUpManager.centerPopUp(companyListWindow);
 				}
 			}
 
 			protected function deleteAccountResult_resultHandler(event:ResultEvent):void {
 				if (deleteAccountResult.lastResult == true && willDeleteAccountDTO != null) {
 					dataGrid.dataProvider.removeItemAt(dataGrid.dataProvider.getItemIndex(willDeleteAccountDTO));
+					clearFrom();
+					MyAlert.showSuccess("数据删除完成！");
 				}
 				willDeleteAccountDTO=null;
 			}
@@ -68,10 +107,36 @@
 			protected function deleteAccountResult_faultHandler(event:FaultEvent):void {
 				willDeleteAccountDTO=null;
 			}
+
+			private var isAddRefesh:Boolean=false;
+
+			public function addRefesh():void {
+				getAllAccountsResult.token=accountRO.getAllAccounts();
+				isAddRefesh=true;
+			}
+
+			protected function getAllAccountsResult_resultHandler(event:ResultEvent):void {
+				if (isAddRefesh) {
+					dataGrid.selectedIndex=dataGrid.dataProvider.length - 1;
+					dataGrid.scroller.verticalScrollBar.value=dataGrid.scroller.verticalScrollBar.maximum;
+					isAddRefesh=false;
+				}
+			}
+
+			protected function textInput_enterHandler(event:FlexEvent):void {
+				if (textInput.text == null || textInput.text == "") {
+					dataGrid.scroller.verticalScrollBar.value=dataGrid.scroller.verticalScrollBar.minimum;
+					//					dataGrid.dataProvider.removeAll();
+					getAllAccountsResult.token=accountRO.getAllAccounts();
+					clearFrom();
+				} else {
+					getAllAccountsResult.token=accountRO.searchAccountsByKeyword(textInput.text);
+				}
+			}
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<s:CallResponder id="getAllAccountsPagerResult"/>
+		<s:CallResponder id="getAllAccountsResult" result="getAllAccountsResult_resultHandler(event)"/>
 		<s:CallResponder id="deleteAccountResult" result="deleteAccountResult_resultHandler(event)" fault="deleteAccountResult_faultHandler(event)"/>
 		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="yyyy-MM-dd hh:mm:ss"/>
 	</fx:Declarations>
@@ -121,12 +186,16 @@
 				</s:GridColumn>
 			</s:ArrayList>
 		</s:columns>
-		<s:AsyncListView list="{getAllAccountsPagerResult.lastResult}"/>
+		<s:AsyncListView list="{getAllAccountsResult.lastResult}"/>
 	</s:DataGrid>
-	<mx:LinkBar right="0" top="0" iconField="icon" labelField="label" itemClick="linkbar1_itemClickHandler(event)">
+	<mx:LinkBar right="155" top="0" iconField="icon" labelField="label" itemClick="linkbar1_itemClickHandler(event)" toolTipField="toolTip">
 		<mx:dataProvider>
-			<fx:Object icon="@Embed('assets/delete.png')" label="删除" id="deleteBtn"/>
-			<fx:Object icon="@Embed('assets/refresh.png')" label="刷新" id="refreshBtn"/>
+			<fx:Object icon="@Embed('assets/company.png')" label="公司" id="companyEditBtn" toolTip="经济公司维护"/>
+			<fx:Object icon="@Embed('assets/relationship.png')" label="关系" id="relationBtn" toolTip="部门与角色关系维护"/>
+			<fx:Object icon="@Embed('assets/delete.png')" label="删除" id="deleteBtn" toolTip="删除选中行"/>
+			<fx:Object icon="@Embed('assets/refresh.png')" label="刷新" id="refreshBtn" toolTip="刷新列表"/>
 		</mx:dataProvider>
 	</mx:LinkBar>
+	<s:TextInput id="textInput" right="1" top="4" width="150" enter="textInput_enterHandler(event)"/>
+	<s:Image right="4" top="7" width="16" height="16" source="@Embed('assets/search.png')"/>
 </s:Group>

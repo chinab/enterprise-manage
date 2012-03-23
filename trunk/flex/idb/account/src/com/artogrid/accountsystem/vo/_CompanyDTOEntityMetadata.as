@@ -20,14 +20,14 @@ internal class _CompanyDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("id", "enName", "address", "status", "name", "code", "telephome", "contact");
+    model_internal static var allProperties:Array = new Array("id", "enName", "address", "status", "name", "code", "contact", "telephome");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "enName", "address", "status", "name", "code", "telephome", "contact");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "enName", "address", "status", "name", "code", "contact", "telephome");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("id", "enName", "address", "status", "name", "code", "telephome", "contact");
+    model_internal static var dataProperties:Array = new Array("id", "enName", "address", "status", "name", "code", "contact", "telephome");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("id", "enName", "address", "status", "name", "code", "telephome", "contact");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "enName", "address", "status", "name", "code", "contact", "telephome");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -53,8 +53,8 @@ internal class _CompanyDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
             model_internal::dependentsOnMap["status"] = new Array();
             model_internal::dependentsOnMap["name"] = new Array();
             model_internal::dependentsOnMap["code"] = new Array();
-            model_internal::dependentsOnMap["telephome"] = new Array();
             model_internal::dependentsOnMap["contact"] = new Array();
+            model_internal::dependentsOnMap["telephome"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -68,8 +68,8 @@ internal class _CompanyDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
         model_internal::propertyTypeMap["status"] = "String";
         model_internal::propertyTypeMap["name"] = "String";
         model_internal::propertyTypeMap["code"] = "String";
-        model_internal::propertyTypeMap["telephome"] = "String";
         model_internal::propertyTypeMap["contact"] = "String";
+        model_internal::propertyTypeMap["telephome"] = "String";
 
         model_internal::_instance = value;
     }
@@ -335,13 +335,13 @@ internal class _CompanyDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]
-    public function get isTelephomeAvailable():Boolean
+    public function get isContactAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isContactAvailable():Boolean
+    public function get isTelephomeAvailable():Boolean
     {
         return true;
     }
@@ -393,13 +393,13 @@ internal class _CompanyDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]   
-    public function get telephomeStyle():com.adobe.fiber.styles.Style
+    public function get contactStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get contactStyle():com.adobe.fiber.styles.Style
+    public function get telephomeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

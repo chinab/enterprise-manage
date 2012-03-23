@@ -16,31 +16,31 @@ import mx.events.PropertyChangeEvent;
 use namespace model_internal;
 
 [ExcludeClass]
-internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
+internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "clientType", "ip");
+    model_internal static var allProperties:Array = new Array("id", "createTime", "modifyBy", "accountId", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "clientType", "ip");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "createTime", "modifyBy", "accountId", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "clientType", "ip");
+    model_internal static var dataProperties:Array = new Array("id", "createTime", "modifyBy", "accountId", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "clientType", "ip");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "createTime", "modifyBy", "accountId", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
-    model_internal static var entityName:String = "LoginStatusDTO";
+    model_internal static var entityName:String = "AccountRoleRelationDTO";
     model_internal static var dependentsOnMap:Object;
     model_internal static var dependedOnServices:Array = new Array();
     model_internal static var propertyTypeMap:Object;
 
 
-    model_internal var _instance:_Super_LoginStatusDTO;
+    model_internal var _instance:_Super_AccountRoleRelationDTO;
     model_internal static var _nullStyle:com.adobe.fiber.styles.Style = new com.adobe.fiber.styles.Style();
 
-    public function _LoginStatusDTOEntityMetadata(value : _Super_LoginStatusDTO)
+    public function _AccountRoleRelationDTOEntityMetadata(value : _Super_AccountRoleRelationDTO)
     {
         // initialize property maps
         if (model_internal::dependentsOnMap == null)
@@ -48,13 +48,15 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
             // dependents map
             model_internal::dependentsOnMap = new Object();
             model_internal::dependentsOnMap["id"] = new Array();
+            model_internal::dependentsOnMap["createTime"] = new Array();
+            model_internal::dependentsOnMap["modifyBy"] = new Array();
             model_internal::dependentsOnMap["accountId"] = new Array();
             model_internal::dependentsOnMap["status"] = new Array();
-            model_internal::dependentsOnMap["token"] = new Array();
-            model_internal::dependentsOnMap["server"] = new Array();
-            model_internal::dependentsOnMap["activation"] = new Array();
-            model_internal::dependentsOnMap["clientType"] = new Array();
-            model_internal::dependentsOnMap["ip"] = new Array();
+            model_internal::dependentsOnMap["departmentId"] = new Array();
+            model_internal::dependentsOnMap["departmentCode"] = new Array();
+            model_internal::dependentsOnMap["modifyTime"] = new Array();
+            model_internal::dependentsOnMap["createBy"] = new Array();
+            model_internal::dependentsOnMap["roleId"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -63,13 +65,15 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
         // Property type Map
         model_internal::propertyTypeMap = new Object();
         model_internal::propertyTypeMap["id"] = "String";
+        model_internal::propertyTypeMap["createTime"] = "Date";
+        model_internal::propertyTypeMap["modifyBy"] = "String";
         model_internal::propertyTypeMap["accountId"] = "String";
         model_internal::propertyTypeMap["status"] = "String";
-        model_internal::propertyTypeMap["token"] = "String";
-        model_internal::propertyTypeMap["server"] = "String";
-        model_internal::propertyTypeMap["activation"] = "String";
-        model_internal::propertyTypeMap["clientType"] = "String";
-        model_internal::propertyTypeMap["ip"] = "String";
+        model_internal::propertyTypeMap["departmentId"] = "String";
+        model_internal::propertyTypeMap["departmentCode"] = "String";
+        model_internal::propertyTypeMap["modifyTime"] = "Date";
+        model_internal::propertyTypeMap["createBy"] = "String";
+        model_internal::propertyTypeMap["roleId"] = "String";
 
         model_internal::_instance = value;
     }
@@ -122,7 +126,7 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     override public function getDependants(propertyName:String):Array
     {
        if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a data property of entity LoginStatusDTO");
+            throw new Error(propertyName + " is not a data property of entity AccountRoleRelationDTO");
             
        return model_internal::dependentsOnMap[propertyName] as Array;  
     }
@@ -140,7 +144,7 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     override public function getCollectionBase(propertyName:String):String
     {
         if (model_internal::collectionProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a collection property of entity LoginStatusDTO");
+            throw new Error(propertyName + " is not a collection property of entity AccountRoleRelationDTO");
 
         return model_internal::collectionBaseMap[propertyName];
     }
@@ -148,7 +152,7 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     override public function getPropertyType(propertyName:String):String
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a property of LoginStatusDTO");
+            throw new Error(propertyName + " is not a property of AccountRoleRelationDTO");
 
         return model_internal::propertyTypeMap[propertyName];
     }
@@ -162,7 +166,7 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity LoginStatusDTO");
+            throw new Error(propertyName + " does not exist for entity AccountRoleRelationDTO");
         }
 
         return model_internal::_instance[propertyName];
@@ -172,7 +176,7 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     {
         if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " is not a modifiable property of entity LoginStatusDTO");
+            throw new Error(propertyName + " is not a modifiable property of entity AccountRoleRelationDTO");
         }
 
         model_internal::_instance[propertyName] = value;
@@ -204,7 +208,7 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity LoginStatusDTO");
+            throw new Error(propertyName + " does not exist for entity AccountRoleRelationDTO");
         }
 
         if (model_internal::allAlwaysAvailableProperties.indexOf(propertyName) != -1)
@@ -305,6 +309,18 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     }
 
     [Bindable(event="propertyChange")]
+    public function get isCreateTimeAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isModifyByAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
     public function get isAccountIdAvailable():Boolean
     {
         return true;
@@ -317,31 +333,31 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     }
 
     [Bindable(event="propertyChange")]
-    public function get isTokenAvailable():Boolean
+    public function get isDepartmentIdAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isServerAvailable():Boolean
+    public function get isDepartmentCodeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isActivationAvailable():Boolean
+    public function get isModifyTimeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isClientTypeAvailable():Boolean
+    public function get isCreateByAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isIpAvailable():Boolean
+    public function get isRoleIdAvailable():Boolean
     {
         return true;
     }
@@ -363,6 +379,18 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     }
 
     [Bindable(event="propertyChange")]   
+    public function get createTimeStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get modifyByStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
     public function get accountIdStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
@@ -375,31 +403,31 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     }
 
     [Bindable(event="propertyChange")]   
-    public function get tokenStyle():com.adobe.fiber.styles.Style
+    public function get departmentIdStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get serverStyle():com.adobe.fiber.styles.Style
+    public function get departmentCodeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get activationStyle():com.adobe.fiber.styles.Style
+    public function get modifyTimeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get clientTypeStyle():com.adobe.fiber.styles.Style
+    public function get createByStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get ipStyle():com.adobe.fiber.styles.Style
+    public function get roleIdStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

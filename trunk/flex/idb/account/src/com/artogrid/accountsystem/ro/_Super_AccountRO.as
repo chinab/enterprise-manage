@@ -9,7 +9,7 @@ import com.adobe.fiber.services.wrapper.RemoteObjectServiceWrapper;
 import com.adobe.fiber.valueobjects.IValueObject;
 import com.adobe.serializers.utility.TypeUtility;
 import com.artogrid.accountsystem.vo.AccountDTO;
-import com.artogrid.accountsystem.vo.PaginatorObjUtil;
+import com.artogrid.accountsystem.vo.AccountRoleRelationDTO;
 import mx.collections.ArrayCollection;
 import mx.collections.ListCollectionView;
 import mx.data.DataManager;
@@ -139,17 +139,14 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
 
         // initialize RemoteClass alias for all entities returned by functions of this service
         com.artogrid.accountsystem.vo.AccountDTO._initRemoteClassAlias();
-        com.artogrid.accountsystem.vo.PaginatorObjUtil._initRemoteClassAlias();
+        com.artogrid.accountsystem.vo.AccountRoleRelationDTO._initRemoteClassAlias();
 
         var operations:Object = new Object();
         var operation:mx.rpc.remoting.Operation;
 
-        operation = new mx.rpc.remoting.Operation(null, "addRolesToAccount");
+        operation = new mx.rpc.remoting.Operation(null, "addAndRemoveAccountRoleRelations");
         operation.resultType = Boolean;
-        operations["addRolesToAccount"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "addRoleToAccount");
-        operation.resultType = Boolean;
-        operations["addRoleToAccount"] = operation;
+        operations["addAndRemoveAccountRoleRelations"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "deleteAccount");
         operation.resultType = Boolean;
         operations["deleteAccount"] = operation;
@@ -165,6 +162,9 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         operation = new mx.rpc.remoting.Operation(null, "getAccountByUsername");
         operation.resultType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountByUsername"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getAccountRoleRelationsByAccountId");
+        operation.resultElementType = com.artogrid.accountsystem.vo.AccountRoleRelationDTO;
+        operations["getAccountRoleRelationsByAccountId"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "getAccountsByDepartmentCode");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountsByDepartmentCode"] = operation;
@@ -174,33 +174,21 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         operation = new mx.rpc.remoting.Operation(null, "getAccountsByRoleId");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountsByRoleId"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getAccountsPagerByDepartmentCode");
-        operation.resultType = com.artogrid.accountsystem.vo.PaginatorObjUtil;
-        operations["getAccountsPagerByDepartmentCode"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getAccountsPagerByDepartmentId");
-        operation.resultType = com.artogrid.accountsystem.vo.PaginatorObjUtil;
-        operations["getAccountsPagerByDepartmentId"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getAccountsPagerByRoleId");
-        operation.resultType = com.artogrid.accountsystem.vo.PaginatorObjUtil;
-        operations["getAccountsPagerByRoleId"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "getAllAccounts");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAllAccounts"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "getAllAccountsPager");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAllAccountsPager"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "removeRoleFormAccount");
-        operation.resultType = Boolean;
-        operations["removeRoleFormAccount"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "removeRolesFormAccount");
-        operation.resultType = Boolean;
-        operations["removeRolesFormAccount"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "saveAccount");
         operation.resultType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["saveAccount"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "updateAccount");
         operation.resultType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["updateAccount"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "searchAccountsByKeyword");
+        operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
+        operations["searchAccountsByKeyword"] = operation;
 
         _serviceControl.operations = operations;
         _serviceControl.convertResultHandler = com.adobe.serializers.utility.TypeUtility.convertResultHandler;
@@ -223,10 +211,10 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         var dmQuery : mx.data.ManagedQuery;
 
         dmQuery = new mx.data.ManagedQuery("getAllAccountsPager");
-        dmQuery.propertySpecifier = "createTime,modifyBy,status,isForbidden,createBy,password,message,id,accountCode,username,address,email,accountType,companyId,displayName,telephone,modifyTime,mobile";
+        dmQuery.propertySpecifier = "createTime,modifyBy,status,isForbidden,password,createBy,id,message,accountCode,username,email,address,accountType,companyId,displayName,modifyTime,telephone,mobile";
         dmQuery.pagingEnabled = true;
         dmQuery.positionalPagingParameters = true;
-        dmQuery.pageSize = 10;
+        dmQuery.pageSize = 20;
         dmQuery.parameters = "arg0,arg1";
         _accountDTORPCDataManager.addManagedOperation(dmQuery);
 
@@ -245,7 +233,7 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     
 
     /**
-      * This method is a generated wrapper used to call the 'addRolesToAccount' operation. It returns an mx.rpc.AsyncToken whose
+      * This method is a generated wrapper used to call the 'addAndRemoveAccountRoleRelations' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -255,27 +243,9 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
       *
       * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function addRolesToAccount(arg0:ArrayCollection, arg1:String) : mx.rpc.AsyncToken
+    public function addAndRemoveAccountRoleRelations(arg0:ArrayCollection, arg1:ArrayCollection) : mx.rpc.AsyncToken
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("addRolesToAccount");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'addRoleToAccount' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function addRoleToAccount(arg0:String, arg1:String) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("addRoleToAccount");
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("addAndRemoveAccountRoleRelations");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
         return _internal_token;
     }
@@ -371,6 +341,24 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     }
      
     /**
+      * This method is a generated wrapper used to call the 'getAccountRoleRelationsByAccountId' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function getAccountRoleRelationsByAccountId(arg0:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountRoleRelationsByAccountId");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
+        return _internal_token;
+    }
+     
+    /**
       * This method is a generated wrapper used to call the 'getAccountsByDepartmentCode' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
@@ -425,60 +413,6 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     }
      
     /**
-      * This method is a generated wrapper used to call the 'getAccountsPagerByDepartmentCode' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function getAccountsPagerByDepartmentCode(arg0:String, arg1:int, arg2:int) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountsPagerByDepartmentCode");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1,arg2) ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'getAccountsPagerByDepartmentId' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function getAccountsPagerByDepartmentId(arg0:String, arg1:int, arg2:int) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountsPagerByDepartmentId");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1,arg2) ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'getAccountsPagerByRoleId' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function getAccountsPagerByRoleId(arg0:String, arg1:int, arg2:int) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountsPagerByRoleId");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1,arg2) ;
-        return _internal_token;
-    }
-     
-    /**
       * This method is a generated wrapper used to call the 'getAllAccounts' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
@@ -515,42 +449,6 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     }
      
     /**
-      * This method is a generated wrapper used to call the 'removeRoleFormAccount' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function removeRoleFormAccount(arg0:String, arg1:String) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("removeRoleFormAccount");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'removeRolesFormAccount' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function removeRolesFormAccount(arg0:ArrayCollection, arg1:String) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("removeRolesFormAccount");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
-        return _internal_token;
-    }
-     
-    /**
       * This method is a generated wrapper used to call the 'saveAccount' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
@@ -582,6 +480,24 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     public function updateAccount(arg0:com.artogrid.accountsystem.vo.AccountDTO) : mx.rpc.AsyncToken
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("updateAccount");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'searchAccountsByKeyword' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function searchAccountsByKeyword(arg0:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("searchAccountsByKeyword");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
         return _internal_token;
     }

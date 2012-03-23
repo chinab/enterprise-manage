@@ -4,10 +4,11 @@
 	<fx:Script>
 		<![CDATA[
 			import com.artogrid.accountsystem.bl.InitData;
+			import com.artogrid.accountsystem.controls.MyAlert;
+			import com.artogrid.accountsystem.events.AccountDataEvent;
 			import com.artogrid.accountsystem.ro.AccountRO;
 
 			import mx.collections.IList;
-			import mx.controls.Alert;
 			import mx.events.FlexEvent;
 			import mx.events.ValidationResultEvent;
 			import mx.rpc.events.ResultEvent;
@@ -70,8 +71,9 @@
 				var accountDTOResult:AccountDTO=event.currentTarget.lastResult;
 				if (accountDTOResult.message == "success") {
 					InitData.copyProperties(accountDTO, accountDTOResult, ["modifyBy", "modifyTime"]);
+					MyAlert.showSuccess("数据更新完成！");
 				} else {
-					Alert.show(accountDTOResult.message, "提示");
+					MyAlert.showAlert(accountDTOResult.message);
 				}
 			}
 
@@ -79,9 +81,10 @@
 				var accountDTOResult:AccountDTO=event.currentTarget.lastResult;
 				if (accountDTOResult.message == "success") {
 					accountDTO=accountDTOResult;
-					dispatchEvent(new Event("add_new_account_to_list"));
+					dispatchEvent(new AccountDataEvent(AccountDataEvent.ADD_NEW_ACCOUNT_TO_LIST));
+					MyAlert.showSuccess("数据添加完成！");
 				} else {
-					Alert.show(accountDTOResult.message, "提示");
+					MyAlert.showAlert(accountDTOResult.message);
 				}
 			}
 
@@ -244,8 +247,8 @@
 			<s:layout>
 				<s:HorizontalLayout verticalAlign="middle" horizontalAlign="center"/>
 			</s:layout>
-			<s:Button id="updateAccount" label="Update Account" click="updateAccount_clickHandler(event)" enabled="{accountDTO.id!=null}"/>
-			<s:Button id="addAccount" label="Add Account" click="addAccount_clickHandler(event)"/>
+			<s:Button id="addAccount" label="添加" click="addAccount_clickHandler(event)"/>
+			<s:Button id="updateAccount" label="更新" click="updateAccount_clickHandler(event)" enabled="{accountDTO.id!=null}"/>
 		</s:Group>
 
 	</s:Form>
