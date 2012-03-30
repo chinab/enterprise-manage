@@ -16,47 +16,51 @@ import mx.events.PropertyChangeEvent;
 use namespace model_internal;
 
 [ExcludeClass]
-internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
+internal class _FinancialCompanyDTOEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("id", "createTime", "accountId", "modifyBy", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
+    model_internal static var allProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "bankType", "description", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "createTime", "accountId", "modifyBy", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "bankType", "description", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("id", "createTime", "accountId", "modifyBy", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
+    model_internal static var dataProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "bankType", "description", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("id", "createTime", "accountId", "modifyBy", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
+    model_internal static var nonDerivedProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "bankType", "description", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
-    model_internal static var entityName:String = "AccountRoleRelationDTO";
+    model_internal static var entityName:String = "FinancialCompanyDTO";
     model_internal static var dependentsOnMap:Object;
     model_internal static var dependedOnServices:Array = new Array();
     model_internal static var propertyTypeMap:Object;
 
 
-    model_internal var _instance:_Super_AccountRoleRelationDTO;
+    model_internal var _instance:_Super_FinancialCompanyDTO;
     model_internal static var _nullStyle:com.adobe.fiber.styles.Style = new com.adobe.fiber.styles.Style();
 
-    public function _AccountRoleRelationDTOEntityMetadata(value : _Super_AccountRoleRelationDTO)
+    public function _FinancialCompanyDTOEntityMetadata(value : _Super_FinancialCompanyDTO)
     {
         // initialize property maps
         if (model_internal::dependentsOnMap == null)
         {
             // dependents map
             model_internal::dependentsOnMap = new Object();
-            model_internal::dependentsOnMap["id"] = new Array();
             model_internal::dependentsOnMap["createTime"] = new Array();
-            model_internal::dependentsOnMap["accountId"] = new Array();
-            model_internal::dependentsOnMap["modifyBy"] = new Array();
             model_internal::dependentsOnMap["status"] = new Array();
-            model_internal::dependentsOnMap["departmentId"] = new Array();
-            model_internal::dependentsOnMap["departmentCode"] = new Array();
-            model_internal::dependentsOnMap["modifyTime"] = new Array();
-            model_internal::dependentsOnMap["createBy"] = new Array();
-            model_internal::dependentsOnMap["roleId"] = new Array();
+            model_internal::dependentsOnMap["nameEn"] = new Array();
+            model_internal::dependentsOnMap["cityName"] = new Array();
+            model_internal::dependentsOnMap["code"] = new Array();
+            model_internal::dependentsOnMap["city"] = new Array();
+            model_internal::dependentsOnMap["id"] = new Array();
+            model_internal::dependentsOnMap["bankType"] = new Array();
+            model_internal::dependentsOnMap["description"] = new Array();
+            model_internal::dependentsOnMap["name"] = new Array();
+            model_internal::dependentsOnMap["fullName"] = new Array();
+            model_internal::dependentsOnMap["pinyin"] = new Array();
+            model_internal::dependentsOnMap["fullNameEn"] = new Array();
+            model_internal::dependentsOnMap["pinyinFull"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -64,16 +68,20 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
 
         // Property type Map
         model_internal::propertyTypeMap = new Object();
-        model_internal::propertyTypeMap["id"] = "String";
         model_internal::propertyTypeMap["createTime"] = "Date";
-        model_internal::propertyTypeMap["accountId"] = "String";
-        model_internal::propertyTypeMap["modifyBy"] = "String";
         model_internal::propertyTypeMap["status"] = "String";
-        model_internal::propertyTypeMap["departmentId"] = "String";
-        model_internal::propertyTypeMap["departmentCode"] = "String";
-        model_internal::propertyTypeMap["modifyTime"] = "Date";
-        model_internal::propertyTypeMap["createBy"] = "String";
-        model_internal::propertyTypeMap["roleId"] = "String";
+        model_internal::propertyTypeMap["nameEn"] = "String";
+        model_internal::propertyTypeMap["cityName"] = "String";
+        model_internal::propertyTypeMap["code"] = "String";
+        model_internal::propertyTypeMap["city"] = "String";
+        model_internal::propertyTypeMap["id"] = "String";
+        model_internal::propertyTypeMap["bankType"] = "String";
+        model_internal::propertyTypeMap["description"] = "String";
+        model_internal::propertyTypeMap["name"] = "String";
+        model_internal::propertyTypeMap["fullName"] = "String";
+        model_internal::propertyTypeMap["pinyin"] = "String";
+        model_internal::propertyTypeMap["fullNameEn"] = "String";
+        model_internal::propertyTypeMap["pinyinFull"] = "String";
 
         model_internal::_instance = value;
     }
@@ -126,7 +134,7 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     override public function getDependants(propertyName:String):Array
     {
        if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a data property of entity AccountRoleRelationDTO");
+            throw new Error(propertyName + " is not a data property of entity FinancialCompanyDTO");
             
        return model_internal::dependentsOnMap[propertyName] as Array;  
     }
@@ -144,7 +152,7 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     override public function getCollectionBase(propertyName:String):String
     {
         if (model_internal::collectionProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a collection property of entity AccountRoleRelationDTO");
+            throw new Error(propertyName + " is not a collection property of entity FinancialCompanyDTO");
 
         return model_internal::collectionBaseMap[propertyName];
     }
@@ -152,7 +160,7 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     override public function getPropertyType(propertyName:String):String
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a property of AccountRoleRelationDTO");
+            throw new Error(propertyName + " is not a property of FinancialCompanyDTO");
 
         return model_internal::propertyTypeMap[propertyName];
     }
@@ -166,7 +174,7 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity AccountRoleRelationDTO");
+            throw new Error(propertyName + " does not exist for entity FinancialCompanyDTO");
         }
 
         return model_internal::_instance[propertyName];
@@ -176,7 +184,7 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     {
         if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " is not a modifiable property of entity AccountRoleRelationDTO");
+            throw new Error(propertyName + " is not a modifiable property of entity FinancialCompanyDTO");
         }
 
         model_internal::_instance[propertyName] = value;
@@ -208,7 +216,7 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity AccountRoleRelationDTO");
+            throw new Error(propertyName + " does not exist for entity FinancialCompanyDTO");
         }
 
         if (model_internal::allAlwaysAvailableProperties.indexOf(propertyName) != -1)
@@ -303,25 +311,7 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     }
 
     [Bindable(event="propertyChange")]
-    public function get isIdAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get isCreateTimeAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isAccountIdAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isModifyByAvailable():Boolean
     {
         return true;
     }
@@ -333,31 +323,73 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     }
 
     [Bindable(event="propertyChange")]
-    public function get isDepartmentIdAvailable():Boolean
+    public function get isNameEnAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isDepartmentCodeAvailable():Boolean
+    public function get isCityNameAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isModifyTimeAvailable():Boolean
+    public function get isCodeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isCreateByAvailable():Boolean
+    public function get isCityAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isRoleIdAvailable():Boolean
+    public function get isIdAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isBankTypeAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isDescriptionAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isNameAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isFullNameAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isPinyinAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isFullNameEnAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isPinyinFullAvailable():Boolean
     {
         return true;
     }
@@ -373,25 +405,7 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     }
 
     [Bindable(event="propertyChange")]   
-    public function get idStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
     public function get createTimeStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get accountIdStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get modifyByStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
@@ -403,31 +417,73 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     }
 
     [Bindable(event="propertyChange")]   
-    public function get departmentIdStyle():com.adobe.fiber.styles.Style
+    public function get nameEnStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get departmentCodeStyle():com.adobe.fiber.styles.Style
+    public function get cityNameStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get modifyTimeStyle():com.adobe.fiber.styles.Style
+    public function get codeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get createByStyle():com.adobe.fiber.styles.Style
+    public function get cityStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get roleIdStyle():com.adobe.fiber.styles.Style
+    public function get idStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get bankTypeStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get descriptionStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get nameStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get fullNameStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get pinyinStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get fullNameEnStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get pinyinFullStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

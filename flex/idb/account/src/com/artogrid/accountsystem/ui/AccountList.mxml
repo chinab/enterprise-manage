@@ -177,9 +177,17 @@
 								<fx:Script>
 									<![CDATA[
 										import com.artogrid.accountsystem.bl.InitData;
+
+										[Bindable]
+										[Embed(source="assets/disable.png")]
+										private var disablePng:Class;
+										
+										[Bindable]
+										[Embed(source="assets/enable.png")]
+										private var enablePng:Class;
 									]]>
 								</fx:Script>
-								<s:Image source="{data.isForbidden==InitData.disable?'assets/disable.png':'assets/enable.png'}" horizontalCenter="0" verticalCenter="0"/>
+								<s:Image source="{data.isForbidden==InitData.disable?disablePng:enablePng}" horizontalCenter="0" verticalCenter="0"/>
 							</s:GridItemRenderer>
 						</fx:Component>
 					</s:itemRenderer>

@@ -26,7 +26,7 @@ internal class _LoginInfoDTOEntityMetadata extends com.adobe.fiber.valueobjects.
     private static var emptyArray:Array = new Array();
 
     model_internal static var allProperties:Array = new Array("message", "loginStatus", "roles", "departments", "account");
-    model_internal static var allAssociationProperties:Array = new Array("account");
+    model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
     model_internal static var allAlwaysAvailableProperties:Array = new Array("message", "loginStatus", "roles", "departments", "account");
     model_internal static var guardedProperties:Array = new Array();
