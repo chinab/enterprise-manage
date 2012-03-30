@@ -1,6 +1,7 @@
 package com.artogrid.accountsystem.bl {
 	import com.artogrid.accountsystem.ro.CompanyRO;
-
+	import com.artogrid.accountsystem.ro.FinancialCompanyRO;
+	
 	import mx.collections.ArrayCollection;
 	import mx.collections.IList;
 	import mx.rpc.CallResponder;
@@ -12,9 +13,11 @@ package com.artogrid.accountsystem.bl {
 
 		[Bindable]
 		public static var getAllCompanysResult:CallResponder=new CallResponder();
+		[Bindable]
+		public static var getAllFinancialCompanysResult:CallResponder=new CallResponder();
 
 		[Bindable]
-		public static var useTypes:ArrayCollection=new ArrayCollection([{name: "agent", value: "1"}, {name: "client", value: "2"}]);
+		public static var useTypes:ArrayCollection=new ArrayCollection([{name: "Broker", value: "1"}, {name: "Customer", value: "2"}]);
 
 		public static const enable:String="1";
 
@@ -22,6 +25,7 @@ package com.artogrid.accountsystem.bl {
 
 		public static function init():void {
 			getAllCompanysResult.token=CompanyRO.getMe().getAllCompanys();
+			getAllFinancialCompanysResult.token=FinancialCompanyRO.getMe().getAllFinancialCompanys();
 		}
 
 		public static function getIndexFromList(list:IList, name:String, value:String):int {
@@ -42,7 +46,7 @@ package com.artogrid.accountsystem.bl {
 			}
 			return "";
 		}
-
+		
 		/**
 		 * 对象内部属性的复制
 		 *
@@ -55,11 +59,9 @@ package com.artogrid.accountsystem.bl {
 				try {
 					dest[filed]=orig[filed];
 				} catch (e:Error) {
-//								trace(e.message);
+					//								trace(e.message);
 				}
 			}
-
 		}
-
 	}
 }

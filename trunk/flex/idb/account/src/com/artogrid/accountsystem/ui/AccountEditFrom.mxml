@@ -38,7 +38,9 @@
 				accountDTO.email=emailTextInput.text;
 				accountDTO.address=addressTextInput.text;
 				accountDTO.accountType=accountTypeList.selectedItem.value;
-				accountDTO.companyId=companyIdList.selectedItem.id;
+				if (companyIdList.selectedItem) {
+					accountDTO.companyId=companyIdList.selectedItem.id;
+				}
 				accountDTO.displayName=displayNameTextInput.text;
 				accountDTO.telephone=telephoneTextInput.text;
 				accountDTO.mobile=mobileTextInput.text;
@@ -60,7 +62,9 @@
 				newAccountDTO.email=emailTextInput.text;
 				newAccountDTO.address=addressTextInput.text;
 				newAccountDTO.accountType=accountTypeList.selectedItem.value;
-				newAccountDTO.companyId=companyIdList.selectedItem.id;
+				if (companyIdList.selectedItem) {
+					newAccountDTO.companyId=companyIdList.selectedItem.id;
+				}
 				newAccountDTO.displayName=displayNameTextInput.text;
 				newAccountDTO.telephone=telephoneTextInput.text;
 				newAccountDTO.mobile=mobileTextInput.text;
@@ -113,19 +117,19 @@
 		<s:CallResponder id="updateAccountResult" result="accountDTOFromResult(event)"/>
 		<s:CallResponder id="saveAccountResult" result="addAccountDTOFromResult(event)"/>
 
-		<mx:StringValidator id="passwordVal" source="{passwordTextInput}" property="text" minLength="6" maxLength="32"/>
+		<mx:StringValidator id="passwordVal" source="{passwordTextInput}" property="text" minLength="2" maxLength="32" required="false"/>
 
 		<fx:Array id="validators">
-			<mx:StringValidator source="{displayNameTextInput}" property="text" minLength="4" maxLength="32"/>
-			<mx:StringValidator source="{accountCodeTextInput}" property="text" minLength="4" maxLength="32"/>
-			<mx:StringValidator source="{usernameTextInput}" property="text" minLength="4" maxLength="32"/>
+			<mx:StringValidator source="{displayNameTextInput}" property="text" minLength="0" maxLength="32"/>
+			<mx:StringValidator source="{accountCodeTextInput}" property="text" minLength="2" maxLength="32"/>
+			<mx:StringValidator source="{usernameTextInput}" property="text" minLength="2" maxLength="32"/>
 			<!--
-			<mx:StringValidator source="{passwordTextInput}" property="text" minLength="6" maxLength="32"/>
+			<mx:StringValidator source="{passwordTextInput}" property="text" minLength="2" maxLength="32"/>
 			-->
-			<mx:StringValidator source="{addressTextInput}" property="text" minLength="6" maxLength="50"/>
-			<mx:EmailValidator source="{emailTextInput}" property="text"/>
-			<mx:PhoneNumberValidator source="{telephoneTextInput}" property="text"/>
-			<mx:PhoneNumberValidator source="{mobileTextInput}" property="text"/>
+			<mx:StringValidator source="{addressTextInput}" property="text" minLength="2" maxLength="50" required="false"/>
+			<mx:EmailValidator source="{emailTextInput}" property="text" required="false"/>
+			<mx:PhoneNumberValidator source="{telephoneTextInput}" property="text" required="false"/>
+			<mx:PhoneNumberValidator source="{mobileTextInput}" property="text" required="false"/>
 		</fx:Array>
 	</fx:Declarations>
 	<s:layout>
@@ -150,16 +154,17 @@
 			</s:helpContent>
 			<s:TextInput id="usernameTextInput" text="{accountDTO.username}" width="150" right="10"/>
 		</s:FormItem>
-		<s:FormItem label="CompanyId">
+		<s:FormItem label="AccountType">
 			<s:helpContent>
 				<s:VGroup>
-					<s:Label text="所属公司">
+					<s:Label text="用户类型">
 					</s:Label>
 				</s:VGroup>
 			</s:helpContent>
-			<s:DropDownList id="companyIdList" dataProvider="{InitData.getAllCompanysResult.lastResult}" labelField="name" selectedIndex="{InitData.getIndexFromList(InitData.getAllCompanysResult.lastResult,'id',accountDTO.companyId)}"/>
+			<s:DropDownList id="accountTypeList" dataProvider="{InitData.useTypes}" labelField="name" selectedIndex="{InitData.getIndexFromList(InitData.useTypes,'value',accountDTO.accountType)}">
+			</s:DropDownList>
 			<!--
-			<s:TextInput id="companyIdTextInput" text="{accountDTO.companyId}" width="150" right="10"/>
+			<s:TextInput id="accountTypeTextInput" text="{accountDTO.accountType}" width="150" right="10"/>
 			-->
 		</s:FormItem>
 		<s:FormItem label="Address">
@@ -212,17 +217,16 @@
 			</s:helpContent>
 			<s:TextInput id="passwordTextInput" text="{}" displayAsPassword="true" width="150" right="10"/>
 		</s:FormItem>
-		<s:FormItem label="AccountType">
+		<s:FormItem label="CompanyId">
 			<s:helpContent>
 				<s:VGroup>
-					<s:Label text="用户类型">
+					<s:Label text="所属公司">
 					</s:Label>
 				</s:VGroup>
 			</s:helpContent>
-			<s:DropDownList id="accountTypeList" dataProvider="{InitData.useTypes}" labelField="name" selectedIndex="{InitData.getIndexFromList(InitData.useTypes,'value',accountDTO.accountType)}">
-			</s:DropDownList>
+			<s:DropDownList id="companyIdList" dataProvider="{InitData.getAllCompanysResult.lastResult}" labelField="name" selectedIndex="{InitData.getIndexFromList(InitData.getAllCompanysResult.lastResult,'id',accountDTO.companyId)}"/>
 			<!--
-			<s:TextInput id="accountTypeTextInput" text="{accountDTO.accountType}" width="150" right="10"/>
+			<s:TextInput id="companyIdTextInput" text="{accountDTO.companyId}" width="150" right="10"/>
 			-->
 		</s:FormItem>
 		<s:FormItem label="Email">

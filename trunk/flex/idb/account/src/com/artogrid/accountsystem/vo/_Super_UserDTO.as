@@ -1,16 +1,12 @@
 /**
  * This is a generated class and is not intended for modification.  To customize behavior
- * of this value object you may modify the generated sub-class of this class - LoginInfoDTO.as.
+ * of this value object you may modify the generated sub-class of this class - UserDTO.as.
  */
 
 package com.artogrid.accountsystem.vo
 {
 import com.adobe.fiber.services.IFiberManagingService;
 import com.adobe.fiber.valueobjects.IValueObject;
-import com.artogrid.accountsystem.vo.AccountDTO;
-import com.artogrid.accountsystem.vo.DepartmentDTO;
-import com.artogrid.accountsystem.vo.LoginStatusDTO;
-import com.artogrid.accountsystem.vo.RoleDTO;
 import flash.events.EventDispatcher;
 import mx.collections.ArrayCollection;
 import mx.events.PropertyChangeEvent;
@@ -24,22 +20,18 @@ import com.adobe.fiber.valueobjects.AvailablePropertyIterator;
 use namespace model_internal;
 
 [ExcludeClass]
-public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
+public class _Super_UserDTO extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
 {
     model_internal static function initRemoteClassAliasSingle(cz:Class) : void
     {
-        flash.net.registerClassAlias("com.artogrid.service.m1.vo.idblogin.LoginInfoDTO", cz);
+        flash.net.registerClassAlias("com.artogrid.service.m1.vo.idblogin.UserDTO", cz);
     }
 
     model_internal static function initRemoteClassAliasAllRelated() : void
     {
-        com.artogrid.accountsystem.vo.LoginStatusDTO.initRemoteClassAliasSingleChild();
-        com.artogrid.accountsystem.vo.RoleDTO.initRemoteClassAliasSingleChild();
-        com.artogrid.accountsystem.vo.DepartmentDTO.initRemoteClassAliasSingleChild();
-        com.artogrid.accountsystem.vo.AccountDTO.initRemoteClassAliasSingleChild();
     }
 
-    model_internal var _dminternal_model : _LoginInfoDTOEntityMetadata;
+    model_internal var _dminternal_model : _UserDTOEntityMetadata;
     model_internal var _changedObjects:mx.collections.ArrayCollection = new ArrayCollection();
 
     public function getChangedObjects() : Array
@@ -57,12 +49,16 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
      * properties
      */
     private var _internal_message : String;
-    private var _internal_loginStatus : com.artogrid.accountsystem.vo.LoginStatusDTO;
-    private var _internal_roles : ArrayCollection;
-    model_internal var _internal_roles_leaf:com.artogrid.accountsystem.vo.RoleDTO;
-    private var _internal_departments : ArrayCollection;
-    model_internal var _internal_departments_leaf:com.artogrid.accountsystem.vo.DepartmentDTO;
-    private var _internal_account : com.artogrid.accountsystem.vo.AccountDTO;
+    private var _internal_id : String;
+    private var _internal_username : String;
+    private var _internal_phone : String;
+    private var _internal_phoneBat : String;
+    private var _internal_email : String;
+    private var _internal_status : String;
+    private var _internal_emailBat : String;
+    private var _internal_code : String;
+    private var _internal_type : String;
+    private var _internal_password : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -74,9 +70,9 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
 
     model_internal var _changeWatcherArray:Array = new Array();
 
-    public function _Super_LoginInfoDTO()
+    public function _Super_UserDTO()
     {
-        _model = new _LoginInfoDTOEntityMetadata(this);
+        _model = new _UserDTOEntityMetadata(this);
 
         // Bind to own data or source properties for cache invalidation triggering
 
@@ -93,27 +89,63 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
     }
 
     [Bindable(event="propertyChange")]
-    public function get loginStatus() : com.artogrid.accountsystem.vo.LoginStatusDTO
+    public function get id() : String
     {
-        return _internal_loginStatus;
+        return _internal_id;
     }
 
     [Bindable(event="propertyChange")]
-    public function get roles() : ArrayCollection
+    public function get username() : String
     {
-        return _internal_roles;
+        return _internal_username;
     }
 
     [Bindable(event="propertyChange")]
-    public function get departments() : ArrayCollection
+    public function get phone() : String
     {
-        return _internal_departments;
+        return _internal_phone;
     }
 
     [Bindable(event="propertyChange")]
-    public function get account() : com.artogrid.accountsystem.vo.AccountDTO
+    public function get phoneBat() : String
     {
-        return _internal_account;
+        return _internal_phoneBat;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get email() : String
+    {
+        return _internal_email;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get status() : String
+    {
+        return _internal_status;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get emailBat() : String
+    {
+        return _internal_emailBat;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get code() : String
+    {
+        return _internal_code;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get type() : String
+    {
+        return _internal_type;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get password() : String
+    {
+        return _internal_password;
     }
 
     public function clearAssociations() : void
@@ -134,73 +166,103 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
         }
     }
 
-    public function set loginStatus(value:com.artogrid.accountsystem.vo.LoginStatusDTO) : void
+    public function set id(value:String) : void
     {
-        var oldValue:com.artogrid.accountsystem.vo.LoginStatusDTO = _internal_loginStatus;
+        var oldValue:String = _internal_id;
         if (oldValue !== value)
         {
-            _internal_loginStatus = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "loginStatus", oldValue, _internal_loginStatus));
+            _internal_id = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "id", oldValue, _internal_id));
         }
     }
 
-    public function set roles(value:*) : void
+    public function set username(value:String) : void
     {
-        var oldValue:ArrayCollection = _internal_roles;
+        var oldValue:String = _internal_username;
         if (oldValue !== value)
         {
-            if (value is ArrayCollection)
-            {
-                _internal_roles = value;
-            }
-            else if (value is Array)
-            {
-                _internal_roles = new ArrayCollection(value);
-            }
-            else if (value == null)
-            {
-                _internal_roles = null;
-            }
-            else
-            {
-                throw new Error("value of roles must be a collection");
-            }
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "roles", oldValue, _internal_roles));
+            _internal_username = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "username", oldValue, _internal_username));
         }
     }
 
-    public function set departments(value:*) : void
+    public function set phone(value:String) : void
     {
-        var oldValue:ArrayCollection = _internal_departments;
+        var oldValue:String = _internal_phone;
         if (oldValue !== value)
         {
-            if (value is ArrayCollection)
-            {
-                _internal_departments = value;
-            }
-            else if (value is Array)
-            {
-                _internal_departments = new ArrayCollection(value);
-            }
-            else if (value == null)
-            {
-                _internal_departments = null;
-            }
-            else
-            {
-                throw new Error("value of departments must be a collection");
-            }
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "departments", oldValue, _internal_departments));
+            _internal_phone = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "phone", oldValue, _internal_phone));
         }
     }
 
-    public function set account(value:com.artogrid.accountsystem.vo.AccountDTO) : void
+    public function set phoneBat(value:String) : void
     {
-        var oldValue:com.artogrid.accountsystem.vo.AccountDTO = _internal_account;
+        var oldValue:String = _internal_phoneBat;
         if (oldValue !== value)
         {
-            _internal_account = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "account", oldValue, _internal_account));
+            _internal_phoneBat = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "phoneBat", oldValue, _internal_phoneBat));
+        }
+    }
+
+    public function set email(value:String) : void
+    {
+        var oldValue:String = _internal_email;
+        if (oldValue !== value)
+        {
+            _internal_email = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "email", oldValue, _internal_email));
+        }
+    }
+
+    public function set status(value:String) : void
+    {
+        var oldValue:String = _internal_status;
+        if (oldValue !== value)
+        {
+            _internal_status = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "status", oldValue, _internal_status));
+        }
+    }
+
+    public function set emailBat(value:String) : void
+    {
+        var oldValue:String = _internal_emailBat;
+        if (oldValue !== value)
+        {
+            _internal_emailBat = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "emailBat", oldValue, _internal_emailBat));
+        }
+    }
+
+    public function set code(value:String) : void
+    {
+        var oldValue:String = _internal_code;
+        if (oldValue !== value)
+        {
+            _internal_code = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "code", oldValue, _internal_code));
+        }
+    }
+
+    public function set type(value:String) : void
+    {
+        var oldValue:String = _internal_type;
+        if (oldValue !== value)
+        {
+            _internal_type = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "type", oldValue, _internal_type));
+        }
+    }
+
+    public function set password(value:String) : void
+    {
+        var oldValue:String = _internal_password;
+        if (oldValue !== value)
+        {
+            _internal_password = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "password", oldValue, _internal_password));
         }
     }
 
@@ -265,14 +327,14 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
 
     [Transient]
     [Bindable(event="propertyChange")]
-    public function get _model() : _LoginInfoDTOEntityMetadata
+    public function get _model() : _UserDTOEntityMetadata
     {
         return model_internal::_dminternal_model;
     }
 
-    public function set _model(value : _LoginInfoDTOEntityMetadata) : void
+    public function set _model(value : _UserDTOEntityMetadata) : void
     {
-        var oldValue : _LoginInfoDTOEntityMetadata = model_internal::_dminternal_model;
+        var oldValue : _UserDTOEntityMetadata = model_internal::_dminternal_model;
         if (oldValue !== value)
         {
             model_internal::_dminternal_model = value;

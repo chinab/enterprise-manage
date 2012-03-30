@@ -1,6 +1,6 @@
 /**
  * This is a generated class and is not intended for modification.  To customize behavior
- * of this value object you may modify the generated sub-class of this class - AccountDTO.as.
+ * of this value object you may modify the generated sub-class of this class - FinancialCompanyDTO.as.
  */
 
 package com.artogrid.accountsystem.vo
@@ -20,18 +20,18 @@ import com.adobe.fiber.valueobjects.AvailablePropertyIterator;
 use namespace model_internal;
 
 [ExcludeClass]
-public class _Super_AccountDTO extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
+public class _Super_FinancialCompanyDTO extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
 {
     model_internal static function initRemoteClassAliasSingle(cz:Class) : void
     {
-        flash.net.registerClassAlias("com.artogrid.service.m1.vo.idblogin.AccountDTO", cz);
+        flash.net.registerClassAlias("com.artogrid.service.m1.vo.idblogin.FinancialCompanyDTO", cz);
     }
 
     model_internal static function initRemoteClassAliasAllRelated() : void
     {
     }
 
-    model_internal var _dminternal_model : _AccountDTOEntityMetadata;
+    model_internal var _dminternal_model : _FinancialCompanyDTOEntityMetadata;
     model_internal var _changedObjects:mx.collections.ArrayCollection = new ArrayCollection();
 
     public function getChangedObjects() : Array
@@ -49,23 +49,19 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
      * properties
      */
     private var _internal_createTime : Date;
-    private var _internal_modifyBy : String;
     private var _internal_status : String;
-    private var _internal_isForbidden : String;
-    private var _internal_createBy : String;
-    private var _internal_password : String;
-    private var _internal_message : String;
+    private var _internal_nameEn : String;
+    private var _internal_cityName : String;
+    private var _internal_code : String;
+    private var _internal_city : String;
     private var _internal_id : String;
-    private var _internal_accountCode : String;
-    private var _internal_username : String;
-    private var _internal_email : String;
-    private var _internal_address : String;
-    private var _internal_accountType : String;
-    private var _internal_companyId : String;
-    private var _internal_displayName : String;
-    private var _internal_modifyTime : Date;
-    private var _internal_telephone : String;
-    private var _internal_mobile : String;
+    private var _internal_bankType : String;
+    private var _internal_description : String;
+    private var _internal_name : String;
+    private var _internal_fullName : String;
+    private var _internal_pinyin : String;
+    private var _internal_fullNameEn : String;
+    private var _internal_pinyinFull : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -77,9 +73,9 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
 
     model_internal var _changeWatcherArray:Array = new Array();
 
-    public function _Super_AccountDTO()
+    public function _Super_FinancialCompanyDTO()
     {
-        _model = new _AccountDTOEntityMetadata(this);
+        _model = new _FinancialCompanyDTOEntityMetadata(this);
 
         // Bind to own data or source properties for cache invalidation triggering
 
@@ -96,39 +92,33 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get modifyBy() : String
-    {
-        return _internal_modifyBy;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get status() : String
     {
         return _internal_status;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isForbidden() : String
+    public function get nameEn() : String
     {
-        return _internal_isForbidden;
+        return _internal_nameEn;
     }
 
     [Bindable(event="propertyChange")]
-    public function get createBy() : String
+    public function get cityName() : String
     {
-        return _internal_createBy;
+        return _internal_cityName;
     }
 
     [Bindable(event="propertyChange")]
-    public function get password() : String
+    public function get code() : String
     {
-        return _internal_password;
+        return _internal_code;
     }
 
     [Bindable(event="propertyChange")]
-    public function get message() : String
+    public function get city() : String
     {
-        return _internal_message;
+        return _internal_city;
     }
 
     [Bindable(event="propertyChange")]
@@ -138,63 +128,45 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get accountCode() : String
+    public function get bankType() : String
     {
-        return _internal_accountCode;
+        return _internal_bankType;
     }
 
     [Bindable(event="propertyChange")]
-    public function get username() : String
+    public function get description() : String
     {
-        return _internal_username;
+        return _internal_description;
     }
 
     [Bindable(event="propertyChange")]
-    public function get email() : String
+    public function get name() : String
     {
-        return _internal_email;
+        return _internal_name;
     }
 
     [Bindable(event="propertyChange")]
-    public function get address() : String
+    public function get fullName() : String
     {
-        return _internal_address;
+        return _internal_fullName;
     }
 
     [Bindable(event="propertyChange")]
-    public function get accountType() : String
+    public function get pinyin() : String
     {
-        return _internal_accountType;
+        return _internal_pinyin;
     }
 
     [Bindable(event="propertyChange")]
-    public function get companyId() : String
+    public function get fullNameEn() : String
     {
-        return _internal_companyId;
+        return _internal_fullNameEn;
     }
 
     [Bindable(event="propertyChange")]
-    public function get displayName() : String
+    public function get pinyinFull() : String
     {
-        return _internal_displayName;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get modifyTime() : Date
-    {
-        return _internal_modifyTime;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get telephone() : String
-    {
-        return _internal_telephone;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get mobile() : String
-    {
-        return _internal_mobile;
+        return _internal_pinyinFull;
     }
 
     public function clearAssociations() : void
@@ -215,16 +187,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set modifyBy(value:String) : void
-    {
-        var oldValue:String = _internal_modifyBy;
-        if (oldValue !== value)
-        {
-            _internal_modifyBy = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "modifyBy", oldValue, _internal_modifyBy));
-        }
-    }
-
     public function set status(value:String) : void
     {
         var oldValue:String = _internal_status;
@@ -235,43 +197,43 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set isForbidden(value:String) : void
+    public function set nameEn(value:String) : void
     {
-        var oldValue:String = _internal_isForbidden;
+        var oldValue:String = _internal_nameEn;
         if (oldValue !== value)
         {
-            _internal_isForbidden = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "isForbidden", oldValue, _internal_isForbidden));
+            _internal_nameEn = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "nameEn", oldValue, _internal_nameEn));
         }
     }
 
-    public function set createBy(value:String) : void
+    public function set cityName(value:String) : void
     {
-        var oldValue:String = _internal_createBy;
+        var oldValue:String = _internal_cityName;
         if (oldValue !== value)
         {
-            _internal_createBy = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "createBy", oldValue, _internal_createBy));
+            _internal_cityName = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "cityName", oldValue, _internal_cityName));
         }
     }
 
-    public function set password(value:String) : void
+    public function set code(value:String) : void
     {
-        var oldValue:String = _internal_password;
+        var oldValue:String = _internal_code;
         if (oldValue !== value)
         {
-            _internal_password = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "password", oldValue, _internal_password));
+            _internal_code = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "code", oldValue, _internal_code));
         }
     }
 
-    public function set message(value:String) : void
+    public function set city(value:String) : void
     {
-        var oldValue:String = _internal_message;
+        var oldValue:String = _internal_city;
         if (oldValue !== value)
         {
-            _internal_message = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "message", oldValue, _internal_message));
+            _internal_city = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "city", oldValue, _internal_city));
         }
     }
 
@@ -285,103 +247,73 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set accountCode(value:String) : void
+    public function set bankType(value:String) : void
     {
-        var oldValue:String = _internal_accountCode;
+        var oldValue:String = _internal_bankType;
         if (oldValue !== value)
         {
-            _internal_accountCode = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "accountCode", oldValue, _internal_accountCode));
+            _internal_bankType = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "bankType", oldValue, _internal_bankType));
         }
     }
 
-    public function set username(value:String) : void
+    public function set description(value:String) : void
     {
-        var oldValue:String = _internal_username;
+        var oldValue:String = _internal_description;
         if (oldValue !== value)
         {
-            _internal_username = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "username", oldValue, _internal_username));
+            _internal_description = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "description", oldValue, _internal_description));
         }
     }
 
-    public function set email(value:String) : void
+    public function set name(value:String) : void
     {
-        var oldValue:String = _internal_email;
+        var oldValue:String = _internal_name;
         if (oldValue !== value)
         {
-            _internal_email = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "email", oldValue, _internal_email));
+            _internal_name = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "name", oldValue, _internal_name));
         }
     }
 
-    public function set address(value:String) : void
+    public function set fullName(value:String) : void
     {
-        var oldValue:String = _internal_address;
+        var oldValue:String = _internal_fullName;
         if (oldValue !== value)
         {
-            _internal_address = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "address", oldValue, _internal_address));
+            _internal_fullName = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "fullName", oldValue, _internal_fullName));
         }
     }
 
-    public function set accountType(value:String) : void
+    public function set pinyin(value:String) : void
     {
-        var oldValue:String = _internal_accountType;
+        var oldValue:String = _internal_pinyin;
         if (oldValue !== value)
         {
-            _internal_accountType = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "accountType", oldValue, _internal_accountType));
+            _internal_pinyin = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "pinyin", oldValue, _internal_pinyin));
         }
     }
 
-    public function set companyId(value:String) : void
+    public function set fullNameEn(value:String) : void
     {
-        var oldValue:String = _internal_companyId;
+        var oldValue:String = _internal_fullNameEn;
         if (oldValue !== value)
         {
-            _internal_companyId = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "companyId", oldValue, _internal_companyId));
+            _internal_fullNameEn = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "fullNameEn", oldValue, _internal_fullNameEn));
         }
     }
 
-    public function set displayName(value:String) : void
+    public function set pinyinFull(value:String) : void
     {
-        var oldValue:String = _internal_displayName;
+        var oldValue:String = _internal_pinyinFull;
         if (oldValue !== value)
         {
-            _internal_displayName = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "displayName", oldValue, _internal_displayName));
-        }
-    }
-
-    public function set modifyTime(value:Date) : void
-    {
-        var oldValue:Date = _internal_modifyTime;
-        if (oldValue !== value)
-        {
-            _internal_modifyTime = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "modifyTime", oldValue, _internal_modifyTime));
-        }
-    }
-
-    public function set telephone(value:String) : void
-    {
-        var oldValue:String = _internal_telephone;
-        if (oldValue !== value)
-        {
-            _internal_telephone = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "telephone", oldValue, _internal_telephone));
-        }
-    }
-
-    public function set mobile(value:String) : void
-    {
-        var oldValue:String = _internal_mobile;
-        if (oldValue !== value)
-        {
-            _internal_mobile = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "mobile", oldValue, _internal_mobile));
+            _internal_pinyinFull = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "pinyinFull", oldValue, _internal_pinyinFull));
         }
     }
 
@@ -446,14 +378,14 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
 
     [Transient]
     [Bindable(event="propertyChange")]
-    public function get _model() : _AccountDTOEntityMetadata
+    public function get _model() : _FinancialCompanyDTOEntityMetadata
     {
         return model_internal::_dminternal_model;
     }
 
-    public function set _model(value : _AccountDTOEntityMetadata) : void
+    public function set _model(value : _FinancialCompanyDTOEntityMetadata) : void
     {
-        var oldValue : _AccountDTOEntityMetadata = model_internal::_dminternal_model;
+        var oldValue : _FinancialCompanyDTOEntityMetadata = model_internal::_dminternal_model;
         if (oldValue !== value)
         {
             model_internal::_dminternal_model = value;
