@@ -224,7 +224,7 @@
 					</s:Label>
 				</s:VGroup>
 			</s:helpContent>
-			<s:DropDownList id="companyIdList" dataProvider="{InitData.getAllCompanysResult.lastResult}" labelField="name" selectedIndex="{InitData.getIndexFromList(InitData.getAllCompanysResult.lastResult,'id',accountDTO.companyId)}"/>
+			<s:DropDownList id="companyIdList" dataProvider="{accountTypeList.selectedItem.value=='1'?InitData.getAllCompanysResult.lastResult:InitData.getAllFinancialCompanysResult.lastResult}" labelField="name" selectedIndex="{InitData.getIndexFromList((accountTypeList.selectedItem.value=='1'?InitData.getAllCompanysResult.lastResult:InitData.getAllFinancialCompanysResult.lastResult),'id',accountDTO.companyId)}"/>
 			<!--
 			<s:TextInput id="companyIdTextInput" text="{accountDTO.companyId}" width="150" right="10"/>
 			-->

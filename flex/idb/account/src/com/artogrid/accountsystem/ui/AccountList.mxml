@@ -59,7 +59,7 @@
 
 			private function companyIdLabelFunction(item:Object, column:GridColumn):String {
 				var companyId:String=(item[column.dataField] as String);
-				return InitData.getOtherValueFromListByName(InitData.getAllCompanysResult.lastResult, "id", companyId, "name");
+				return InitData.getOtherValueFromListByName((item["accountType"]=='1'?InitData.getAllCompanysResult.lastResult:InitData.getAllFinancialCompanysResult.lastResult), "id", companyId, "name");
 			}
 
 			protected function linkbar1_itemClickHandler(event:ItemClickEvent):void {
@@ -89,7 +89,7 @@
 						MyAlert.showAlert("请选择要维护关系的账号!");
 					}
 				} else if (event.item == companyEditBtn) {
-					var companyListWindow:CompanyListWindow=CompanyListWindow.getMe();
+					var companyListWindow:CompanyWindow=CompanyWindow.getMe();
 					PopUpManager.addPopUp(companyListWindow, FlexGlobals.topLevelApplication as DisplayObject, true);
 					PopUpManager.centerPopUp(companyListWindow);
 				}
