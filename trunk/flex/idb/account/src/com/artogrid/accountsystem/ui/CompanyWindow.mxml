@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" xmlns:vo="com.artogrid.accountsystem.vo.*" width="1122"
+			   height="618" close="PopUpManager.removePopUp(this)" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="公司管理" xmlns:ui="com.artogrid.accountsystem.ui.*">
+	<fx:Script>
+		<![CDATA[
+			import mx.managers.PopUpManager;
+			
+			private static var me:CompanyWindow;
+			
+			public static function getMe():CompanyWindow {
+				if (me == null) {
+					me=new CompanyWindow();
+				}
+				return me;
+			}
+		]]>
+	</fx:Script>
+	<mx:TabNavigator left="-1" right="-1" top="-1" bottom="-1">
+		<s:NavigatorContent width="100%" height="100%" label="经济人公司">
+			<ui:CompanyEdit parentWin="{this}"/>
+		</s:NavigatorContent>
+		<s:NavigatorContent width="100%" height="100%" label="金融公司">
+			<ui:FinancialCompanyEdit parentWin="{this}"/>
+		</s:NavigatorContent>
+	</mx:TabNavigator>
+</s:TitleWindow>

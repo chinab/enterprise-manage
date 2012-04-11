@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Panel xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="350" height="200"
+		 skinClass="com.artogrid.accountsystem.skin.LoginPanelSkin" title="登录">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.vo.UserDTO;
+
+			import mx.controls.Alert;
+			import mx.rpc.events.ResultEvent;
+
+			public function get loginFunction():Function {
+				return _loginFunction;
+			}
+
+			public function set loginFunction(value:Function):void {
+				_loginFunction=value;
+			}
+
+			private var _loginFunction:Function;
+
+			protected function button_clickHandler(event:MouseEvent):void {
+				loginToAccontResult.token=idbLoginRO.loginToAccont(usernameTextInput.text, passwordTextInput.text);
+			}
+
+			protected function loginToAccontResult_resultHandler(event:ResultEvent):void {
+				var userDTO:UserDTO=loginToAccontResult.lastResult;
+				if (userDTO) {
+					if (userDTO.message == "success") {
+						messageLabel.text="";
+						usernameTextInput.text="";
+						passwordTextInput.text="";
+						loginFunction(userDTO);
+					} else {
+						messageLabel.text=userDTO.message;
+					}
+				} else {
+					messageLabel.text="登录失败";
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<ro:IdbLoginRO id="idbLoginRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<s:CallResponder id="loginToAccontResult" result="loginToAccontResult_resultHandler(event)"/>
+	</fx:Declarations>
+	<s:Label id="messageLabel" y="15" color="#FF0000" horizontalCenter="0" text=""/>
+	<s:Form height="138" defaultButton="{loginBtn}" horizontalCenter="0" verticalCenter="10">
+		<s:FormItem height="35" label="用户名">
+			<s:TextInput id="usernameTextInput" width="150"/>
+		</s:FormItem>
+		<s:FormItem height="35" label="密码">
+			<s:TextInput id="passwordTextInput" width="150" displayAsPassword="true"/>
+		</s:FormItem>
+		<s:Group width="100%" height="40">
+			<s:Button id="loginBtn" label="登录" horizontalCenter="0" verticalCenter="0" click="button_clickHandler(event)"/>
+		</s:Group>
+	</s:Form>
+</s:Panel>
