@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="646" height="300"
+			   creationComplete="titleWindow_creationCompleteHandler(event)" title="服务器配置" close="titlewindow1_closeHandler(event)" keyUp="titlewindow1_keyUpHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			public static var instance:TitleWindow=new ServerConfigWindow();
+
+			protected function titleWindow_creationCompleteHandler(event:FlexEvent):void {
+				getServerUrlsMapResult.token=idbLoginRO.getServerUrlsMap();
+			}
+
+			protected function getServerUrlsMapResult_resultHandler(event:ResultEvent):void {
+				var serverMap:Object=getServerUrlsMapResult.lastResult;
+				servers.removeAllElements();
+				for (var name:String in serverMap) {
+					var serverUrlField:ServerUrlField=new ServerUrlField();
+					serverUrlField.setData(name, serverMap[name][0], serverMap[name][1]);
+					servers.addElement(serverUrlField);
+				}
+			}
+
+			protected function titlewindow1_closeHandler(event:CloseEvent):void {
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function button_clickHandler(event:MouseEvent):void {
+				var obj:Object={};
+				for (var i:int=0; i < servers.numElements; i++) {
+					var ser:ServerUrlField=servers.getElementAt(i) as ServerUrlField;
+					obj[ser.nameLabel.text]=[ser.valueTextInput1.text, ser.valueTextInput2.text];
+				}
+
+				setServerUrlsMapResult.token=idbLoginRO.setServerUrlsMap(obj);
+			}
+
+			protected function button2_clickHandler(event:MouseEvent):void {
+				setServerUrlsMapDefaultResult.token=idbLoginRO.setServerUrlsMapDefault();
+			}
+
+			protected function titlewindow1_keyUpHandler(event:KeyboardEvent):void {
+				if (Keyboard.ESCAPE == event.keyCode) {
+					PopUpManager.removePopUp(this);
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:CallResponder id="getServerUrlsMapResult" result="getServerUrlsMapResult_resultHandler(event)"/>
+		<ro:IdbLoginRO id="idbLoginRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<fx:Component className="ServerUrlField">
+			<s:VGroup>
+				<fx:Script>
+					<![CDATA[
+						[Bindable]
+						private var _name:String;
+						[Bindable]
+						private var _value1:String;
+						[Bindable]
+						private var _value2:String;
+
+						public function setData(name:String, value1:String, value2:String):void {
+							_name=name;
+							_value1=value1;
+							_value2=value2;
+						}
+					]]>
+				</fx:Script>
+				<s:Label fontWeight="bold" id="nameLabel" text="{_name}"/>
+				<s:HGroup>
+					<s:Label text="endpoint" width="120"/>
+					<s:TextInput id="valueTextInput1" text="{_value1}" width="400"/>
+				</s:HGroup>
+				<s:HGroup>
+					<s:Label text="messageChannel" width="120"/>
+					<s:TextInput id="valueTextInput2" text="{_value2}" width="400"/>
+				</s:HGroup>
+			</s:VGroup>
+		</fx:Component>
+		<s:CallResponder id="setServerUrlsMapResult"/>
+		<s:CallResponder id="setServerUrlsMapDefaultResult" result="getServerUrlsMapResult_resultHandler(event)"/>
+	</fx:Declarations>
+	<s:VGroup id="servers" horizontalCenter="0" height="191" verticalAlign="middle">
+	</s:VGroup>
+	<s:Button id="button" bottom="15" horizontalCenter="-50" label="保存" click="button_clickHandler(event)"/>
+	<s:Button id="button2" bottom="15" horizontalCenter="50" label="恢复" click="button2_clickHandler(event)"/>
+
+</s:TitleWindow>

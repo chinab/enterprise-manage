@@ -35,8 +35,8 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
     {
         com.artogrid.accountsystem.vo.LoginStatusDTO.initRemoteClassAliasSingleChild();
         com.artogrid.accountsystem.vo.RoleDTO.initRemoteClassAliasSingleChild();
-        com.artogrid.accountsystem.vo.DepartmentDTO.initRemoteClassAliasSingleChild();
         com.artogrid.accountsystem.vo.AccountDTO.initRemoteClassAliasSingleChild();
+        com.artogrid.accountsystem.vo.DepartmentDTO.initRemoteClassAliasSingleChild();
     }
 
     model_internal var _dminternal_model : _LoginInfoDTOEntityMetadata;
@@ -60,9 +60,9 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
     private var _internal_loginStatus : com.artogrid.accountsystem.vo.LoginStatusDTO;
     private var _internal_roles : ArrayCollection;
     model_internal var _internal_roles_leaf:com.artogrid.accountsystem.vo.RoleDTO;
+    private var _internal_account : com.artogrid.accountsystem.vo.AccountDTO;
     private var _internal_departments : ArrayCollection;
     model_internal var _internal_departments_leaf:com.artogrid.accountsystem.vo.DepartmentDTO;
-    private var _internal_account : com.artogrid.accountsystem.vo.AccountDTO;
 
     private static var emptyArray:Array = new Array();
 
@@ -105,15 +105,15 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
     }
 
     [Bindable(event="propertyChange")]
-    public function get departments() : ArrayCollection
-    {
-        return _internal_departments;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get account() : com.artogrid.accountsystem.vo.AccountDTO
     {
         return _internal_account;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get departments() : ArrayCollection
+    {
+        return _internal_departments;
     }
 
     public function clearAssociations() : void
@@ -169,6 +169,16 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
         }
     }
 
+    public function set account(value:com.artogrid.accountsystem.vo.AccountDTO) : void
+    {
+        var oldValue:com.artogrid.accountsystem.vo.AccountDTO = _internal_account;
+        if (oldValue !== value)
+        {
+            _internal_account = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "account", oldValue, _internal_account));
+        }
+    }
+
     public function set departments(value:*) : void
     {
         var oldValue:ArrayCollection = _internal_departments;
@@ -191,16 +201,6 @@ public class _Super_LoginInfoDTO extends flash.events.EventDispatcher implements
                 throw new Error("value of departments must be a collection");
             }
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "departments", oldValue, _internal_departments));
-        }
-    }
-
-    public function set account(value:com.artogrid.accountsystem.vo.AccountDTO) : void
-    {
-        var oldValue:com.artogrid.accountsystem.vo.AccountDTO = _internal_account;
-        if (oldValue !== value)
-        {
-            _internal_account = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "account", oldValue, _internal_account));
         }
     }
 

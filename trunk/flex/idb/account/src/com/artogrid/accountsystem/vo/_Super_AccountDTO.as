@@ -52,8 +52,8 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     private var _internal_modifyBy : String;
     private var _internal_status : String;
     private var _internal_isForbidden : String;
-    private var _internal_createBy : String;
     private var _internal_password : String;
+    private var _internal_createBy : String;
     private var _internal_message : String;
     private var _internal_id : String;
     private var _internal_accountCode : String;
@@ -114,15 +114,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get createBy() : String
-    {
-        return _internal_createBy;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get password() : String
     {
         return _internal_password;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get createBy() : String
+    {
+        return _internal_createBy;
     }
 
     [Bindable(event="propertyChange")]
@@ -245,16 +245,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set createBy(value:String) : void
-    {
-        var oldValue:String = _internal_createBy;
-        if (oldValue !== value)
-        {
-            _internal_createBy = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "createBy", oldValue, _internal_createBy));
-        }
-    }
-
     public function set password(value:String) : void
     {
         var oldValue:String = _internal_password;
@@ -262,6 +252,16 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         {
             _internal_password = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "password", oldValue, _internal_password));
+        }
+    }
+
+    public function set createBy(value:String) : void
+    {
+        var oldValue:String = _internal_createBy;
+        if (oldValue !== value)
+        {
+            _internal_createBy = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "createBy", oldValue, _internal_createBy));
         }
     }
 
