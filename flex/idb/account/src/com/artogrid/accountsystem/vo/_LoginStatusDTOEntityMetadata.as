@@ -20,14 +20,14 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "ip", "clientType");
+    model_internal static var allProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "clientType", "ip");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "ip", "clientType");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "clientType", "ip");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "ip", "clientType");
+    model_internal static var dataProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "clientType", "ip");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "ip", "clientType");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "accountId", "status", "token", "server", "activation", "clientType", "ip");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -53,8 +53,8 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
             model_internal::dependentsOnMap["token"] = new Array();
             model_internal::dependentsOnMap["server"] = new Array();
             model_internal::dependentsOnMap["activation"] = new Array();
-            model_internal::dependentsOnMap["ip"] = new Array();
             model_internal::dependentsOnMap["clientType"] = new Array();
+            model_internal::dependentsOnMap["ip"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -68,8 +68,8 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
         model_internal::propertyTypeMap["token"] = "String";
         model_internal::propertyTypeMap["server"] = "String";
         model_internal::propertyTypeMap["activation"] = "String";
-        model_internal::propertyTypeMap["ip"] = "String";
         model_internal::propertyTypeMap["clientType"] = "String";
+        model_internal::propertyTypeMap["ip"] = "String";
 
         model_internal::_instance = value;
     }
@@ -335,13 +335,13 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     }
 
     [Bindable(event="propertyChange")]
-    public function get isIpAvailable():Boolean
+    public function get isClientTypeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isClientTypeAvailable():Boolean
+    public function get isIpAvailable():Boolean
     {
         return true;
     }
@@ -393,13 +393,13 @@ internal class _LoginStatusDTOEntityMetadata extends com.adobe.fiber.valueobject
     }
 
     [Bindable(event="propertyChange")]   
-    public function get ipStyle():com.adobe.fiber.styles.Style
+    public function get clientTypeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get clientTypeStyle():com.adobe.fiber.styles.Style
+    public function get ipStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

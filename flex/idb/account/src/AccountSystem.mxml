@@ -15,6 +15,7 @@
 			import com.artogrid.accountsystem.bl.InitData;
 			import com.artogrid.accountsystem.controls.MyAlert;
 			import com.artogrid.accountsystem.events.AccountDataEvent;
+			import com.artogrid.accountsystem.ui.ServerConfigWindow;
 			import com.artogrid.accountsystem.vo.AccountDTO;
 			import com.artogrid.accountsystem.vo.UserDTO;
 
@@ -22,6 +23,7 @@
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
 
 			import spark.events.GridSelectionEvent;
@@ -57,6 +59,11 @@
 					}
 				});
 			}
+
+			protected function configBtn_clickHandler(event:MouseEvent):void {
+				PopUpManager.addPopUp(ServerConfigWindow.instance, this);
+				PopUpManager.centerPopUp(ServerConfigWindow.instance);
+			}
 		]]>
 	</fx:Script>
 	<s:states>
@@ -68,6 +75,7 @@
 		<s:HGroup verticalAlign="middle">
 			<s:Label text="当前用户：{_userDTO.username}"/>
 			<mx:LinkButton id="logoutBtn" label="登出" icon="@Embed('assets/logout.png')" click="logoutBtn_clickHandler(event)"/>
+			<mx:LinkButton id="configBtn" label="服务器配置" icon="@Embed('assets/settings.png')" click="configBtn_clickHandler(event)"/>
 		</s:HGroup>
 		<ui:AccountList id="accountList" width="100%" height="100%" creationComplete="accountlist1_creationCompleteHandler(event)">
 		</ui:AccountList>
