@@ -47,6 +47,10 @@
 					PopUpManager.removePopUp(this);
 				}
 			}
+
+			protected function servers_updateCompleteHandler(event:FlexEvent):void {
+				this.height=servers.height + 130;
+			}
 		]]>
 	</fx:Script>
 	<fx:Declarations>
@@ -84,7 +88,7 @@
 		<s:CallResponder id="setServerUrlsMapResult"/>
 		<s:CallResponder id="setServerUrlsMapDefaultResult" result="getServerUrlsMapResult_resultHandler(event)"/>
 	</fx:Declarations>
-	<s:VGroup id="servers" horizontalCenter="0" height="191" verticalAlign="middle">
+	<s:VGroup id="servers" horizontalCenter="0" verticalAlign="middle" updateComplete="servers_updateCompleteHandler(event)">
 	</s:VGroup>
 	<s:Button id="button" bottom="15" horizontalCenter="-50" label="保存" click="button_clickHandler(event)"/>
 	<s:Button id="button2" bottom="15" horizontalCenter="50" label="恢复" click="button2_clickHandler(event)"/>
