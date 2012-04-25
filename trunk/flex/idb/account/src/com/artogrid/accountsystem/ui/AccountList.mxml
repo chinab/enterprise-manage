@@ -59,7 +59,7 @@
 
 			private function companyIdLabelFunction(item:Object, column:GridColumn):String {
 				var companyId:String=(item[column.dataField] as String);
-				return InitData.getOtherValueFromListByName((item["accountType"]=='1'?InitData.getAllCompanysResult.lastResult:InitData.getAllFinancialCompanysResult.lastResult), "id", companyId, "name");
+				return InitData.getOtherValueFromListByName((item["accountType"] == '1' ? InitData.getAllCompanysResult.lastResult : InitData.getAllFinancialCompanysResult.lastResult), "id", companyId, "name");
 			}
 
 			protected function linkbar1_itemClickHandler(event:ItemClickEvent):void {
@@ -87,6 +87,14 @@
 						PopUpManager.centerPopUp(accountRelationWindow);
 					} else {
 						MyAlert.showAlert("请选择要维护关系的账号!");
+					}
+				} else if (event.item == limitBtn) {
+					if (accountDTO != null) {
+						var accountLimitWindow:AccountLimitWindow=AccountLimitWindow.getMe(accountDTO);
+						PopUpManager.addPopUp(accountLimitWindow, FlexGlobals.topLevelApplication as DisplayObject, true);
+						PopUpManager.centerPopUp(accountLimitWindow);
+					} else {
+						MyAlert.showAlert("请选择要操作的账号!");
 					}
 				} else if (event.item == companyEditBtn) {
 					var companyListWindow:CompanyWindow=CompanyWindow.getMe();
@@ -181,7 +189,7 @@
 										[Bindable]
 										[Embed(source="assets/disable.png")]
 										private var disablePng:Class;
-										
+
 										[Bindable]
 										[Embed(source="assets/enable.png")]
 										private var enablePng:Class;
@@ -200,6 +208,7 @@
 		<mx:dataProvider>
 			<fx:Object icon="@Embed('assets/company.png')" label="公司" id="companyEditBtn" toolTip="经济公司维护"/>
 			<fx:Object icon="@Embed('assets/relationship.png')" label="关系" id="relationBtn" toolTip="部门与角色关系维护"/>
+			<fx:Object icon="@Embed('assets/limit.png')" label="限制" id="limitBtn" toolTip="账号的限制设置"/>
 			<fx:Object icon="@Embed('assets/delete.png')" label="删除" id="deleteBtn" toolTip="删除选中行"/>
 			<fx:Object icon="@Embed('assets/refresh.png')" label="刷新" id="refreshBtn" toolTip="刷新列表"/>
 		</mx:dataProvider>
