@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="566" height="424"
+			   close="PopUpManager.removePopUp(this)" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="用户限制-{_accountDTO.displayName}">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.vo.AccountDTO;
+			import com.artogrid.accountsystem.vo.AccountLimitDTO;
+			import com.artogrid.accountsystem.vo.AccountRoleRelationDTO;
+
+			import mx.collections.ArrayCollection;
+			import mx.collections.IList;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			private static var me:AccountLimitWindow;
+			[Bindable]
+			private var _accountDTO:AccountDTO;
+			private var limitsMap:Object={};
+
+			public function setAccountDTO(value:AccountDTO):void {
+				_accountDTO=value;
+				getAccountLimitsByAccountIdResult.token=accountRO.getAccountLimitsByAccountId(_accountDTO.id);
+			}
+
+			public static function getMe(accountDTO:AccountDTO):AccountLimitWindow {
+				if (me == null) {
+					me=new AccountLimitWindow();
+				}
+				me.setAccountDTO(accountDTO);
+				return me;
+			}
+
+			protected function getAccountRoleRelationsByAccountIdResult_resultHandler(event:ResultEvent):void {
+				limitsGroup.removeAllElements();
+				var accountRoleRelations:IList=(getAccountRoleRelationsByAccountIdResult.lastResult as IList);
+				for each (var accountRoleRelationDTO:AccountRoleRelationDTO in accountRoleRelations) {
+					var accountLimitForm:AccountLimitForm=new AccountLimitForm();
+					accountLimitForm.initData(accountRoleRelationDTO.departmentCode, limitsMap[accountRoleRelationDTO.departmentCode] as AccountLimitDTO);
+					limitsGroup.addElement(accountLimitForm);
+				}
+
+			}
+
+			protected function getAccountLimitsByAccountIdResult_resultHandler(event:ResultEvent):void {
+				limitsMap={};
+				var limits:IList=getAccountLimitsByAccountIdResult.lastResult as IList;
+				for each (var accountLimitDTO:AccountLimitDTO in limits) {
+					limitsMap[accountLimitDTO.departmentCode]=accountLimitDTO;
+				}
+
+				getAccountRoleRelationsByAccountIdResult.token=accountRO.getAccountRoleRelationsByAccountId(_accountDTO.id);
+			}
+
+			protected function limitsGroup_updateCompleteHandler(event:FlexEvent):void {
+				height=limitsGroup.height + 130;
+				PopUpManager.centerPopUp(this);
+			}
+
+			protected function saveBtn_clickHandler(event:MouseEvent):void {
+				var accountLimits:ArrayCollection=new ArrayCollection();
+				for (var i:int=0; i < limitsGroup.numElements; i++) {
+					var accountLimitForm:AccountLimitForm=limitsGroup.getElementAt(i) as AccountLimitForm;
+					accountLimits.addItem(accountLimitForm.getAccountLimitDTO());
+				}
+
+				saveAccountLimitsResult.token=accountRO.saveAccountLimits(_accountDTO.id, accountLimits);
+			}
+
+			protected function cBtn_clickHandler(event:MouseEvent):void {
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function saveAccountLimitsResult_resultHandler(event:ResultEvent):void {
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<s:CallResponder id="getAccountLimitsByAccountIdResult" result="getAccountLimitsByAccountIdResult_resultHandler(event)"/>
+		<ro:AccountRO id="accountRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<s:CallResponder id="getAccountRoleRelationsByAccountIdResult" result="getAccountRoleRelationsByAccountIdResult_resultHandler(event)"/>
+		<fx:Component className="AccountLimitForm">
+			<s:HGroup gap="20">
+				<fx:Script>
+					<![CDATA[
+						import com.artogrid.accountsystem.vo.AccountLimitDTO;
+
+						import mx.collections.IList;
+						[Bindable]
+						private var _departmentCode:String
+						[Bindable]
+						private var _accountLimitDTO:AccountLimitDTO;
+
+						public function initData(departmentCode:String, accountLimitDTO:AccountLimitDTO):void {
+							_departmentCode=departmentCode;
+							_accountLimitDTO=accountLimitDTO;
+							if (_accountLimitDTO == null) {
+								_accountLimitDTO=new AccountLimitDTO();
+								_accountLimitDTO.departmentCode=_departmentCode;
+								_accountLimitDTO.maxOnlineSize=0;
+								_accountLimitDTO.maxMachineSize=0;
+								_accountLimitDTO.startTime=new Date();
+								_accountLimitDTO.endTime=new Date();
+							}
+						}
+
+						public function getAccountLimitDTO():AccountLimitDTO {
+							_accountLimitDTO.maxOnlineSize=maxOnlineSize.value;
+							_accountLimitDTO.maxMachineSize=maxMachineSize.value;
+							_accountLimitDTO.startTime=startTime.selectedDate;
+							_accountLimitDTO.endTime=endTime.selectedDate;
+
+							return _accountLimitDTO;
+						}
+					]]>
+				</fx:Script>
+				<s:Label text="{_departmentCode}" width="80" textAlign="right"/>
+				<s:NumericStepper id="maxOnlineSize" value="{_accountLimitDTO.maxOnlineSize}" width="55"/>
+				<s:NumericStepper id="maxMachineSize" value="{_accountLimitDTO.maxMachineSize}" width="55"/>
+				<mx:DateField id="startTime" selectedDate="{_accountLimitDTO.startTime}" width="105" formatString="YYYY-MM-DD"/>
+				<mx:DateField id="endTime" selectedDate="{_accountLimitDTO.endTime}" width="105" formatString="YYYY-MM-DD"/>
+			</s:HGroup>
+		</fx:Component>
+		<s:CallResponder id="saveAccountLimitsResult" result="saveAccountLimitsResult_resultHandler(event)"/>
+	</fx:Declarations>
+	<s:HGroup gap="20" horizontalCenter="0" top="20">
+		<s:Label text="部门" width="80" textAlign="right"/>
+		<s:Label text="在线限制" width="55" textAlign="center"/>
+		<s:Label text="机器限制" width="55" textAlign="center"/>
+		<s:Label text="生效时间" width="105" textAlign="center"/>
+		<s:Label text="过期时间" width="105" textAlign="center"/>
+	</s:HGroup>
+	<s:VGroup id="limitsGroup" horizontalCenter="0" verticalCenter="-10" updateComplete="limitsGroup_updateCompleteHandler(event)">
+
+	</s:VGroup>
+	<s:Button bottom="20" horizontalCenter="-40" label="保存" id="saveBtn" click="saveBtn_clickHandler(event)"/>
+	<s:Button bottom="20" horizontalCenter="40" label="取消" id="cBtn" click="cBtn_clickHandler(event)"/>
+</s:TitleWindow>

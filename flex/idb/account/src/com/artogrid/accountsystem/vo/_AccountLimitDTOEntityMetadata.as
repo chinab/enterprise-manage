@@ -16,55 +16,45 @@ import mx.events.PropertyChangeEvent;
 use namespace model_internal;
 
 [ExcludeClass]
-internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
+internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "createBy", "password", "id", "message", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile");
+    model_internal static var allProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "endTime", "departmentCode");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "createBy", "password", "id", "message", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "endTime", "departmentCode");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "createBy", "password", "id", "message", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile");
+    model_internal static var dataProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "endTime", "departmentCode");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "createBy", "password", "id", "message", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile");
+    model_internal static var nonDerivedProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "endTime", "departmentCode");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
-    model_internal static var entityName:String = "AccountDTO";
+    model_internal static var entityName:String = "AccountLimitDTO";
     model_internal static var dependentsOnMap:Object;
     model_internal static var dependedOnServices:Array = new Array();
     model_internal static var propertyTypeMap:Object;
 
 
-    model_internal var _instance:_Super_AccountDTO;
+    model_internal var _instance:_Super_AccountLimitDTO;
     model_internal static var _nullStyle:com.adobe.fiber.styles.Style = new com.adobe.fiber.styles.Style();
 
-    public function _AccountDTOEntityMetadata(value : _Super_AccountDTO)
+    public function _AccountLimitDTOEntityMetadata(value : _Super_AccountLimitDTO)
     {
         // initialize property maps
         if (model_internal::dependentsOnMap == null)
         {
             // dependents map
             model_internal::dependentsOnMap = new Object();
-            model_internal::dependentsOnMap["createTime"] = new Array();
-            model_internal::dependentsOnMap["modifyBy"] = new Array();
-            model_internal::dependentsOnMap["status"] = new Array();
-            model_internal::dependentsOnMap["isForbidden"] = new Array();
-            model_internal::dependentsOnMap["createBy"] = new Array();
-            model_internal::dependentsOnMap["password"] = new Array();
+            model_internal::dependentsOnMap["startTime"] = new Array();
             model_internal::dependentsOnMap["id"] = new Array();
-            model_internal::dependentsOnMap["message"] = new Array();
-            model_internal::dependentsOnMap["accountCode"] = new Array();
-            model_internal::dependentsOnMap["username"] = new Array();
-            model_internal::dependentsOnMap["address"] = new Array();
-            model_internal::dependentsOnMap["email"] = new Array();
-            model_internal::dependentsOnMap["accountType"] = new Array();
-            model_internal::dependentsOnMap["companyId"] = new Array();
-            model_internal::dependentsOnMap["displayName"] = new Array();
-            model_internal::dependentsOnMap["telephone"] = new Array();
-            model_internal::dependentsOnMap["modifyTime"] = new Array();
-            model_internal::dependentsOnMap["mobile"] = new Array();
+            model_internal::dependentsOnMap["accountId"] = new Array();
+            model_internal::dependentsOnMap["status"] = new Array();
+            model_internal::dependentsOnMap["maxMachineSize"] = new Array();
+            model_internal::dependentsOnMap["maxOnlineSize"] = new Array();
+            model_internal::dependentsOnMap["endTime"] = new Array();
+            model_internal::dependentsOnMap["departmentCode"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -72,24 +62,14 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
 
         // Property type Map
         model_internal::propertyTypeMap = new Object();
-        model_internal::propertyTypeMap["createTime"] = "Date";
-        model_internal::propertyTypeMap["modifyBy"] = "String";
-        model_internal::propertyTypeMap["status"] = "String";
-        model_internal::propertyTypeMap["isForbidden"] = "String";
-        model_internal::propertyTypeMap["createBy"] = "String";
-        model_internal::propertyTypeMap["password"] = "String";
+        model_internal::propertyTypeMap["startTime"] = "Date";
         model_internal::propertyTypeMap["id"] = "String";
-        model_internal::propertyTypeMap["message"] = "String";
-        model_internal::propertyTypeMap["accountCode"] = "String";
-        model_internal::propertyTypeMap["username"] = "String";
-        model_internal::propertyTypeMap["address"] = "String";
-        model_internal::propertyTypeMap["email"] = "String";
-        model_internal::propertyTypeMap["accountType"] = "String";
-        model_internal::propertyTypeMap["companyId"] = "String";
-        model_internal::propertyTypeMap["displayName"] = "String";
-        model_internal::propertyTypeMap["telephone"] = "String";
-        model_internal::propertyTypeMap["modifyTime"] = "Date";
-        model_internal::propertyTypeMap["mobile"] = "String";
+        model_internal::propertyTypeMap["accountId"] = "String";
+        model_internal::propertyTypeMap["status"] = "String";
+        model_internal::propertyTypeMap["maxMachineSize"] = "int";
+        model_internal::propertyTypeMap["maxOnlineSize"] = "int";
+        model_internal::propertyTypeMap["endTime"] = "Date";
+        model_internal::propertyTypeMap["departmentCode"] = "String";
 
         model_internal::_instance = value;
     }
@@ -142,7 +122,7 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     override public function getDependants(propertyName:String):Array
     {
        if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a data property of entity AccountDTO");
+            throw new Error(propertyName + " is not a data property of entity AccountLimitDTO");
             
        return model_internal::dependentsOnMap[propertyName] as Array;  
     }
@@ -160,7 +140,7 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     override public function getCollectionBase(propertyName:String):String
     {
         if (model_internal::collectionProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a collection property of entity AccountDTO");
+            throw new Error(propertyName + " is not a collection property of entity AccountLimitDTO");
 
         return model_internal::collectionBaseMap[propertyName];
     }
@@ -168,7 +148,7 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     override public function getPropertyType(propertyName:String):String
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a property of AccountDTO");
+            throw new Error(propertyName + " is not a property of AccountLimitDTO");
 
         return model_internal::propertyTypeMap[propertyName];
     }
@@ -182,7 +162,7 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity AccountDTO");
+            throw new Error(propertyName + " does not exist for entity AccountLimitDTO");
         }
 
         return model_internal::_instance[propertyName];
@@ -192,7 +172,7 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     {
         if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " is not a modifiable property of entity AccountDTO");
+            throw new Error(propertyName + " is not a modifiable property of entity AccountLimitDTO");
         }
 
         model_internal::_instance[propertyName] = value;
@@ -224,7 +204,7 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity AccountDTO");
+            throw new Error(propertyName + " does not exist for entity AccountLimitDTO");
         }
 
         if (model_internal::allAlwaysAvailableProperties.indexOf(propertyName) != -1)
@@ -319,37 +299,7 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]
-    public function get isCreateTimeAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isModifyByAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isStatusAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isIsForbiddenAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isCreateByAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isPasswordAvailable():Boolean
+    public function get isStartTimeAvailable():Boolean
     {
         return true;
     }
@@ -361,67 +311,37 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]
-    public function get isMessageAvailable():Boolean
+    public function get isAccountIdAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isAccountCodeAvailable():Boolean
+    public function get isStatusAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isUsernameAvailable():Boolean
+    public function get isMaxMachineSizeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isAddressAvailable():Boolean
+    public function get isMaxOnlineSizeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isEmailAvailable():Boolean
+    public function get isEndTimeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isAccountTypeAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isCompanyIdAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isDisplayNameAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isTelephoneAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isModifyTimeAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
-    public function get isMobileAvailable():Boolean
+    public function get isDepartmentCodeAvailable():Boolean
     {
         return true;
     }
@@ -437,37 +357,7 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]   
-    public function get createTimeStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get modifyByStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get statusStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get isForbiddenStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get createByStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get passwordStyle():com.adobe.fiber.styles.Style
+    public function get startTimeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
@@ -479,67 +369,37 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]   
-    public function get messageStyle():com.adobe.fiber.styles.Style
+    public function get accountIdStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get accountCodeStyle():com.adobe.fiber.styles.Style
+    public function get statusStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get usernameStyle():com.adobe.fiber.styles.Style
+    public function get maxMachineSizeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get addressStyle():com.adobe.fiber.styles.Style
+    public function get maxOnlineSizeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get emailStyle():com.adobe.fiber.styles.Style
+    public function get endTimeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get accountTypeStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get companyIdStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get displayNameStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get telephoneStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get modifyTimeStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
-    public function get mobileStyle():com.adobe.fiber.styles.Style
+    public function get departmentCodeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

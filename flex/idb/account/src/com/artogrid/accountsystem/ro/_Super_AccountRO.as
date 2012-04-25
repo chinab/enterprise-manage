@@ -8,6 +8,7 @@ import com.adobe.fiber.core.model_internal;
 import com.adobe.fiber.services.wrapper.RemoteObjectServiceWrapper;
 import com.adobe.serializers.utility.TypeUtility;
 import com.artogrid.accountsystem.vo.AccountDTO;
+import com.artogrid.accountsystem.vo.AccountLimitDTO;
 import com.artogrid.accountsystem.vo.AccountRoleRelationDTO;
 import mx.collections.ArrayCollection;
 import mx.rpc.AbstractOperation;
@@ -31,6 +32,7 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         // initialize RemoteClass alias for all entities returned by functions of this service
         com.artogrid.accountsystem.vo.AccountDTO._initRemoteClassAlias();
         com.artogrid.accountsystem.vo.AccountRoleRelationDTO._initRemoteClassAlias();
+        com.artogrid.accountsystem.vo.AccountLimitDTO._initRemoteClassAlias();
 
         var operations:Object = new Object();
         var operation:mx.rpc.remoting.Operation;
@@ -80,6 +82,12 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         operation = new mx.rpc.remoting.Operation(null, "getAllAccountsPager");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAllAccountsPager"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getAccountLimitsByAccountId");
+        operation.resultElementType = com.artogrid.accountsystem.vo.AccountLimitDTO;
+        operations["getAccountLimitsByAccountId"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "saveAccountLimits");
+        operation.resultType = Boolean;
+        operations["saveAccountLimits"] = operation;
 
         _serviceControl.operations = operations;
         _serviceControl.convertResultHandler = com.adobe.serializers.utility.TypeUtility.convertResultHandler;
@@ -363,6 +371,42 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     public function getAllAccountsPager(arg0:int, arg1:int) : mx.rpc.AsyncToken
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAllAccountsPager");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'getAccountLimitsByAccountId' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function getAccountLimitsByAccountId(arg0:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountLimitsByAccountId");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'saveAccountLimits' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function saveAccountLimits(arg0:String, arg1:ArrayCollection) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("saveAccountLimits");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
         return _internal_token;
     }

@@ -50,6 +50,7 @@
 
 			protected function servers_updateCompleteHandler(event:FlexEvent):void {
 				this.height=servers.height + 130;
+				PopUpManager.centerPopUp(this);
 			}
 		]]>
 	</fx:Script>
