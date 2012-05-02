@@ -9,7 +9,6 @@ import com.adobe.fiber.styles.Style;
 import com.adobe.fiber.valueobjects.AbstractEntityMetadata;
 import com.adobe.fiber.valueobjects.AvailablePropertyIterator;
 import com.adobe.fiber.valueobjects.IPropertyIterator;
-import mx.collections.ArrayCollection;
 import com.adobe.fiber.core.model_internal;
 import com.adobe.fiber.valueobjects.IModelType;
 import mx.events.PropertyChangeEvent;
@@ -17,67 +16,78 @@ import mx.events.PropertyChangeEvent;
 use namespace model_internal;
 
 [ExcludeClass]
-internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
+internal class _IDBAccountEntityMetadata extends com.adobe.fiber.valueobjects.AbstractEntityMetadata
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("pageCount", "usePage", "usePrevious", "pageNo", "pageSize", "endNum", "totalRecords", "startNum", "useBehind", "records", "totalPages");
+    model_internal static var allProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("pageCount", "usePage", "usePrevious", "pageNo", "pageSize", "endNum", "totalRecords", "startNum", "useBehind", "records", "totalPages");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("pageCount", "usePage", "usePrevious", "pageNo", "pageSize", "endNum", "totalRecords", "startNum", "useBehind", "records", "totalPages");
+    model_internal static var dataProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("pageCount", "usePage", "usePrevious", "pageNo", "pageSize", "endNum", "totalRecords", "startNum", "useBehind", "records", "totalPages");
+    model_internal static var nonDerivedProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile");
     model_internal static var derivedProperties:Array = new Array();
-    model_internal static var collectionProperties:Array = new Array("records");
+    model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
-    model_internal static var entityName:String = "PaginatorObjUtil";
+    model_internal static var entityName:String = "IDBAccount";
     model_internal static var dependentsOnMap:Object;
     model_internal static var dependedOnServices:Array = new Array();
     model_internal static var propertyTypeMap:Object;
 
 
-    model_internal var _instance:_Super_PaginatorObjUtil;
+    model_internal var _instance:_Super_IDBAccount;
     model_internal static var _nullStyle:com.adobe.fiber.styles.Style = new com.adobe.fiber.styles.Style();
 
-    public function _PaginatorObjUtilEntityMetadata(value : _Super_PaginatorObjUtil)
+    public function _IDBAccountEntityMetadata(value : _Super_IDBAccount)
     {
         // initialize property maps
         if (model_internal::dependentsOnMap == null)
         {
             // dependents map
             model_internal::dependentsOnMap = new Object();
-            model_internal::dependentsOnMap["pageCount"] = new Array();
-            model_internal::dependentsOnMap["usePage"] = new Array();
-            model_internal::dependentsOnMap["usePrevious"] = new Array();
-            model_internal::dependentsOnMap["pageNo"] = new Array();
-            model_internal::dependentsOnMap["pageSize"] = new Array();
-            model_internal::dependentsOnMap["endNum"] = new Array();
-            model_internal::dependentsOnMap["totalRecords"] = new Array();
-            model_internal::dependentsOnMap["startNum"] = new Array();
-            model_internal::dependentsOnMap["useBehind"] = new Array();
-            model_internal::dependentsOnMap["records"] = new Array();
-            model_internal::dependentsOnMap["totalPages"] = new Array();
+            model_internal::dependentsOnMap["createTime"] = new Array();
+            model_internal::dependentsOnMap["modifyBy"] = new Array();
+            model_internal::dependentsOnMap["status"] = new Array();
+            model_internal::dependentsOnMap["isForbidden"] = new Array();
+            model_internal::dependentsOnMap["password"] = new Array();
+            model_internal::dependentsOnMap["createBy"] = new Array();
+            model_internal::dependentsOnMap["id"] = new Array();
+            model_internal::dependentsOnMap["accountCode"] = new Array();
+            model_internal::dependentsOnMap["username"] = new Array();
+            model_internal::dependentsOnMap["address"] = new Array();
+            model_internal::dependentsOnMap["email"] = new Array();
+            model_internal::dependentsOnMap["accountType"] = new Array();
+            model_internal::dependentsOnMap["companyId"] = new Array();
+            model_internal::dependentsOnMap["displayName"] = new Array();
+            model_internal::dependentsOnMap["telephone"] = new Array();
+            model_internal::dependentsOnMap["modifyTime"] = new Array();
+            model_internal::dependentsOnMap["mobile"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
-            model_internal::collectionBaseMap["records"] = "Object";
         }
 
         // Property type Map
         model_internal::propertyTypeMap = new Object();
-        model_internal::propertyTypeMap["pageCount"] = "int";
-        model_internal::propertyTypeMap["usePage"] = "Boolean";
-        model_internal::propertyTypeMap["usePrevious"] = "Boolean";
-        model_internal::propertyTypeMap["pageNo"] = "int";
-        model_internal::propertyTypeMap["pageSize"] = "int";
-        model_internal::propertyTypeMap["endNum"] = "int";
-        model_internal::propertyTypeMap["totalRecords"] = "int";
-        model_internal::propertyTypeMap["startNum"] = "int";
-        model_internal::propertyTypeMap["useBehind"] = "Boolean";
-        model_internal::propertyTypeMap["records"] = "ArrayCollection";
-        model_internal::propertyTypeMap["totalPages"] = "int";
+        model_internal::propertyTypeMap["createTime"] = "Date";
+        model_internal::propertyTypeMap["modifyBy"] = "String";
+        model_internal::propertyTypeMap["status"] = "String";
+        model_internal::propertyTypeMap["isForbidden"] = "String";
+        model_internal::propertyTypeMap["password"] = "String";
+        model_internal::propertyTypeMap["createBy"] = "String";
+        model_internal::propertyTypeMap["id"] = "String";
+        model_internal::propertyTypeMap["accountCode"] = "String";
+        model_internal::propertyTypeMap["username"] = "String";
+        model_internal::propertyTypeMap["address"] = "String";
+        model_internal::propertyTypeMap["email"] = "String";
+        model_internal::propertyTypeMap["accountType"] = "String";
+        model_internal::propertyTypeMap["companyId"] = "String";
+        model_internal::propertyTypeMap["displayName"] = "String";
+        model_internal::propertyTypeMap["telephone"] = "String";
+        model_internal::propertyTypeMap["modifyTime"] = "Date";
+        model_internal::propertyTypeMap["mobile"] = "String";
 
         model_internal::_instance = value;
     }
@@ -130,7 +140,7 @@ internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobje
     override public function getDependants(propertyName:String):Array
     {
        if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a data property of entity PaginatorObjUtil");
+            throw new Error(propertyName + " is not a data property of entity IDBAccount");
             
        return model_internal::dependentsOnMap[propertyName] as Array;  
     }
@@ -148,7 +158,7 @@ internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobje
     override public function getCollectionBase(propertyName:String):String
     {
         if (model_internal::collectionProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a collection property of entity PaginatorObjUtil");
+            throw new Error(propertyName + " is not a collection property of entity IDBAccount");
 
         return model_internal::collectionBaseMap[propertyName];
     }
@@ -156,7 +166,7 @@ internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobje
     override public function getPropertyType(propertyName:String):String
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
-            throw new Error(propertyName + " is not a property of PaginatorObjUtil");
+            throw new Error(propertyName + " is not a property of IDBAccount");
 
         return model_internal::propertyTypeMap[propertyName];
     }
@@ -170,7 +180,7 @@ internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobje
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity PaginatorObjUtil");
+            throw new Error(propertyName + " does not exist for entity IDBAccount");
         }
 
         return model_internal::_instance[propertyName];
@@ -180,7 +190,7 @@ internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobje
     {
         if (model_internal::nonDerivedProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " is not a modifiable property of entity PaginatorObjUtil");
+            throw new Error(propertyName + " is not a modifiable property of entity IDBAccount");
         }
 
         model_internal::_instance[propertyName] = value;
@@ -212,7 +222,7 @@ internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobje
     {
         if (model_internal::allProperties.indexOf(propertyName) == -1)
         {
-            throw new Error(propertyName + " does not exist for entity PaginatorObjUtil");
+            throw new Error(propertyName + " does not exist for entity IDBAccount");
         }
 
         if (model_internal::allAlwaysAvailableProperties.indexOf(propertyName) != -1)
@@ -307,67 +317,103 @@ internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobje
     }
 
     [Bindable(event="propertyChange")]
-    public function get isPageCountAvailable():Boolean
+    public function get isCreateTimeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isUsePageAvailable():Boolean
+    public function get isModifyByAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isUsePreviousAvailable():Boolean
+    public function get isStatusAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isPageNoAvailable():Boolean
+    public function get isIsForbiddenAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isPageSizeAvailable():Boolean
+    public function get isPasswordAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isEndNumAvailable():Boolean
+    public function get isCreateByAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isTotalRecordsAvailable():Boolean
+    public function get isIdAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isStartNumAvailable():Boolean
+    public function get isAccountCodeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isUseBehindAvailable():Boolean
+    public function get isUsernameAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isRecordsAvailable():Boolean
+    public function get isAddressAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isTotalPagesAvailable():Boolean
+    public function get isEmailAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isAccountTypeAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isCompanyIdAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isDisplayNameAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isTelephoneAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isModifyTimeAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isMobileAvailable():Boolean
     {
         return true;
     }
@@ -383,67 +429,103 @@ internal class _PaginatorObjUtilEntityMetadata extends com.adobe.fiber.valueobje
     }
 
     [Bindable(event="propertyChange")]   
-    public function get pageCountStyle():com.adobe.fiber.styles.Style
+    public function get createTimeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get usePageStyle():com.adobe.fiber.styles.Style
+    public function get modifyByStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get usePreviousStyle():com.adobe.fiber.styles.Style
+    public function get statusStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get pageNoStyle():com.adobe.fiber.styles.Style
+    public function get isForbiddenStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get pageSizeStyle():com.adobe.fiber.styles.Style
+    public function get passwordStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get endNumStyle():com.adobe.fiber.styles.Style
+    public function get createByStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get totalRecordsStyle():com.adobe.fiber.styles.Style
+    public function get idStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get startNumStyle():com.adobe.fiber.styles.Style
+    public function get accountCodeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get useBehindStyle():com.adobe.fiber.styles.Style
+    public function get usernameStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get recordsStyle():com.adobe.fiber.styles.Style
+    public function get addressStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get totalPagesStyle():com.adobe.fiber.styles.Style
+    public function get emailStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get accountTypeStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get companyIdStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get displayNameStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get telephoneStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get modifyTimeStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get mobileStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

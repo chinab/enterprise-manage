@@ -1,6 +1,6 @@
 /**
  * This is a generated class and is not intended for modification.  To customize behavior
- * of this value object you may modify the generated sub-class of this class - AccountDTO.as.
+ * of this value object you may modify the generated sub-class of this class - IDBAccount.as.
  */
 
 package com.artogrid.accountsystem.vo
@@ -20,18 +20,18 @@ import com.adobe.fiber.valueobjects.AvailablePropertyIterator;
 use namespace model_internal;
 
 [ExcludeClass]
-public class _Super_AccountDTO extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
+public class _Super_IDBAccount extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
 {
     model_internal static function initRemoteClassAliasSingle(cz:Class) : void
     {
-        flash.net.registerClassAlias("com.artogrid.service.m1.vo.idblogin.AccountDTO", cz);
+        flash.net.registerClassAlias("com.artogrid.service.m1.persistant.idblogin.IDBAccount", cz);
     }
 
     model_internal static function initRemoteClassAliasAllRelated() : void
     {
     }
 
-    model_internal var _dminternal_model : _AccountDTOEntityMetadata;
+    model_internal var _dminternal_model : _IDBAccountEntityMetadata;
     model_internal var _changedObjects:mx.collections.ArrayCollection = new ArrayCollection();
 
     public function getChangedObjects() : Array
@@ -52,19 +52,18 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     private var _internal_modifyBy : String;
     private var _internal_status : String;
     private var _internal_isForbidden : String;
-    private var _internal_createBy : String;
     private var _internal_password : String;
-    private var _internal_message : String;
+    private var _internal_createBy : String;
     private var _internal_id : String;
     private var _internal_accountCode : String;
     private var _internal_username : String;
-    private var _internal_email : String;
     private var _internal_address : String;
+    private var _internal_email : String;
     private var _internal_accountType : String;
     private var _internal_companyId : String;
     private var _internal_displayName : String;
-    private var _internal_modifyTime : Date;
     private var _internal_telephone : String;
+    private var _internal_modifyTime : Date;
     private var _internal_mobile : String;
 
     private static var emptyArray:Array = new Array();
@@ -77,9 +76,9 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
 
     model_internal var _changeWatcherArray:Array = new Array();
 
-    public function _Super_AccountDTO()
+    public function _Super_IDBAccount()
     {
-        _model = new _AccountDTOEntityMetadata(this);
+        _model = new _IDBAccountEntityMetadata(this);
 
         // Bind to own data or source properties for cache invalidation triggering
 
@@ -114,21 +113,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get createBy() : String
-    {
-        return _internal_createBy;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get password() : String
     {
         return _internal_password;
     }
 
     [Bindable(event="propertyChange")]
-    public function get message() : String
+    public function get createBy() : String
     {
-        return _internal_message;
+        return _internal_createBy;
     }
 
     [Bindable(event="propertyChange")]
@@ -150,15 +143,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get email() : String
-    {
-        return _internal_email;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get address() : String
     {
         return _internal_address;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get email() : String
+    {
+        return _internal_email;
     }
 
     [Bindable(event="propertyChange")]
@@ -180,15 +173,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get modifyTime() : Date
-    {
-        return _internal_modifyTime;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get telephone() : String
     {
         return _internal_telephone;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get modifyTime() : Date
+    {
+        return _internal_modifyTime;
     }
 
     [Bindable(event="propertyChange")]
@@ -245,16 +238,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set createBy(value:String) : void
-    {
-        var oldValue:String = _internal_createBy;
-        if (oldValue !== value)
-        {
-            _internal_createBy = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "createBy", oldValue, _internal_createBy));
-        }
-    }
-
     public function set password(value:String) : void
     {
         var oldValue:String = _internal_password;
@@ -265,13 +248,13 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set message(value:String) : void
+    public function set createBy(value:String) : void
     {
-        var oldValue:String = _internal_message;
+        var oldValue:String = _internal_createBy;
         if (oldValue !== value)
         {
-            _internal_message = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "message", oldValue, _internal_message));
+            _internal_createBy = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "createBy", oldValue, _internal_createBy));
         }
     }
 
@@ -305,16 +288,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set email(value:String) : void
-    {
-        var oldValue:String = _internal_email;
-        if (oldValue !== value)
-        {
-            _internal_email = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "email", oldValue, _internal_email));
-        }
-    }
-
     public function set address(value:String) : void
     {
         var oldValue:String = _internal_address;
@@ -322,6 +295,16 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         {
             _internal_address = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "address", oldValue, _internal_address));
+        }
+    }
+
+    public function set email(value:String) : void
+    {
+        var oldValue:String = _internal_email;
+        if (oldValue !== value)
+        {
+            _internal_email = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "email", oldValue, _internal_email));
         }
     }
 
@@ -355,16 +338,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set modifyTime(value:Date) : void
-    {
-        var oldValue:Date = _internal_modifyTime;
-        if (oldValue !== value)
-        {
-            _internal_modifyTime = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "modifyTime", oldValue, _internal_modifyTime));
-        }
-    }
-
     public function set telephone(value:String) : void
     {
         var oldValue:String = _internal_telephone;
@@ -372,6 +345,16 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         {
             _internal_telephone = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "telephone", oldValue, _internal_telephone));
+        }
+    }
+
+    public function set modifyTime(value:Date) : void
+    {
+        var oldValue:Date = _internal_modifyTime;
+        if (oldValue !== value)
+        {
+            _internal_modifyTime = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "modifyTime", oldValue, _internal_modifyTime));
         }
     }
 
@@ -446,14 +429,14 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
 
     [Transient]
     [Bindable(event="propertyChange")]
-    public function get _model() : _AccountDTOEntityMetadata
+    public function get _model() : _IDBAccountEntityMetadata
     {
         return model_internal::_dminternal_model;
     }
 
-    public function set _model(value : _AccountDTOEntityMetadata) : void
+    public function set _model(value : _IDBAccountEntityMetadata) : void
     {
-        var oldValue : _AccountDTOEntityMetadata = model_internal::_dminternal_model;
+        var oldValue : _IDBAccountEntityMetadata = model_internal::_dminternal_model;
         if (oldValue !== value)
         {
             model_internal::_dminternal_model = value;

@@ -20,14 +20,14 @@ internal class _FinancialCompanyDTOEntityMetadata extends com.adobe.fiber.valueo
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "bankType", "description", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
+    model_internal static var allProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "description", "bankType", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "bankType", "description", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "description", "bankType", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "bankType", "description", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
+    model_internal static var dataProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "description", "bankType", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "bankType", "description", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
+    model_internal static var nonDerivedProperties:Array = new Array("createTime", "status", "nameEn", "cityName", "code", "city", "id", "description", "bankType", "name", "fullName", "pinyin", "fullNameEn", "pinyinFull");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -54,8 +54,8 @@ internal class _FinancialCompanyDTOEntityMetadata extends com.adobe.fiber.valueo
             model_internal::dependentsOnMap["code"] = new Array();
             model_internal::dependentsOnMap["city"] = new Array();
             model_internal::dependentsOnMap["id"] = new Array();
-            model_internal::dependentsOnMap["bankType"] = new Array();
             model_internal::dependentsOnMap["description"] = new Array();
+            model_internal::dependentsOnMap["bankType"] = new Array();
             model_internal::dependentsOnMap["name"] = new Array();
             model_internal::dependentsOnMap["fullName"] = new Array();
             model_internal::dependentsOnMap["pinyin"] = new Array();
@@ -75,8 +75,8 @@ internal class _FinancialCompanyDTOEntityMetadata extends com.adobe.fiber.valueo
         model_internal::propertyTypeMap["code"] = "String";
         model_internal::propertyTypeMap["city"] = "String";
         model_internal::propertyTypeMap["id"] = "String";
-        model_internal::propertyTypeMap["bankType"] = "String";
         model_internal::propertyTypeMap["description"] = "String";
+        model_internal::propertyTypeMap["bankType"] = "String";
         model_internal::propertyTypeMap["name"] = "String";
         model_internal::propertyTypeMap["fullName"] = "String";
         model_internal::propertyTypeMap["pinyin"] = "String";
@@ -353,13 +353,13 @@ internal class _FinancialCompanyDTOEntityMetadata extends com.adobe.fiber.valueo
     }
 
     [Bindable(event="propertyChange")]
-    public function get isBankTypeAvailable():Boolean
+    public function get isDescriptionAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isDescriptionAvailable():Boolean
+    public function get isBankTypeAvailable():Boolean
     {
         return true;
     }
@@ -447,13 +447,13 @@ internal class _FinancialCompanyDTOEntityMetadata extends com.adobe.fiber.valueo
     }
 
     [Bindable(event="propertyChange")]   
-    public function get bankTypeStyle():com.adobe.fiber.styles.Style
+    public function get descriptionStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get descriptionStyle():com.adobe.fiber.styles.Style
+    public function get bankTypeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
