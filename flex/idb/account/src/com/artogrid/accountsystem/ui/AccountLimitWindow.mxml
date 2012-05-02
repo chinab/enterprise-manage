@@ -3,6 +3,7 @@
 			   close="PopUpManager.removePopUp(this)" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="用户限制-{_accountDTO.displayName}">
 	<fx:Script>
 		<![CDATA[
+			import com.artogrid.accountsystem.controls.MyAlert;
 			import com.artogrid.accountsystem.vo.AccountDTO;
 			import com.artogrid.accountsystem.vo.AccountLimitDTO;
 			import com.artogrid.accountsystem.vo.AccountRoleRelationDTO;
@@ -10,6 +11,7 @@
 			import mx.collections.ArrayCollection;
 			import mx.collections.IList;
 			import mx.controls.Alert;
+			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
@@ -74,6 +76,16 @@
 			protected function saveAccountLimitsResult_resultHandler(event:ResultEvent):void {
 				PopUpManager.removePopUp(this);
 			}
+
+			protected function clearBtn_clickHandler(event:MouseEvent):void {
+				MyAlert.showConfirm("是否确认清除所有已注册的机器id?", function(event:CloseEvent):void {
+					clearMachineIdsResult.token=idbLoginRO.clearMachineIds(_accountDTO.id);
+				});
+			}
+
+			protected function clearMachineIdsResult_resultHandler(event:ResultEvent):void {
+				MyAlert.showSuccess("清除数据成功!");
+			}
 		]]>
 	</fx:Script>
 
@@ -124,6 +136,8 @@
 			</s:HGroup>
 		</fx:Component>
 		<s:CallResponder id="saveAccountLimitsResult" result="saveAccountLimitsResult_resultHandler(event)"/>
+		<s:CallResponder id="clearMachineIdsResult" result="clearMachineIdsResult_resultHandler(event)"/>
+		<ro:IdbLoginRO id="idbLoginRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
 	</fx:Declarations>
 	<s:HGroup gap="20" horizontalCenter="0" top="20">
 		<s:Label text="部门" width="80" textAlign="right"/>
@@ -137,4 +151,5 @@
 	</s:VGroup>
 	<s:Button bottom="20" horizontalCenter="-40" label="保存" id="saveBtn" click="saveBtn_clickHandler(event)"/>
 	<s:Button bottom="20" horizontalCenter="40" label="取消" id="cBtn" click="cBtn_clickHandler(event)"/>
+	<s:Button id="clearBtn" right="20" bottom="20" label="清理已注册机器号" click="clearBtn_clickHandler(event)"/>
 </s:TitleWindow>
