@@ -1,5 +1,5 @@
 /**
- * This is a generated sub-class of _PaginatorObjUtil.as and is intended for behavior
+ * This is a generated sub-class of _IDBAccount.as and is intended for behavior
  * customization.  This class is only generated when there is no file already present
  * at its target location.  Thus custom behavior that you add here will survive regeneration
  * of the super-class. 
@@ -15,7 +15,7 @@ package com.artogrid.accountsystem.vo
 
 import com.adobe.fiber.core.model_internal;
 
-public class PaginatorObjUtil extends _Super_PaginatorObjUtil
+public class IDBAccount extends _Super_IDBAccount
 {
     /** 
      * DO NOT MODIFY THIS STATIC INITIALIZER - IT IS NECESSARY
@@ -30,17 +30,17 @@ public class PaginatorObjUtil extends _Super_PaginatorObjUtil
      */     
     public static function _initRemoteClassAlias() : void
     {
-        _Super_PaginatorObjUtil.model_internal::initRemoteClassAliasSingle(com.artogrid.accountsystem.vo.PaginatorObjUtil);
-        _Super_PaginatorObjUtil.model_internal::initRemoteClassAliasAllRelated();
+        _Super_IDBAccount.model_internal::initRemoteClassAliasSingle(com.artogrid.accountsystem.vo.IDBAccount);
+        _Super_IDBAccount.model_internal::initRemoteClassAliasAllRelated();
     }
      
     model_internal static function initRemoteClassAliasSingleChild() : void
     {
-        _Super_PaginatorObjUtil.model_internal::initRemoteClassAliasSingle(com.artogrid.accountsystem.vo.PaginatorObjUtil);
+        _Super_IDBAccount.model_internal::initRemoteClassAliasSingle(com.artogrid.accountsystem.vo.IDBAccount);
     }
     
     {
-        _Super_PaginatorObjUtil.model_internal::initRemoteClassAliasSingle(com.artogrid.accountsystem.vo.PaginatorObjUtil);
+        _Super_IDBAccount.model_internal::initRemoteClassAliasSingle(com.artogrid.accountsystem.vo.IDBAccount);
     }
     /** 
      * END OF DO NOT MODIFY SECTION

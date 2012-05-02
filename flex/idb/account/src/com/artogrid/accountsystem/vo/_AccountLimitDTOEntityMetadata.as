@@ -20,14 +20,14 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "endTime", "departmentCode");
+    model_internal static var allProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "endTime", "departmentCode");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "endTime", "departmentCode");
+    model_internal static var dataProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "endTime", "departmentCode");
+    model_internal static var nonDerivedProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -53,8 +53,8 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
             model_internal::dependentsOnMap["status"] = new Array();
             model_internal::dependentsOnMap["maxMachineSize"] = new Array();
             model_internal::dependentsOnMap["maxOnlineSize"] = new Array();
-            model_internal::dependentsOnMap["endTime"] = new Array();
             model_internal::dependentsOnMap["departmentCode"] = new Array();
+            model_internal::dependentsOnMap["endTime"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -68,8 +68,8 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
         model_internal::propertyTypeMap["status"] = "String";
         model_internal::propertyTypeMap["maxMachineSize"] = "int";
         model_internal::propertyTypeMap["maxOnlineSize"] = "int";
-        model_internal::propertyTypeMap["endTime"] = "Date";
         model_internal::propertyTypeMap["departmentCode"] = "String";
+        model_internal::propertyTypeMap["endTime"] = "Date";
 
         model_internal::_instance = value;
     }
@@ -335,13 +335,13 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
     }
 
     [Bindable(event="propertyChange")]
-    public function get isEndTimeAvailable():Boolean
+    public function get isDepartmentCodeAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isDepartmentCodeAvailable():Boolean
+    public function get isEndTimeAvailable():Boolean
     {
         return true;
     }
@@ -393,13 +393,13 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
     }
 
     [Bindable(event="propertyChange")]   
-    public function get endTimeStyle():com.adobe.fiber.styles.Style
+    public function get departmentCodeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get departmentCodeStyle():com.adobe.fiber.styles.Style
+    public function get endTimeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

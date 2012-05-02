@@ -50,8 +50,8 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
      */
     private var _internal_id : String;
     private var _internal_enName : String;
-    private var _internal_address : String;
     private var _internal_status : String;
+    private var _internal_address : String;
     private var _internal_name : String;
     private var _internal_code : String;
     private var _internal_contact : String;
@@ -92,15 +92,15 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get address() : String
-    {
-        return _internal_address;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get status() : String
     {
         return _internal_status;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get address() : String
+    {
+        return _internal_address;
     }
 
     [Bindable(event="propertyChange")]
@@ -155,16 +155,6 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set address(value:String) : void
-    {
-        var oldValue:String = _internal_address;
-        if (oldValue !== value)
-        {
-            _internal_address = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "address", oldValue, _internal_address));
-        }
-    }
-
     public function set status(value:String) : void
     {
         var oldValue:String = _internal_status;
@@ -172,6 +162,16 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
         {
             _internal_status = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "status", oldValue, _internal_status));
+        }
+    }
+
+    public function set address(value:String) : void
+    {
+        var oldValue:String = _internal_address;
+        if (oldValue !== value)
+        {
+            _internal_address = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "address", oldValue, _internal_address));
         }
     }
 
