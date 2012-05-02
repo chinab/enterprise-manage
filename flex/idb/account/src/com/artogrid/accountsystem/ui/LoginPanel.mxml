@@ -26,10 +26,14 @@
 				var userDTO:UserDTO=loginToAccontResult.lastResult;
 				if (userDTO) {
 					if (userDTO.message == "success") {
-						messageLabel.text="";
-						usernameTextInput.text="";
-						passwordTextInput.text="";
-						loginFunction(userDTO);
+						if(userDTO.type == "superman"){
+							messageLabel.text="";
+							usernameTextInput.text="";
+							passwordTextInput.text="";
+							loginFunction(userDTO);
+						}else{
+							messageLabel.text="请使用superman用户登录";
+						}
 					} else {
 						messageLabel.text=userDTO.message;
 					}
