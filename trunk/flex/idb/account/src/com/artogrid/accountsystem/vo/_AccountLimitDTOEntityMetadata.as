@@ -20,14 +20,14 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
+    model_internal static var allProperties:Array = new Array("id", "startTime", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "startTime", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
+    model_internal static var dataProperties:Array = new Array("id", "startTime", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("startTime", "id", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "startTime", "accountId", "status", "maxMachineSize", "maxOnlineSize", "departmentCode", "endTime");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -47,8 +47,8 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
         {
             // dependents map
             model_internal::dependentsOnMap = new Object();
-            model_internal::dependentsOnMap["startTime"] = new Array();
             model_internal::dependentsOnMap["id"] = new Array();
+            model_internal::dependentsOnMap["startTime"] = new Array();
             model_internal::dependentsOnMap["accountId"] = new Array();
             model_internal::dependentsOnMap["status"] = new Array();
             model_internal::dependentsOnMap["maxMachineSize"] = new Array();
@@ -62,8 +62,8 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
 
         // Property type Map
         model_internal::propertyTypeMap = new Object();
-        model_internal::propertyTypeMap["startTime"] = "Date";
         model_internal::propertyTypeMap["id"] = "String";
+        model_internal::propertyTypeMap["startTime"] = "Date";
         model_internal::propertyTypeMap["accountId"] = "String";
         model_internal::propertyTypeMap["status"] = "String";
         model_internal::propertyTypeMap["maxMachineSize"] = "int";
@@ -299,13 +299,13 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
     }
 
     [Bindable(event="propertyChange")]
-    public function get isStartTimeAvailable():Boolean
+    public function get isIdAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isIdAvailable():Boolean
+    public function get isStartTimeAvailable():Boolean
     {
         return true;
     }
@@ -357,13 +357,13 @@ internal class _AccountLimitDTOEntityMetadata extends com.adobe.fiber.valueobjec
     }
 
     [Bindable(event="propertyChange")]   
-    public function get startTimeStyle():com.adobe.fiber.styles.Style
+    public function get idStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get idStyle():com.adobe.fiber.styles.Style
+    public function get startTimeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

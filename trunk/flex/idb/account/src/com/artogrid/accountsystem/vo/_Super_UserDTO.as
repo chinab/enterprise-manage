@@ -48,8 +48,8 @@ public class _Super_UserDTO extends flash.events.EventDispatcher implements com.
     /**
      * properties
      */
-    private var _internal_id : String;
     private var _internal_message : String;
+    private var _internal_id : String;
     private var _internal_username : String;
     private var _internal_phone : String;
     private var _internal_phoneBat : String;
@@ -83,15 +83,15 @@ public class _Super_UserDTO extends flash.events.EventDispatcher implements com.
      */
 
     [Bindable(event="propertyChange")]
-    public function get id() : String
-    {
-        return _internal_id;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get message() : String
     {
         return _internal_message;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get id() : String
+    {
+        return _internal_id;
     }
 
     [Bindable(event="propertyChange")]
@@ -156,16 +156,6 @@ public class _Super_UserDTO extends flash.events.EventDispatcher implements com.
      * data/source property setters
      */
 
-    public function set id(value:String) : void
-    {
-        var oldValue:String = _internal_id;
-        if (oldValue !== value)
-        {
-            _internal_id = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "id", oldValue, _internal_id));
-        }
-    }
-
     public function set message(value:String) : void
     {
         var oldValue:String = _internal_message;
@@ -173,6 +163,16 @@ public class _Super_UserDTO extends flash.events.EventDispatcher implements com.
         {
             _internal_message = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "message", oldValue, _internal_message));
+        }
+    }
+
+    public function set id(value:String) : void
+    {
+        var oldValue:String = _internal_id;
+        if (oldValue !== value)
+        {
+            _internal_id = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "id", oldValue, _internal_id));
         }
     }
 

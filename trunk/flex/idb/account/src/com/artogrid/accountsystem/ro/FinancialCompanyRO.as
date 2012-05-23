@@ -20,6 +20,7 @@ public class FinancialCompanyRO extends _Super_FinancialCompanyRO
 
         super.preInitializeService();
         // Initialization customization goes here
+		_serviceControl.setCredentials("Guest","token_default");
     }
 	private static var me:FinancialCompanyRO;
 	

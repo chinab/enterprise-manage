@@ -52,9 +52,15 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         operation = new mx.rpc.remoting.Operation(null, "getAccountsByDepartmentId");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountsByDepartmentId"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getOnlineAccount");
+        operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
+        operations["getOnlineAccount"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "getAccountsByRoleId");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountsByRoleId"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getAccountLimitsByAccountId");
+        operation.resultElementType = com.artogrid.accountsystem.vo.AccountLimitDTO;
+        operations["getAccountLimitsByAccountId"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "deleteAccountById");
         operation.resultType = Boolean;
         operations["deleteAccountById"] = operation;
@@ -73,6 +79,9 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         operation = new mx.rpc.remoting.Operation(null, "getAccountByUsername");
         operation.resultType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountByUsername"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "saveAccountLimits");
+        operation.resultType = Boolean;
+        operations["saveAccountLimits"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "getAccountById");
         operation.resultType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountById"] = operation;
@@ -82,15 +91,12 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         operation = new mx.rpc.remoting.Operation(null, "getAllAccountsPager");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAllAccountsPager"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getAccountLimitsByAccountId");
-        operation.resultElementType = com.artogrid.accountsystem.vo.AccountLimitDTO;
-        operations["getAccountLimitsByAccountId"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "saveAccountLimits");
-        operation.resultType = Boolean;
-        operations["saveAccountLimits"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getOnlineAccount");
+        operation = new mx.rpc.remoting.Operation(null, "getAccountsByIds");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
-        operations["getOnlineAccount"] = operation;
+        operations["getAccountsByIds"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "activateAccountById");
+        operation.resultType = com.artogrid.accountsystem.vo.AccountDTO;
+        operations["activateAccountById"] = operation;
 
         _serviceControl.operations = operations;
         _serviceControl.convertResultHandler = com.adobe.serializers.utility.TypeUtility.convertResultHandler;
@@ -199,6 +205,24 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     }
      
     /**
+      * This method is a generated wrapper used to call the 'getOnlineAccount' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function getOnlineAccount() : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getOnlineAccount");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
+        return _internal_token;
+    }
+     
+    /**
       * This method is a generated wrapper used to call the 'getAccountsByRoleId' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
@@ -212,6 +236,24 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     public function getAccountsByRoleId(arg0:String) : mx.rpc.AsyncToken
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountsByRoleId");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'getAccountLimitsByAccountId' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function getAccountLimitsByAccountId(arg0:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountLimitsByAccountId");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
         return _internal_token;
     }
@@ -325,6 +367,24 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     }
      
     /**
+      * This method is a generated wrapper used to call the 'saveAccountLimits' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function saveAccountLimits(arg0:String, arg1:ArrayCollection) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("saveAccountLimits");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
+        return _internal_token;
+    }
+     
+    /**
       * This method is a generated wrapper used to call the 'getAccountById' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
@@ -379,7 +439,7 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     }
      
     /**
-      * This method is a generated wrapper used to call the 'getAccountLimitsByAccountId' operation. It returns an mx.rpc.AsyncToken whose
+      * This method is a generated wrapper used to call the 'getAccountsByIds' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -389,15 +449,15 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
       *
       * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function getAccountLimitsByAccountId(arg0:String) : mx.rpc.AsyncToken
+    public function getAccountsByIds(arg0:ArrayCollection) : mx.rpc.AsyncToken
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountLimitsByAccountId");
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountsByIds");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
         return _internal_token;
     }
      
     /**
-      * This method is a generated wrapper used to call the 'saveAccountLimits' operation. It returns an mx.rpc.AsyncToken whose
+      * This method is a generated wrapper used to call the 'activateAccountById' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
       * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
@@ -407,28 +467,10 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
       *
       * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
       */
-    public function saveAccountLimits(arg0:String, arg1:ArrayCollection) : mx.rpc.AsyncToken
+    public function activateAccountById(arg0:String) : mx.rpc.AsyncToken
     {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("saveAccountLimits");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'getOnlineAccount' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function getOnlineAccount() : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getOnlineAccount");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("activateAccountById");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
         return _internal_token;
     }
      

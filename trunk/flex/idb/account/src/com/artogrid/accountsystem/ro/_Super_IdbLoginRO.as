@@ -37,25 +37,25 @@ internal class _Super_IdbLoginRO extends com.adobe.fiber.services.wrapper.Remote
         operation = new mx.rpc.remoting.Operation(null, "logout");
         operation.resultType = Boolean;
         operations["logout"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "login");
-        operation.resultType = com.artogrid.accountsystem.vo.LoginInfoDTO;
-        operations["login"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "loginToAccont");
-        operation.resultType = com.artogrid.accountsystem.vo.UserDTO;
-        operations["loginToAccont"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "setServerUrlsMap");
         operations["setServerUrlsMap"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getServerUrlsMap");
-        operation.resultType = Object;
-        operations["getServerUrlsMap"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "setServerUrlsMapDefault");
         operation.resultType = Object;
         operations["setServerUrlsMapDefault"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "login");
+        operation.resultType = com.artogrid.accountsystem.vo.LoginInfoDTO;
+        operations["login"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "logined");
         operations["logined"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "clearMachineIds");
         operation.resultType = Boolean;
         operations["clearMachineIds"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "loginToAccont");
+        operation.resultType = com.artogrid.accountsystem.vo.UserDTO;
+        operations["loginToAccont"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getServerUrlsMap");
+        operation.resultType = Object;
+        operations["getServerUrlsMap"] = operation;
 
         _serviceControl.operations = operations;
         _serviceControl.convertResultHandler = com.adobe.serializers.utility.TypeUtility.convertResultHandler;
@@ -92,42 +92,6 @@ internal class _Super_IdbLoginRO extends com.adobe.fiber.services.wrapper.Remote
     }
      
     /**
-      * This method is a generated wrapper used to call the 'login' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function login(arg0:String, arg1:String, arg2:String, arg3:String, arg4:String) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("login");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1,arg2,arg3,arg4) ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'loginToAccont' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function loginToAccont(arg0:String, arg1:String) : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("loginToAccont");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
-        return _internal_token;
-    }
-     
-    /**
       * This method is a generated wrapper used to call the 'setServerUrlsMap' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
@@ -146,24 +110,6 @@ internal class _Super_IdbLoginRO extends com.adobe.fiber.services.wrapper.Remote
     }
      
     /**
-      * This method is a generated wrapper used to call the 'getServerUrlsMap' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function getServerUrlsMap() : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getServerUrlsMap");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
-        return _internal_token;
-    }
-     
-    /**
       * This method is a generated wrapper used to call the 'setServerUrlsMapDefault' operation. It returns an mx.rpc.AsyncToken whose
       * result property will be populated with the result of the operation when the server response is received.
       * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
@@ -178,6 +124,24 @@ internal class _Super_IdbLoginRO extends com.adobe.fiber.services.wrapper.Remote
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("setServerUrlsMapDefault");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'login' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function login(arg0:String, arg1:String, arg2:String, arg3:String, arg4:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("login");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1,arg2,arg3,arg4) ;
         return _internal_token;
     }
      
@@ -214,6 +178,42 @@ internal class _Super_IdbLoginRO extends com.adobe.fiber.services.wrapper.Remote
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("clearMachineIds");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'loginToAccont' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function loginToAccont(arg0:String, arg1:String) : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("loginToAccont");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0,arg1) ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'getServerUrlsMap' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function getServerUrlsMap() : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getServerUrlsMap");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
         return _internal_token;
     }
      

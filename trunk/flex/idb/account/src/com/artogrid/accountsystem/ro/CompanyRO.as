@@ -17,6 +17,7 @@ package com.artogrid.accountsystem.ro {
 
 			super.preInitializeService();
 			// Initialization customization goes here
+			_serviceControl.setCredentials("Guest","token_default");
 		}
 		private static var me:CompanyRO;
 

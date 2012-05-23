@@ -48,8 +48,8 @@ public class _Super_AccountLimitDTO extends flash.events.EventDispatcher impleme
     /**
      * properties
      */
-    private var _internal_startTime : Date;
     private var _internal_id : String;
+    private var _internal_startTime : Date;
     private var _internal_accountId : String;
     private var _internal_status : String;
     private var _internal_maxMachineSize : int;
@@ -80,15 +80,15 @@ public class _Super_AccountLimitDTO extends flash.events.EventDispatcher impleme
      */
 
     [Bindable(event="propertyChange")]
-    public function get startTime() : Date
-    {
-        return _internal_startTime;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get id() : String
     {
         return _internal_id;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get startTime() : Date
+    {
+        return _internal_startTime;
     }
 
     [Bindable(event="propertyChange")]
@@ -135,16 +135,6 @@ public class _Super_AccountLimitDTO extends flash.events.EventDispatcher impleme
      * data/source property setters
      */
 
-    public function set startTime(value:Date) : void
-    {
-        var oldValue:Date = _internal_startTime;
-        if (oldValue !== value)
-        {
-            _internal_startTime = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "startTime", oldValue, _internal_startTime));
-        }
-    }
-
     public function set id(value:String) : void
     {
         var oldValue:String = _internal_id;
@@ -152,6 +142,16 @@ public class _Super_AccountLimitDTO extends flash.events.EventDispatcher impleme
         {
             _internal_id = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "id", oldValue, _internal_id));
+        }
+    }
+
+    public function set startTime(value:Date) : void
+    {
+        var oldValue:Date = _internal_startTime;
+        if (oldValue !== value)
+        {
+            _internal_startTime = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "startTime", oldValue, _internal_startTime));
         }
     }
 
