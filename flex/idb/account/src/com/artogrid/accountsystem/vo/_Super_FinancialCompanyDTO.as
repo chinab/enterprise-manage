@@ -55,8 +55,8 @@ public class _Super_FinancialCompanyDTO extends flash.events.EventDispatcher imp
     private var _internal_code : String;
     private var _internal_city : String;
     private var _internal_id : String;
-    private var _internal_description : String;
     private var _internal_bankType : String;
+    private var _internal_description : String;
     private var _internal_name : String;
     private var _internal_fullName : String;
     private var _internal_pinyin : String;
@@ -128,15 +128,15 @@ public class _Super_FinancialCompanyDTO extends flash.events.EventDispatcher imp
     }
 
     [Bindable(event="propertyChange")]
-    public function get description() : String
-    {
-        return _internal_description;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get bankType() : String
     {
         return _internal_bankType;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get description() : String
+    {
+        return _internal_description;
     }
 
     [Bindable(event="propertyChange")]
@@ -247,16 +247,6 @@ public class _Super_FinancialCompanyDTO extends flash.events.EventDispatcher imp
         }
     }
 
-    public function set description(value:String) : void
-    {
-        var oldValue:String = _internal_description;
-        if (oldValue !== value)
-        {
-            _internal_description = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "description", oldValue, _internal_description));
-        }
-    }
-
     public function set bankType(value:String) : void
     {
         var oldValue:String = _internal_bankType;
@@ -264,6 +254,16 @@ public class _Super_FinancialCompanyDTO extends flash.events.EventDispatcher imp
         {
             _internal_bankType = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "bankType", oldValue, _internal_bankType));
+        }
+    }
+
+    public function set description(value:String) : void
+    {
+        var oldValue:String = _internal_description;
+        if (oldValue !== value)
+        {
+            _internal_description = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "description", oldValue, _internal_description));
         }
     }
 

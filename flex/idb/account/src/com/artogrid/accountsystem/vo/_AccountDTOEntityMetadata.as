@@ -20,14 +20,14 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "createBy", "password", "message", "id", "accountCode", "username", "email", "address", "accountType", "companyId", "displayName", "modifyTime", "telephone", "mobile");
+    model_internal static var allProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "password", "createBy", "id", "message", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "modifyTime", "telephone", "mobile");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "createBy", "password", "message", "id", "accountCode", "username", "email", "address", "accountType", "companyId", "displayName", "modifyTime", "telephone", "mobile");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "password", "createBy", "id", "message", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "modifyTime", "telephone", "mobile");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "createBy", "password", "message", "id", "accountCode", "username", "email", "address", "accountType", "companyId", "displayName", "modifyTime", "telephone", "mobile");
+    model_internal static var dataProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "password", "createBy", "id", "message", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "modifyTime", "telephone", "mobile");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "createBy", "password", "message", "id", "accountCode", "username", "email", "address", "accountType", "companyId", "displayName", "modifyTime", "telephone", "mobile");
+    model_internal static var nonDerivedProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "password", "createBy", "id", "message", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "modifyTime", "telephone", "mobile");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -51,14 +51,14 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
             model_internal::dependentsOnMap["modifyBy"] = new Array();
             model_internal::dependentsOnMap["status"] = new Array();
             model_internal::dependentsOnMap["isForbidden"] = new Array();
-            model_internal::dependentsOnMap["createBy"] = new Array();
             model_internal::dependentsOnMap["password"] = new Array();
-            model_internal::dependentsOnMap["message"] = new Array();
+            model_internal::dependentsOnMap["createBy"] = new Array();
             model_internal::dependentsOnMap["id"] = new Array();
+            model_internal::dependentsOnMap["message"] = new Array();
             model_internal::dependentsOnMap["accountCode"] = new Array();
             model_internal::dependentsOnMap["username"] = new Array();
-            model_internal::dependentsOnMap["email"] = new Array();
             model_internal::dependentsOnMap["address"] = new Array();
+            model_internal::dependentsOnMap["email"] = new Array();
             model_internal::dependentsOnMap["accountType"] = new Array();
             model_internal::dependentsOnMap["companyId"] = new Array();
             model_internal::dependentsOnMap["displayName"] = new Array();
@@ -76,14 +76,14 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
         model_internal::propertyTypeMap["modifyBy"] = "String";
         model_internal::propertyTypeMap["status"] = "String";
         model_internal::propertyTypeMap["isForbidden"] = "String";
-        model_internal::propertyTypeMap["createBy"] = "String";
         model_internal::propertyTypeMap["password"] = "String";
-        model_internal::propertyTypeMap["message"] = "String";
+        model_internal::propertyTypeMap["createBy"] = "String";
         model_internal::propertyTypeMap["id"] = "String";
+        model_internal::propertyTypeMap["message"] = "String";
         model_internal::propertyTypeMap["accountCode"] = "String";
         model_internal::propertyTypeMap["username"] = "String";
-        model_internal::propertyTypeMap["email"] = "String";
         model_internal::propertyTypeMap["address"] = "String";
+        model_internal::propertyTypeMap["email"] = "String";
         model_internal::propertyTypeMap["accountType"] = "String";
         model_internal::propertyTypeMap["companyId"] = "String";
         model_internal::propertyTypeMap["displayName"] = "String";
@@ -343,25 +343,25 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]
-    public function get isCreateByAvailable():Boolean
-    {
-        return true;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get isPasswordAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isMessageAvailable():Boolean
+    public function get isCreateByAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
     public function get isIdAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isMessageAvailable():Boolean
     {
         return true;
     }
@@ -379,13 +379,13 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]
-    public function get isEmailAvailable():Boolean
+    public function get isAddressAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isAddressAvailable():Boolean
+    public function get isEmailAvailable():Boolean
     {
         return true;
     }
@@ -461,25 +461,25 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]   
-    public function get createByStyle():com.adobe.fiber.styles.Style
-    {
-        return model_internal::_nullStyle;
-    }
-
-    [Bindable(event="propertyChange")]   
     public function get passwordStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get messageStyle():com.adobe.fiber.styles.Style
+    public function get createByStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
     public function get idStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get messageStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
@@ -497,13 +497,13 @@ internal class _AccountDTOEntityMetadata extends com.adobe.fiber.valueobjects.Ab
     }
 
     [Bindable(event="propertyChange")]   
-    public function get emailStyle():com.adobe.fiber.styles.Style
+    public function get addressStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get addressStyle():com.adobe.fiber.styles.Style
+    public function get emailStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

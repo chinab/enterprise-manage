@@ -50,8 +50,8 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
      */
     private var _internal_id : String;
     private var _internal_createTime : Date;
-    private var _internal_accountId : String;
     private var _internal_modifyBy : String;
+    private var _internal_accountId : String;
     private var _internal_status : String;
     private var _internal_departmentId : String;
     private var _internal_departmentCode : String;
@@ -94,15 +94,15 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
     }
 
     [Bindable(event="propertyChange")]
-    public function get accountId() : String
-    {
-        return _internal_accountId;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get modifyBy() : String
     {
         return _internal_modifyBy;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get accountId() : String
+    {
+        return _internal_accountId;
     }
 
     [Bindable(event="propertyChange")]
@@ -169,16 +169,6 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
         }
     }
 
-    public function set accountId(value:String) : void
-    {
-        var oldValue:String = _internal_accountId;
-        if (oldValue !== value)
-        {
-            _internal_accountId = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "accountId", oldValue, _internal_accountId));
-        }
-    }
-
     public function set modifyBy(value:String) : void
     {
         var oldValue:String = _internal_modifyBy;
@@ -186,6 +176,16 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
         {
             _internal_modifyBy = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "modifyBy", oldValue, _internal_modifyBy));
+        }
+    }
+
+    public function set accountId(value:String) : void
+    {
+        var oldValue:String = _internal_accountId;
+        if (oldValue !== value)
+        {
+            _internal_accountId = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "accountId", oldValue, _internal_accountId));
         }
     }
 

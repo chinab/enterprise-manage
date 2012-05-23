@@ -20,14 +20,14 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("id", "createTime", "accountId", "modifyBy", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
+    model_internal static var allProperties:Array = new Array("id", "createTime", "modifyBy", "accountId", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "createTime", "accountId", "modifyBy", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "createTime", "modifyBy", "accountId", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("id", "createTime", "accountId", "modifyBy", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
+    model_internal static var dataProperties:Array = new Array("id", "createTime", "modifyBy", "accountId", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("id", "createTime", "accountId", "modifyBy", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "createTime", "modifyBy", "accountId", "status", "departmentId", "departmentCode", "modifyTime", "createBy", "roleId");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -49,8 +49,8 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
             model_internal::dependentsOnMap = new Object();
             model_internal::dependentsOnMap["id"] = new Array();
             model_internal::dependentsOnMap["createTime"] = new Array();
-            model_internal::dependentsOnMap["accountId"] = new Array();
             model_internal::dependentsOnMap["modifyBy"] = new Array();
+            model_internal::dependentsOnMap["accountId"] = new Array();
             model_internal::dependentsOnMap["status"] = new Array();
             model_internal::dependentsOnMap["departmentId"] = new Array();
             model_internal::dependentsOnMap["departmentCode"] = new Array();
@@ -66,8 +66,8 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
         model_internal::propertyTypeMap = new Object();
         model_internal::propertyTypeMap["id"] = "String";
         model_internal::propertyTypeMap["createTime"] = "Date";
-        model_internal::propertyTypeMap["accountId"] = "String";
         model_internal::propertyTypeMap["modifyBy"] = "String";
+        model_internal::propertyTypeMap["accountId"] = "String";
         model_internal::propertyTypeMap["status"] = "String";
         model_internal::propertyTypeMap["departmentId"] = "String";
         model_internal::propertyTypeMap["departmentCode"] = "String";
@@ -315,13 +315,13 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     }
 
     [Bindable(event="propertyChange")]
-    public function get isAccountIdAvailable():Boolean
+    public function get isModifyByAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isModifyByAvailable():Boolean
+    public function get isAccountIdAvailable():Boolean
     {
         return true;
     }
@@ -385,13 +385,13 @@ internal class _AccountRoleRelationDTOEntityMetadata extends com.adobe.fiber.val
     }
 
     [Bindable(event="propertyChange")]   
-    public function get accountIdStyle():com.adobe.fiber.styles.Style
+    public function get modifyByStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get modifyByStyle():com.adobe.fiber.styles.Style
+    public function get accountIdStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
