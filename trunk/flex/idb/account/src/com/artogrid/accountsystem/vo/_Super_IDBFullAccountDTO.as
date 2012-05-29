@@ -1,6 +1,6 @@
 /**
  * This is a generated class and is not intended for modification.  To customize behavior
- * of this value object you may modify the generated sub-class of this class - AccountRoleRelationDTO.as.
+ * of this value object you may modify the generated sub-class of this class - IDBFullAccountDTO.as.
  */
 
 package com.artogrid.accountsystem.vo
@@ -20,18 +20,18 @@ import com.adobe.fiber.valueobjects.AvailablePropertyIterator;
 use namespace model_internal;
 
 [ExcludeClass]
-public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
+public class _Super_IDBFullAccountDTO extends flash.events.EventDispatcher implements com.adobe.fiber.valueobjects.IValueObject
 {
     model_internal static function initRemoteClassAliasSingle(cz:Class) : void
     {
-        flash.net.registerClassAlias("com.artogrid.service.m1.vo.idblogin.AccountRoleRelationDTO", cz);
+        flash.net.registerClassAlias("com.artogrid.service.m1.vo.idblogin.IDBFullAccountDTO", cz);
     }
 
     model_internal static function initRemoteClassAliasAllRelated() : void
     {
     }
 
-    model_internal var _dminternal_model : _AccountRoleRelationDTOEntityMetadata;
+    model_internal var _dminternal_model : _IDBFullAccountDTOEntityMetadata;
     model_internal var _changedObjects:mx.collections.ArrayCollection = new ArrayCollection();
 
     public function getChangedObjects() : Array
@@ -48,16 +48,25 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
     /**
      * properties
      */
-    private var _internal_id : String;
     private var _internal_createTime : Date;
     private var _internal_modifyBy : String;
-    private var _internal_accountId : String;
     private var _internal_status : String;
-    private var _internal_departmentId : String;
-    private var _internal_departmentCode : String;
+    private var _internal_isForbidden : String;
+    private var _internal_companyName : String;
+    private var _internal_password : String;
     private var _internal_createBy : String;
+    private var _internal_id : String;
+    private var _internal_accountCode : String;
+    private var _internal_username : String;
+    private var _internal_address : String;
+    private var _internal_email : String;
+    private var _internal_accountType : String;
+    private var _internal_companyId : String;
+    private var _internal_displayName : String;
+    private var _internal_telephone : String;
     private var _internal_modifyTime : Date;
-    private var _internal_roleId : String;
+    private var _internal_companyFullName : String;
+    private var _internal_mobile : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -69,9 +78,9 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
 
     model_internal var _changeWatcherArray:Array = new Array();
 
-    public function _Super_AccountRoleRelationDTO()
+    public function _Super_IDBFullAccountDTO()
     {
-        _model = new _AccountRoleRelationDTOEntityMetadata(this);
+        _model = new _IDBFullAccountDTOEntityMetadata(this);
 
         // Bind to own data or source properties for cache invalidation triggering
 
@@ -80,12 +89,6 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
     /**
      * data/source property getters
      */
-
-    [Bindable(event="propertyChange")]
-    public function get id() : String
-    {
-        return _internal_id;
-    }
 
     [Bindable(event="propertyChange")]
     public function get createTime() : Date
@@ -100,27 +103,27 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
     }
 
     [Bindable(event="propertyChange")]
-    public function get accountId() : String
-    {
-        return _internal_accountId;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get status() : String
     {
         return _internal_status;
     }
 
     [Bindable(event="propertyChange")]
-    public function get departmentId() : String
+    public function get isForbidden() : String
     {
-        return _internal_departmentId;
+        return _internal_isForbidden;
     }
 
     [Bindable(event="propertyChange")]
-    public function get departmentCode() : String
+    public function get companyName() : String
     {
-        return _internal_departmentCode;
+        return _internal_companyName;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get password() : String
+    {
+        return _internal_password;
     }
 
     [Bindable(event="propertyChange")]
@@ -130,15 +133,75 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
     }
 
     [Bindable(event="propertyChange")]
+    public function get id() : String
+    {
+        return _internal_id;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get accountCode() : String
+    {
+        return _internal_accountCode;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get username() : String
+    {
+        return _internal_username;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get address() : String
+    {
+        return _internal_address;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get email() : String
+    {
+        return _internal_email;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get accountType() : String
+    {
+        return _internal_accountType;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get companyId() : String
+    {
+        return _internal_companyId;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get displayName() : String
+    {
+        return _internal_displayName;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get telephone() : String
+    {
+        return _internal_telephone;
+    }
+
+    [Bindable(event="propertyChange")]
     public function get modifyTime() : Date
     {
         return _internal_modifyTime;
     }
 
     [Bindable(event="propertyChange")]
-    public function get roleId() : String
+    public function get companyFullName() : String
     {
-        return _internal_roleId;
+        return _internal_companyFullName;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get mobile() : String
+    {
+        return _internal_mobile;
     }
 
     public function clearAssociations() : void
@@ -148,16 +211,6 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
     /**
      * data/source property setters
      */
-
-    public function set id(value:String) : void
-    {
-        var oldValue:String = _internal_id;
-        if (oldValue !== value)
-        {
-            _internal_id = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "id", oldValue, _internal_id));
-        }
-    }
 
     public function set createTime(value:Date) : void
     {
@@ -179,16 +232,6 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
         }
     }
 
-    public function set accountId(value:String) : void
-    {
-        var oldValue:String = _internal_accountId;
-        if (oldValue !== value)
-        {
-            _internal_accountId = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "accountId", oldValue, _internal_accountId));
-        }
-    }
-
     public function set status(value:String) : void
     {
         var oldValue:String = _internal_status;
@@ -199,23 +242,33 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
         }
     }
 
-    public function set departmentId(value:String) : void
+    public function set isForbidden(value:String) : void
     {
-        var oldValue:String = _internal_departmentId;
+        var oldValue:String = _internal_isForbidden;
         if (oldValue !== value)
         {
-            _internal_departmentId = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "departmentId", oldValue, _internal_departmentId));
+            _internal_isForbidden = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "isForbidden", oldValue, _internal_isForbidden));
         }
     }
 
-    public function set departmentCode(value:String) : void
+    public function set companyName(value:String) : void
     {
-        var oldValue:String = _internal_departmentCode;
+        var oldValue:String = _internal_companyName;
         if (oldValue !== value)
         {
-            _internal_departmentCode = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "departmentCode", oldValue, _internal_departmentCode));
+            _internal_companyName = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "companyName", oldValue, _internal_companyName));
+        }
+    }
+
+    public function set password(value:String) : void
+    {
+        var oldValue:String = _internal_password;
+        if (oldValue !== value)
+        {
+            _internal_password = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "password", oldValue, _internal_password));
         }
     }
 
@@ -229,6 +282,96 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
         }
     }
 
+    public function set id(value:String) : void
+    {
+        var oldValue:String = _internal_id;
+        if (oldValue !== value)
+        {
+            _internal_id = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "id", oldValue, _internal_id));
+        }
+    }
+
+    public function set accountCode(value:String) : void
+    {
+        var oldValue:String = _internal_accountCode;
+        if (oldValue !== value)
+        {
+            _internal_accountCode = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "accountCode", oldValue, _internal_accountCode));
+        }
+    }
+
+    public function set username(value:String) : void
+    {
+        var oldValue:String = _internal_username;
+        if (oldValue !== value)
+        {
+            _internal_username = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "username", oldValue, _internal_username));
+        }
+    }
+
+    public function set address(value:String) : void
+    {
+        var oldValue:String = _internal_address;
+        if (oldValue !== value)
+        {
+            _internal_address = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "address", oldValue, _internal_address));
+        }
+    }
+
+    public function set email(value:String) : void
+    {
+        var oldValue:String = _internal_email;
+        if (oldValue !== value)
+        {
+            _internal_email = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "email", oldValue, _internal_email));
+        }
+    }
+
+    public function set accountType(value:String) : void
+    {
+        var oldValue:String = _internal_accountType;
+        if (oldValue !== value)
+        {
+            _internal_accountType = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "accountType", oldValue, _internal_accountType));
+        }
+    }
+
+    public function set companyId(value:String) : void
+    {
+        var oldValue:String = _internal_companyId;
+        if (oldValue !== value)
+        {
+            _internal_companyId = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "companyId", oldValue, _internal_companyId));
+        }
+    }
+
+    public function set displayName(value:String) : void
+    {
+        var oldValue:String = _internal_displayName;
+        if (oldValue !== value)
+        {
+            _internal_displayName = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "displayName", oldValue, _internal_displayName));
+        }
+    }
+
+    public function set telephone(value:String) : void
+    {
+        var oldValue:String = _internal_telephone;
+        if (oldValue !== value)
+        {
+            _internal_telephone = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "telephone", oldValue, _internal_telephone));
+        }
+    }
+
     public function set modifyTime(value:Date) : void
     {
         var oldValue:Date = _internal_modifyTime;
@@ -239,13 +382,23 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
         }
     }
 
-    public function set roleId(value:String) : void
+    public function set companyFullName(value:String) : void
     {
-        var oldValue:String = _internal_roleId;
+        var oldValue:String = _internal_companyFullName;
         if (oldValue !== value)
         {
-            _internal_roleId = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "roleId", oldValue, _internal_roleId));
+            _internal_companyFullName = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "companyFullName", oldValue, _internal_companyFullName));
+        }
+    }
+
+    public function set mobile(value:String) : void
+    {
+        var oldValue:String = _internal_mobile;
+        if (oldValue !== value)
+        {
+            _internal_mobile = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "mobile", oldValue, _internal_mobile));
         }
     }
 
@@ -310,14 +463,14 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
 
     [Transient]
     [Bindable(event="propertyChange")]
-    public function get _model() : _AccountRoleRelationDTOEntityMetadata
+    public function get _model() : _IDBFullAccountDTOEntityMetadata
     {
         return model_internal::_dminternal_model;
     }
 
-    public function set _model(value : _AccountRoleRelationDTOEntityMetadata) : void
+    public function set _model(value : _IDBFullAccountDTOEntityMetadata) : void
     {
-        var oldValue : _AccountRoleRelationDTOEntityMetadata = model_internal::_dminternal_model;
+        var oldValue : _IDBFullAccountDTOEntityMetadata = model_internal::_dminternal_model;
         if (oldValue !== value)
         {
             model_internal::_dminternal_model = value;

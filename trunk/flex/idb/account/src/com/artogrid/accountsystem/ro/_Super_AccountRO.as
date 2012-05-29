@@ -10,6 +10,7 @@ import com.adobe.serializers.utility.TypeUtility;
 import com.artogrid.accountsystem.vo.AccountDTO;
 import com.artogrid.accountsystem.vo.AccountLimitDTO;
 import com.artogrid.accountsystem.vo.AccountRoleRelationDTO;
+import com.artogrid.accountsystem.vo.IDBFullAccountDTO;
 import mx.collections.ArrayCollection;
 import mx.rpc.AbstractOperation;
 import mx.rpc.AsyncToken;
@@ -33,6 +34,7 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         com.artogrid.accountsystem.vo.AccountDTO._initRemoteClassAlias();
         com.artogrid.accountsystem.vo.AccountRoleRelationDTO._initRemoteClassAlias();
         com.artogrid.accountsystem.vo.AccountLimitDTO._initRemoteClassAlias();
+        com.artogrid.accountsystem.vo.IDBFullAccountDTO._initRemoteClassAlias();
 
         var operations:Object = new Object();
         var operation:mx.rpc.remoting.Operation;
@@ -52,9 +54,6 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         operation = new mx.rpc.remoting.Operation(null, "getAccountsByDepartmentId");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountsByDepartmentId"] = operation;
-        operation = new mx.rpc.remoting.Operation(null, "getOnlineAccount");
-        operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
-        operations["getOnlineAccount"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "getAccountsByRoleId");
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAccountsByRoleId"] = operation;
@@ -92,11 +91,14 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
         operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["getAllAccountsPager"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "getAccountsByIds");
-        operation.resultElementType = com.artogrid.accountsystem.vo.AccountDTO;
+        operation.resultElementType = com.artogrid.accountsystem.vo.IDBFullAccountDTO;
         operations["getAccountsByIds"] = operation;
         operation = new mx.rpc.remoting.Operation(null, "activateAccountById");
         operation.resultType = com.artogrid.accountsystem.vo.AccountDTO;
         operations["activateAccountById"] = operation;
+        operation = new mx.rpc.remoting.Operation(null, "getOnlineAccountAsXMLString");
+        operation.resultType = String;
+        operations["getOnlineAccountAsXMLString"] = operation;
 
         _serviceControl.operations = operations;
         _serviceControl.convertResultHandler = com.adobe.serializers.utility.TypeUtility.convertResultHandler;
@@ -201,24 +203,6 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getAccountsByDepartmentId");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
-        return _internal_token;
-    }
-     
-    /**
-      * This method is a generated wrapper used to call the 'getOnlineAccount' operation. It returns an mx.rpc.AsyncToken whose
-      * result property will be populated with the result of the operation when the server response is received.
-      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
-      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
-      *
-      * @see mx.rpc.AsyncToken
-      * @see mx.rpc.CallResponder 
-      *
-      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
-      */
-    public function getOnlineAccount() : mx.rpc.AsyncToken
-    {
-        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getOnlineAccount");
-        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
         return _internal_token;
     }
      
@@ -471,6 +455,24 @@ internal class _Super_AccountRO extends com.adobe.fiber.services.wrapper.RemoteO
     {
         var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("activateAccountById");
         var _internal_token:mx.rpc.AsyncToken = _internal_operation.send(arg0) ;
+        return _internal_token;
+    }
+     
+    /**
+      * This method is a generated wrapper used to call the 'getOnlineAccountAsXMLString' operation. It returns an mx.rpc.AsyncToken whose
+      * result property will be populated with the result of the operation when the server response is received.
+      * To use this result from MXML code, define a CallResponder component and assign its token property to this method's return value.
+      * You can then bind to CallResponder.lastResult or listen for the CallResponder.result or fault events.
+      *
+      * @see mx.rpc.AsyncToken
+      * @see mx.rpc.CallResponder 
+      *
+      * @return an mx.rpc.AsyncToken whose result property will be populated with the result of the operation when the server response is received.
+      */
+    public function getOnlineAccountAsXMLString() : mx.rpc.AsyncToken
+    {
+        var _internal_operation:mx.rpc.AbstractOperation = _serviceControl.getOperation("getOnlineAccountAsXMLString");
+        var _internal_token:mx.rpc.AsyncToken = _internal_operation.send() ;
         return _internal_token;
     }
      
