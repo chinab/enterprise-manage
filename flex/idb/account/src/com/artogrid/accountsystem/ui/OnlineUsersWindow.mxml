@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="900" height="600"
+			   creationComplete="titleWindow_creationCompleteHandler(event)" title="在线用户" close="titlewindow1_closeHandler(event)" keyUp="titlewindow1_keyUpHandler(event)">
+
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.bl.InitData;
+			import com.artogrid.accountsystem.controls.MyAlert;
+
+			import mx.controls.Alert;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			private static var _instance:TitleWindow;
+			private static const M_MS:Number=60000;
+			private static const HOUR_MS:Number=3600000;
+			private static const DAY_MS:Number=86400000;
+			private static const MONTH_MS:Number=2592000000;
+			private static const YEAR_MS:Number=31536000000;
+
+			public static function get instance():TitleWindow {
+				if (_instance == null) {
+					_instance=new OnlineUsersWindow();
+				}
+				return _instance;
+			}
+
+			protected function titleWindow_creationCompleteHandler(event:FlexEvent):void {
+				getOnlineAccountAsXMLStringResult.token=accountRO.getOnlineAccountAsXMLString();
+			}
+
+			protected function titlewindow1_closeHandler(event:CloseEvent):void {
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function titlewindow1_keyUpHandler(event:KeyboardEvent):void {
+				if (Keyboard.ESCAPE == event.keyCode) {
+					PopUpManager.removePopUp(this);
+				}
+			}
+
+			public function logout(token:String):void {
+				if (token != null) {
+					MyAlert.showConfirm("是否要登出该用户？", function(closeEvent:CloseEvent):void {
+						if (closeEvent.detail == Alert.YES) {
+							logoutResult.token=idbLoginRO.logout(token);
+						}
+					});
+				} else {
+					MyAlert.showAlert("登出操作错误!");
+				}
+			}
+
+			private function timeToString(item:Object, column:AdvancedDataGridColumn):String {
+				var value:String=item[column.dataField];
+				if (value == "")
+					return "";
+				else {
+					var date:Date=new Date(Number(value));
+					return dateFormatter.format(date);
+				}
+			}
+
+			private function timeToTimeLong(item:Object, column:AdvancedDataGridColumn):String {
+				var value:String=item[column.dataField];
+				if (value != null && value != "") {
+					var timeLong:Number=Number(value);
+					if (timeLong < M_MS) {
+						return "不足1分钟";
+					} else if (timeLong > M_MS && timeLong < HOUR_MS) {
+						return (timeLong / M_MS).toFixed() + "分钟";
+					} else if (timeLong > HOUR_MS && timeLong < DAY_MS) {
+						return (timeLong / HOUR_MS).toFixed() + "小时";
+					} else if (timeLong > DAY_MS && timeLong < MONTH_MS) {
+						return (timeLong / DAY_MS).toFixed() + "天";
+					} else if (timeLong > MONTH_MS && timeLong < YEAR_MS) {
+						return (timeLong / MONTH_MS).toFixed() + "月";
+					} else {
+						return (timeLong / YEAR_MS).toFixed() + "年";
+					}
+				}
+				return "";
+			}
+
+			private function typeLabelFunction(item:Object, column:AdvancedDataGridColumn):String {
+				var accountType:String=item[column.dataField];
+				if (accountType == null || accountType == "")
+					return ""
+				else
+					return InitData.getOtherValueFromListByName(InitData.useTypes, "value", accountType, "name");
+			}
+
+			protected function idbLoginRO_resultHandler(event:ResultEvent):void {
+				if (event.result) {
+					MyAlert.showSuccess("登出成功!");
+				}
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="yyyy-MM-dd HH:mm:ss"/>
+		<fx:XMLList id="data" xmlns="">
+			<user name="张三" loginStartTime="" loginType="" currentDuration="" loginCount="20" totalDuration="165491"
+				  token="">
+				<ip name="192.168.0.51" loginStartTime="1338270350072" loginType="1" currentDuration="40040" loginCount="15"
+					token="fdsfds"/>
+				<ip name="192.168.0.54" loginStartTime="1338270350072" loginType="1" currentDuration="42000" loginCount="5" totalDuration="700000"
+					token="fdsfdsfds"/>
+			</user>
+			<user name="李四" loginStartTime="" loginType="" currentDuration="" loginCount="" totalDuration="154984"
+				  token="">
+				<ip name="192.168.0.51" loginStartTime="1338270350072" loginType="2" currentDuration="80000" loginCount="" totalDuration="984654"
+					token="fds"/>
+				<ip name="192.168.0.54" loginStartTime="1338270350072" loginType="2" currentDuration="90000" loginCount="" totalDuration="496849049"
+					token="fdsfds"/>
+			</user>
+		</fx:XMLList>
+		<s:CallResponder id="logoutResult"/>
+		<ro:IdbLoginRO id="idbLoginRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true" result="idbLoginRO_resultHandler(event)"/>
+		<s:CallResponder id="getOnlineAccountAsXMLStringResult"/>
+		<ro:AccountRO id="accountRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+	</fx:Declarations>
+	<mx:AdvancedDataGrid id="adg1" left="15" right="15" top="15" bottom="15" designViewDataType="tree"
+						 displayItemsExpanded="true">
+		<mx:dataProvider>
+			<mx:HierarchicalData source="{data}"/>
+		</mx:dataProvider>
+		<mx:columns>
+			<mx:AdvancedDataGridColumn dataField="@name" headerText="用户(/ip)"/>
+			<mx:AdvancedDataGridColumn dataField="@loginStartTime" headerText="登录时间" labelFunction="timeToString"/>
+			<mx:AdvancedDataGridColumn dataField="@loginType" headerText="登录类型" labelFunction="typeLabelFunction"/>
+			<mx:AdvancedDataGridColumn dataField="@currentDuration" headerText="本次登录时长" labelFunction="timeToTimeLong"/>
+			<mx:AdvancedDataGridColumn dataField="@loginCount" headerText="登录次数"/>
+			<mx:AdvancedDataGridColumn dataField="@token" headerText="操作">
+				<mx:itemRenderer>
+					<fx:Component>
+						<mx:Box horizontalAlign="center">
+							<fx:Script>
+								<![CDATA[
+									import mx.controls.Alert;
+
+									protected function button1_clickHandler(event:MouseEvent):void {
+										outerDocument.logout(data.@token);
+									}
+								]]>
+							</fx:Script>
+							<mx:LinkButton icon="@Embed('assets/logout.png')" click="button1_clickHandler(event)" visible="{data.@token!=null?data.@token!='':false}" label="登出" toolTip="强制下线"/>
+						</mx:Box>
+					</fx:Component>
+				</mx:itemRenderer>
+			</mx:AdvancedDataGridColumn>
+		</mx:columns>
+	</mx:AdvancedDataGrid>
+</s:TitleWindow>
