@@ -1,0 +1,53 @@
+@CHARSET "UTF-8";
+
+body {
+	font-size: 14px;
+}
+
+textarea{
+	font-size: 14px;
+	width: 268px;
+	height: 153px;
+}
+
+a {
+	list-style: none;
+	float: left;
+	padding: 0px;
+	margin-right: 10px;
+	background-color: #A3BAE9;
+	color: #333333;
+	border-style: solid;
+	border-color: #A3BAE9;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	width: 700px;
+}
+
+table td {
+	border: 1px solid black;
+}
+
+table th {
+	border: 1px solid black;
+}
+
+tr.tableTitle th {
+	border: 1px solid black;
+	background-color: #A3BAE9;
+}
+
+.addContent,.editContent {
+	clear: left;
+	height: 245px;
+	width: 280px;
+	background-color: #A3BAE9;
+	color: #333333;
+	padding: 5px;
+	display: block;
+}
