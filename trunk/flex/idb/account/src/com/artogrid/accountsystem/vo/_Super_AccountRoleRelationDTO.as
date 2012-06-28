@@ -55,8 +55,8 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
     private var _internal_status : String;
     private var _internal_departmentId : String;
     private var _internal_departmentCode : String;
-    private var _internal_createBy : String;
     private var _internal_modifyTime : Date;
+    private var _internal_createBy : String;
     private var _internal_roleId : String;
 
     private static var emptyArray:Array = new Array();
@@ -124,15 +124,15 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
     }
 
     [Bindable(event="propertyChange")]
-    public function get createBy() : String
-    {
-        return _internal_createBy;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get modifyTime() : Date
     {
         return _internal_modifyTime;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get createBy() : String
+    {
+        return _internal_createBy;
     }
 
     [Bindable(event="propertyChange")]
@@ -219,16 +219,6 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
         }
     }
 
-    public function set createBy(value:String) : void
-    {
-        var oldValue:String = _internal_createBy;
-        if (oldValue !== value)
-        {
-            _internal_createBy = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "createBy", oldValue, _internal_createBy));
-        }
-    }
-
     public function set modifyTime(value:Date) : void
     {
         var oldValue:Date = _internal_modifyTime;
@@ -236,6 +226,16 @@ public class _Super_AccountRoleRelationDTO extends flash.events.EventDispatcher 
         {
             _internal_modifyTime = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "modifyTime", oldValue, _internal_modifyTime));
+        }
+    }
+
+    public function set createBy(value:String) : void
+    {
+        var oldValue:String = _internal_createBy;
+        if (oldValue !== value)
+        {
+            _internal_createBy = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "createBy", oldValue, _internal_createBy));
         }
     }
 

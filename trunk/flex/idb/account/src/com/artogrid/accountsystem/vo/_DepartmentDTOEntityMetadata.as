@@ -20,14 +20,14 @@ internal class _DepartmentDTOEntityMetadata extends com.adobe.fiber.valueobjects
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("id", "status", "description", "name", "messageChannelURL", "departmentCode", "endpoint");
+    model_internal static var allProperties:Array = new Array("id", "status", "description", "name", "messageChannelClass", "messageChannelURL", "departmentCode", "endTime", "endpoint");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "status", "description", "name", "messageChannelURL", "departmentCode", "endpoint");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "status", "description", "name", "messageChannelClass", "messageChannelURL", "departmentCode", "endTime", "endpoint");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("id", "status", "description", "name", "messageChannelURL", "departmentCode", "endpoint");
+    model_internal static var dataProperties:Array = new Array("id", "status", "description", "name", "messageChannelClass", "messageChannelURL", "departmentCode", "endTime", "endpoint");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("id", "status", "description", "name", "messageChannelURL", "departmentCode", "endpoint");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "status", "description", "name", "messageChannelClass", "messageChannelURL", "departmentCode", "endTime", "endpoint");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -51,8 +51,10 @@ internal class _DepartmentDTOEntityMetadata extends com.adobe.fiber.valueobjects
             model_internal::dependentsOnMap["status"] = new Array();
             model_internal::dependentsOnMap["description"] = new Array();
             model_internal::dependentsOnMap["name"] = new Array();
+            model_internal::dependentsOnMap["messageChannelClass"] = new Array();
             model_internal::dependentsOnMap["messageChannelURL"] = new Array();
             model_internal::dependentsOnMap["departmentCode"] = new Array();
+            model_internal::dependentsOnMap["endTime"] = new Array();
             model_internal::dependentsOnMap["endpoint"] = new Array();
 
             // collection base map
@@ -65,8 +67,10 @@ internal class _DepartmentDTOEntityMetadata extends com.adobe.fiber.valueobjects
         model_internal::propertyTypeMap["status"] = "String";
         model_internal::propertyTypeMap["description"] = "String";
         model_internal::propertyTypeMap["name"] = "String";
+        model_internal::propertyTypeMap["messageChannelClass"] = "String";
         model_internal::propertyTypeMap["messageChannelURL"] = "String";
         model_internal::propertyTypeMap["departmentCode"] = "String";
+        model_internal::propertyTypeMap["endTime"] = "Date";
         model_internal::propertyTypeMap["endpoint"] = "String";
 
         model_internal::_instance = value;
@@ -321,6 +325,12 @@ internal class _DepartmentDTOEntityMetadata extends com.adobe.fiber.valueobjects
     }
 
     [Bindable(event="propertyChange")]
+    public function get isMessageChannelClassAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
     public function get isMessageChannelURLAvailable():Boolean
     {
         return true;
@@ -328,6 +338,12 @@ internal class _DepartmentDTOEntityMetadata extends com.adobe.fiber.valueobjects
 
     [Bindable(event="propertyChange")]
     public function get isDepartmentCodeAvailable():Boolean
+    {
+        return true;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get isEndTimeAvailable():Boolean
     {
         return true;
     }
@@ -373,6 +389,12 @@ internal class _DepartmentDTOEntityMetadata extends com.adobe.fiber.valueobjects
     }
 
     [Bindable(event="propertyChange")]   
+    public function get messageChannelClassStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
     public function get messageChannelURLStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
@@ -380,6 +402,12 @@ internal class _DepartmentDTOEntityMetadata extends com.adobe.fiber.valueobjects
 
     [Bindable(event="propertyChange")]   
     public function get departmentCodeStyle():com.adobe.fiber.styles.Style
+    {
+        return model_internal::_nullStyle;
+    }
+
+    [Bindable(event="propertyChange")]   
+    public function get endTimeStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

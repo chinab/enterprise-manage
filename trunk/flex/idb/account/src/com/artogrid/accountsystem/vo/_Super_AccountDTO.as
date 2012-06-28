@@ -54,17 +54,17 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     private var _internal_isForbidden : String;
     private var _internal_createBy : String;
     private var _internal_password : String;
-    private var _internal_id : String;
     private var _internal_message : String;
+    private var _internal_id : String;
     private var _internal_accountCode : String;
     private var _internal_username : String;
-    private var _internal_address : String;
     private var _internal_email : String;
+    private var _internal_address : String;
     private var _internal_accountType : String;
     private var _internal_companyId : String;
     private var _internal_displayName : String;
-    private var _internal_telephone : String;
     private var _internal_modifyTime : Date;
+    private var _internal_telephone : String;
     private var _internal_mobile : String;
 
     private static var emptyArray:Array = new Array();
@@ -126,15 +126,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get id() : String
-    {
-        return _internal_id;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get message() : String
     {
         return _internal_message;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get id() : String
+    {
+        return _internal_id;
     }
 
     [Bindable(event="propertyChange")]
@@ -150,15 +150,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get address() : String
-    {
-        return _internal_address;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get email() : String
     {
         return _internal_email;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get address() : String
+    {
+        return _internal_address;
     }
 
     [Bindable(event="propertyChange")]
@@ -180,15 +180,15 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get telephone() : String
-    {
-        return _internal_telephone;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get modifyTime() : Date
     {
         return _internal_modifyTime;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get telephone() : String
+    {
+        return _internal_telephone;
     }
 
     [Bindable(event="propertyChange")]
@@ -265,16 +265,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set id(value:String) : void
-    {
-        var oldValue:String = _internal_id;
-        if (oldValue !== value)
-        {
-            _internal_id = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "id", oldValue, _internal_id));
-        }
-    }
-
     public function set message(value:String) : void
     {
         var oldValue:String = _internal_message;
@@ -282,6 +272,16 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         {
             _internal_message = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "message", oldValue, _internal_message));
+        }
+    }
+
+    public function set id(value:String) : void
+    {
+        var oldValue:String = _internal_id;
+        if (oldValue !== value)
+        {
+            _internal_id = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "id", oldValue, _internal_id));
         }
     }
 
@@ -305,16 +305,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set address(value:String) : void
-    {
-        var oldValue:String = _internal_address;
-        if (oldValue !== value)
-        {
-            _internal_address = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "address", oldValue, _internal_address));
-        }
-    }
-
     public function set email(value:String) : void
     {
         var oldValue:String = _internal_email;
@@ -322,6 +312,16 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         {
             _internal_email = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "email", oldValue, _internal_email));
+        }
+    }
+
+    public function set address(value:String) : void
+    {
+        var oldValue:String = _internal_address;
+        if (oldValue !== value)
+        {
+            _internal_address = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "address", oldValue, _internal_address));
         }
     }
 
@@ -355,16 +355,6 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set telephone(value:String) : void
-    {
-        var oldValue:String = _internal_telephone;
-        if (oldValue !== value)
-        {
-            _internal_telephone = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "telephone", oldValue, _internal_telephone));
-        }
-    }
-
     public function set modifyTime(value:Date) : void
     {
         var oldValue:Date = _internal_modifyTime;
@@ -372,6 +362,16 @@ public class _Super_AccountDTO extends flash.events.EventDispatcher implements c
         {
             _internal_modifyTime = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "modifyTime", oldValue, _internal_modifyTime));
+        }
+    }
+
+    public function set telephone(value:String) : void
+    {
+        var oldValue:String = _internal_telephone;
+        if (oldValue !== value)
+        {
+            _internal_telephone = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "telephone", oldValue, _internal_telephone));
         }
     }
 

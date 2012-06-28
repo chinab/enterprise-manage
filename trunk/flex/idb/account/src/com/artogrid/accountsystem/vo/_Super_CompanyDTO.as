@@ -50,12 +50,12 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
      */
     private var _internal_id : String;
     private var _internal_enName : String;
-    private var _internal_status : String;
     private var _internal_address : String;
+    private var _internal_status : String;
     private var _internal_name : String;
     private var _internal_code : String;
-    private var _internal_contact : String;
     private var _internal_telephome : String;
+    private var _internal_contact : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -92,15 +92,15 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get status() : String
-    {
-        return _internal_status;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get address() : String
     {
         return _internal_address;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get status() : String
+    {
+        return _internal_status;
     }
 
     [Bindable(event="propertyChange")]
@@ -116,15 +116,15 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
     }
 
     [Bindable(event="propertyChange")]
-    public function get contact() : String
-    {
-        return _internal_contact;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get telephome() : String
     {
         return _internal_telephome;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get contact() : String
+    {
+        return _internal_contact;
     }
 
     public function clearAssociations() : void
@@ -155,16 +155,6 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set status(value:String) : void
-    {
-        var oldValue:String = _internal_status;
-        if (oldValue !== value)
-        {
-            _internal_status = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "status", oldValue, _internal_status));
-        }
-    }
-
     public function set address(value:String) : void
     {
         var oldValue:String = _internal_address;
@@ -172,6 +162,16 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
         {
             _internal_address = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "address", oldValue, _internal_address));
+        }
+    }
+
+    public function set status(value:String) : void
+    {
+        var oldValue:String = _internal_status;
+        if (oldValue !== value)
+        {
+            _internal_status = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "status", oldValue, _internal_status));
         }
     }
 
@@ -195,16 +195,6 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
         }
     }
 
-    public function set contact(value:String) : void
-    {
-        var oldValue:String = _internal_contact;
-        if (oldValue !== value)
-        {
-            _internal_contact = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "contact", oldValue, _internal_contact));
-        }
-    }
-
     public function set telephome(value:String) : void
     {
         var oldValue:String = _internal_telephome;
@@ -212,6 +202,16 @@ public class _Super_CompanyDTO extends flash.events.EventDispatcher implements c
         {
             _internal_telephome = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "telephome", oldValue, _internal_telephome));
+        }
+    }
+
+    public function set contact(value:String) : void
+    {
+        var oldValue:String = _internal_contact;
+        if (oldValue !== value)
+        {
+            _internal_contact = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "contact", oldValue, _internal_contact));
         }
     }
 

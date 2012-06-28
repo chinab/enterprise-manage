@@ -20,14 +20,14 @@ internal class _UserDTOEntityMetadata extends com.adobe.fiber.valueobjects.Abstr
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("message", "id", "username", "phone", "phoneBat", "email", "status", "emailBat", "code", "type", "password");
+    model_internal static var allProperties:Array = new Array("id", "message", "username", "phone", "phoneBat", "email", "status", "emailBat", "code", "type", "password");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("message", "id", "username", "phone", "phoneBat", "email", "status", "emailBat", "code", "type", "password");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("id", "message", "username", "phone", "phoneBat", "email", "status", "emailBat", "code", "type", "password");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("message", "id", "username", "phone", "phoneBat", "email", "status", "emailBat", "code", "type", "password");
+    model_internal static var dataProperties:Array = new Array("id", "message", "username", "phone", "phoneBat", "email", "status", "emailBat", "code", "type", "password");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("message", "id", "username", "phone", "phoneBat", "email", "status", "emailBat", "code", "type", "password");
+    model_internal static var nonDerivedProperties:Array = new Array("id", "message", "username", "phone", "phoneBat", "email", "status", "emailBat", "code", "type", "password");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -47,8 +47,8 @@ internal class _UserDTOEntityMetadata extends com.adobe.fiber.valueobjects.Abstr
         {
             // dependents map
             model_internal::dependentsOnMap = new Object();
-            model_internal::dependentsOnMap["message"] = new Array();
             model_internal::dependentsOnMap["id"] = new Array();
+            model_internal::dependentsOnMap["message"] = new Array();
             model_internal::dependentsOnMap["username"] = new Array();
             model_internal::dependentsOnMap["phone"] = new Array();
             model_internal::dependentsOnMap["phoneBat"] = new Array();
@@ -65,8 +65,8 @@ internal class _UserDTOEntityMetadata extends com.adobe.fiber.valueobjects.Abstr
 
         // Property type Map
         model_internal::propertyTypeMap = new Object();
-        model_internal::propertyTypeMap["message"] = "String";
         model_internal::propertyTypeMap["id"] = "String";
+        model_internal::propertyTypeMap["message"] = "String";
         model_internal::propertyTypeMap["username"] = "String";
         model_internal::propertyTypeMap["phone"] = "String";
         model_internal::propertyTypeMap["phoneBat"] = "String";
@@ -305,13 +305,13 @@ internal class _UserDTOEntityMetadata extends com.adobe.fiber.valueobjects.Abstr
     }
 
     [Bindable(event="propertyChange")]
-    public function get isMessageAvailable():Boolean
+    public function get isIdAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isIdAvailable():Boolean
+    public function get isMessageAvailable():Boolean
     {
         return true;
     }
@@ -381,13 +381,13 @@ internal class _UserDTOEntityMetadata extends com.adobe.fiber.valueobjects.Abstr
     }
 
     [Bindable(event="propertyChange")]   
-    public function get messageStyle():com.adobe.fiber.styles.Style
+    public function get idStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get idStyle():com.adobe.fiber.styles.Style
+    public function get messageStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

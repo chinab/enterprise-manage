@@ -25,14 +25,14 @@ internal class _LoginInfoDTOEntityMetadata extends com.adobe.fiber.valueobjects.
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("message", "loginStatus", "roles", "machineId", "account", "departments");
+    model_internal static var allProperties:Array = new Array("message", "loginStatus", "roles", "machineId", "departments", "account");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("message", "loginStatus", "roles", "machineId", "account", "departments");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("message", "loginStatus", "roles", "machineId", "departments", "account");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("message", "loginStatus", "roles", "machineId", "account", "departments");
+    model_internal static var dataProperties:Array = new Array("message", "loginStatus", "roles", "machineId", "departments", "account");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("message", "loginStatus", "roles", "machineId", "account", "departments");
+    model_internal static var nonDerivedProperties:Array = new Array("message", "loginStatus", "roles", "machineId", "departments", "account");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array("roles", "departments");
     model_internal static var collectionBaseMap:Object;
@@ -56,8 +56,8 @@ internal class _LoginInfoDTOEntityMetadata extends com.adobe.fiber.valueobjects.
             model_internal::dependentsOnMap["loginStatus"] = new Array();
             model_internal::dependentsOnMap["roles"] = new Array();
             model_internal::dependentsOnMap["machineId"] = new Array();
-            model_internal::dependentsOnMap["account"] = new Array();
             model_internal::dependentsOnMap["departments"] = new Array();
+            model_internal::dependentsOnMap["account"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -71,8 +71,8 @@ internal class _LoginInfoDTOEntityMetadata extends com.adobe.fiber.valueobjects.
         model_internal::propertyTypeMap["loginStatus"] = "com.artogrid.accountsystem.vo.LoginStatusDTO";
         model_internal::propertyTypeMap["roles"] = "ArrayCollection";
         model_internal::propertyTypeMap["machineId"] = "String";
-        model_internal::propertyTypeMap["account"] = "com.artogrid.accountsystem.vo.AccountDTO";
         model_internal::propertyTypeMap["departments"] = "ArrayCollection";
+        model_internal::propertyTypeMap["account"] = "com.artogrid.accountsystem.vo.AccountDTO";
 
         model_internal::_instance = value;
     }
@@ -326,13 +326,13 @@ internal class _LoginInfoDTOEntityMetadata extends com.adobe.fiber.valueobjects.
     }
 
     [Bindable(event="propertyChange")]
-    public function get isAccountAvailable():Boolean
+    public function get isDepartmentsAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isDepartmentsAvailable():Boolean
+    public function get isAccountAvailable():Boolean
     {
         return true;
     }
@@ -372,13 +372,13 @@ internal class _LoginInfoDTOEntityMetadata extends com.adobe.fiber.valueobjects.
     }
 
     [Bindable(event="propertyChange")]   
-    public function get accountStyle():com.adobe.fiber.styles.Style
+    public function get departmentsStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get departmentsStyle():com.adobe.fiber.styles.Style
+    public function get accountStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

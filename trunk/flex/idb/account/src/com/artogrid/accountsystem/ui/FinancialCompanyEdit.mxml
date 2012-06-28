@@ -5,17 +5,19 @@
 		<![CDATA[
 			import com.artogrid.accountsystem.bl.InitData;
 			import com.artogrid.accountsystem.controls.MyAlert;
-			
+
 			import mx.controls.Alert;
+			import mx.core.FlexGlobals;
 			import mx.core.IFlexDisplayObject;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
-			
+
 			import spark.components.TitleWindow;
 			import spark.events.GridSelectionEvent;
-			
+
 			public var parentWin:TitleWindow;
 
 			protected function saveFinancialCompanyResult_resultHandler(event:ResultEvent):void {
@@ -54,21 +56,6 @@
 
 			protected function closeBtn_clickHandler(event:MouseEvent):void {
 				PopUpManager.removePopUp(parentWin);
-			}
-
-			protected function deleteBtn_clickHandler(event:MouseEvent):void {
-				if (dataGrid.selectedIndex != -1) {
-					MyAlert.showConfirm("确定要删除公司？", function(closeEvent:CloseEvent):void {
-						if (closeEvent.detail == Alert.YES) {
-							var financialCompanyDTO:FinancialCompanyDTO=(dataGrid.selectedItem as FinancialCompanyDTO);
-							if (financialCompanyDTO != null) {
-								deleteFinancialCompanyByIdResult.token=financialCompanyRO.deleteFinancialCompanyById(financialCompanyDTO.id);
-							}
-						}
-					});
-				} else {
-					MyAlert.showAlert("请选择你要删除的数据");
-				}
 			}
 
 			protected function deleteFinancialCompanyByIdResult_resultHandler(event:ResultEvent):void {
@@ -116,6 +103,36 @@
 			private function dateLabelFunction(item:Object, column:GridColumn):String {
 				var date:Date=(item[column.dataField] as Date);
 				return dateFormatter.format(date);
+			}
+
+			protected function linkbar_itemClickHandler(event:ItemClickEvent):void {
+				if (event.item == deleteBtn) {
+					if (dataGrid.selectedIndex != -1) {
+						MyAlert.showConfirm("确定要删除公司？", function(closeEvent:CloseEvent):void {
+							if (closeEvent.detail == Alert.YES) {
+								var financialCompanyDTO:FinancialCompanyDTO=(dataGrid.selectedItem as FinancialCompanyDTO);
+								if (financialCompanyDTO != null) {
+									deleteFinancialCompanyByIdResult.token=financialCompanyRO.deleteFinancialCompanyById(financialCompanyDTO.id);
+								}
+							}
+						});
+					} else {
+						MyAlert.showAlert("请选择你要删除的数据");
+					}
+				} else if (event.item == refreshBtn) {
+					InitData.getAllFinancialCompanysResult.token=FinancialCompanyRO.getMe().getAllFinancialCompanys();
+				} else if (event.item == relationBtn) {
+					if (dataGrid.selectedIndex != -1) {
+						var financialCompanyDTO:FinancialCompanyDTO=(dataGrid.selectedItem as FinancialCompanyDTO);
+						if (financialCompanyDTO != null) {
+							var financialCompanyRelationWindow:FinancialCompanyRelationWindow=FinancialCompanyRelationWindow.getMe(financialCompanyDTO);
+							PopUpManager.addPopUp(financialCompanyRelationWindow, FlexGlobals.topLevelApplication as DisplayObject);
+							PopUpManager.centerPopUp(financialCompanyRelationWindow);
+						}
+					} else {
+						MyAlert.showAlert("请选择你要操作的数据");
+					}
+				}
 			}
 		]]>
 	</fx:Script>
@@ -199,6 +216,11 @@
 	<s:Button id="updateButton" bottom="20" label="更新" click="updateButton_clickHandler(event)" horizontalCenter="0" enabled="{financialCompanyDTO.id!=null}"/>
 	<s:Button id="addButton" bottom="20" label="添加" click="addButton_clickHandler(event)" horizontalCenter="-90"/>
 	<s:Button bottom="20" label="关闭" horizontalCenter="90" id="closeBtn" click="closeBtn_clickHandler(event)"/>
-	<mx:LinkButton id="deleteBtn" right="10" top="0" label="删除" click="deleteBtn_clickHandler(event)" icon="@Embed('assets/delete.png')"
-				   toolTip="删除部门和角色的关系"/>
+	<mx:LinkBar right="10" top="0" iconField="icon" labelField="label" itemClick="linkbar_itemClickHandler(event)" toolTipField="toolTip">
+		<mx:dataProvider>
+			<fx:Object icon="@Embed('assets/relationship.png')" label="关系" id="relationBtn" toolTip="金融公司与部门关系维护"/>
+			<fx:Object icon="@Embed('assets/delete.png')" label="删除" id="deleteBtn" toolTip="删除选择的金融公司"/>
+			<fx:Object icon="@Embed('assets/refresh.png')" label="刷新" id="refreshBtn" toolTip="刷新列表"/>
+		</mx:dataProvider>
+	</mx:LinkBar>
 </s:Group>
