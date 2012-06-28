@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:services="com.artogrid.services.*" minWidth="955" minHeight="600"
-			   xmlns:ui="com.artogrid.accountsystem.ui.*" preinitialize="InitData.init();">
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   xmlns:services="com.artogrid.services.*"
+			   xmlns:ui="com.artogrid.accountsystem.ui.*"
+			   xmlns:services2="services.*"
+			   minWidth="955" minHeight="600" preinitialize="InitData.init();">
 	<fx:Style>
 		@namespace s "library://ns.adobe.com/flex/spark";
 		@namespace mx "library://ns.adobe.com/flex/mx";
@@ -24,14 +29,14 @@
 			import com.artogrid.accountsystem.ui.ServerConfigWindow;
 			import com.artogrid.accountsystem.vo.AccountDTO;
 			import com.artogrid.accountsystem.vo.UserDTO;
-
+			
 			import mx.collections.ArrayCollection;
 			import mx.controls.Alert;
 			import mx.events.CloseEvent;
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			import mx.rpc.events.ResultEvent;
-
+			
 			import spark.components.TitleWindow;
 			import spark.events.GridSelectionEvent;
 
@@ -73,15 +78,28 @@
 			}
 
 			protected function onlineBtn_clickHandler(event:MouseEvent):void {
+				OnlineUsersWindow.instance.loadData();
 				PopUpManager.addPopUp(OnlineUsersWindow.instance, this);
 				PopUpManager.centerPopUp(OnlineUsersWindow.instance);
 			}
+			
+			protected function button_clickHandler(event:MouseEvent):void
+			{
+				saveLogResult.token = logRO.saveLog();
+			}
+
 		]]>
 	</fx:Script>
 	<s:states>
 		<s:State name="NOT_LOGINED_STATE"/>
 		<s:State name="LOGINED_STATE"/>
 	</s:states>
+	<fx:Declarations>
+		<s:CallResponder id="saveLogResult"/>
+		<services2:LogRO id="logRO"
+						 fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)"
+						 showBusyCursor="true"/>
+	</fx:Declarations>
 	<ui:LoginPanel includeIn="NOT_LOGINED_STATE" horizontalCenter="0" verticalCenter="0" loginFunction="{loginFunction}"/>
 	<s:VGroup includeIn="LOGINED_STATE" left="10" right="10" top="10" bottom="10" gap="0">
 		<s:HGroup verticalAlign="middle">
@@ -95,4 +113,6 @@
 		<ui:AccountEditFrom id="accountEditFrom" width="100%">
 		</ui:AccountEditFrom>
 	</s:VGroup>
+	<s:Button id="button" includeIn="NOT_LOGINED_STATE" x="717" y="264" label="logTest"
+			  click="button_clickHandler(event)"/>
 </s:Application>

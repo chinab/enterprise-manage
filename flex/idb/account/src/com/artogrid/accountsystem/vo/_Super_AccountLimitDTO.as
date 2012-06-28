@@ -54,8 +54,8 @@ public class _Super_AccountLimitDTO extends flash.events.EventDispatcher impleme
     private var _internal_status : String;
     private var _internal_maxMachineSize : int;
     private var _internal_maxOnlineSize : int;
-    private var _internal_endTime : Date;
     private var _internal_departmentCode : String;
+    private var _internal_endTime : Date;
 
     private static var emptyArray:Array = new Array();
 
@@ -116,15 +116,15 @@ public class _Super_AccountLimitDTO extends flash.events.EventDispatcher impleme
     }
 
     [Bindable(event="propertyChange")]
-    public function get endTime() : Date
-    {
-        return _internal_endTime;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get departmentCode() : String
     {
         return _internal_departmentCode;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get endTime() : Date
+    {
+        return _internal_endTime;
     }
 
     public function clearAssociations() : void
@@ -195,16 +195,6 @@ public class _Super_AccountLimitDTO extends flash.events.EventDispatcher impleme
         }
     }
 
-    public function set endTime(value:Date) : void
-    {
-        var oldValue:Date = _internal_endTime;
-        if (oldValue !== value)
-        {
-            _internal_endTime = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "endTime", oldValue, _internal_endTime));
-        }
-    }
-
     public function set departmentCode(value:String) : void
     {
         var oldValue:String = _internal_departmentCode;
@@ -212,6 +202,16 @@ public class _Super_AccountLimitDTO extends flash.events.EventDispatcher impleme
         {
             _internal_departmentCode = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "departmentCode", oldValue, _internal_departmentCode));
+        }
+    }
+
+    public function set endTime(value:Date) : void
+    {
+        var oldValue:Date = _internal_endTime;
+        if (oldValue !== value)
+        {
+            _internal_endTime = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "endTime", oldValue, _internal_endTime));
         }
     }
 

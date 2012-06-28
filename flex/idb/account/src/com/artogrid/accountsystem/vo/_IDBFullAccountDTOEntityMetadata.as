@@ -20,14 +20,14 @@ internal class _IDBFullAccountDTOEntityMetadata extends com.adobe.fiber.valueobj
 {
     private static var emptyArray:Array = new Array();
 
-    model_internal static var allProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "companyName", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "companyFullName", "mobile");
+    model_internal static var allProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "companyName", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile", "companyFullName");
     model_internal static var allAssociationProperties:Array = new Array();
     model_internal static var allRequiredProperties:Array = new Array();
-    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "companyName", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "companyFullName", "mobile");
+    model_internal static var allAlwaysAvailableProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "companyName", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile", "companyFullName");
     model_internal static var guardedProperties:Array = new Array();
-    model_internal static var dataProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "companyName", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "companyFullName", "mobile");
+    model_internal static var dataProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "companyName", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile", "companyFullName");
     model_internal static var sourceProperties:Array = emptyArray
-    model_internal static var nonDerivedProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "companyName", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "companyFullName", "mobile");
+    model_internal static var nonDerivedProperties:Array = new Array("createTime", "modifyBy", "status", "isForbidden", "companyName", "password", "createBy", "id", "accountCode", "username", "address", "email", "accountType", "companyId", "displayName", "telephone", "modifyTime", "mobile", "companyFullName");
     model_internal static var derivedProperties:Array = new Array();
     model_internal static var collectionProperties:Array = new Array();
     model_internal static var collectionBaseMap:Object;
@@ -64,8 +64,8 @@ internal class _IDBFullAccountDTOEntityMetadata extends com.adobe.fiber.valueobj
             model_internal::dependentsOnMap["displayName"] = new Array();
             model_internal::dependentsOnMap["telephone"] = new Array();
             model_internal::dependentsOnMap["modifyTime"] = new Array();
-            model_internal::dependentsOnMap["companyFullName"] = new Array();
             model_internal::dependentsOnMap["mobile"] = new Array();
+            model_internal::dependentsOnMap["companyFullName"] = new Array();
 
             // collection base map
             model_internal::collectionBaseMap = new Object();
@@ -90,8 +90,8 @@ internal class _IDBFullAccountDTOEntityMetadata extends com.adobe.fiber.valueobj
         model_internal::propertyTypeMap["displayName"] = "String";
         model_internal::propertyTypeMap["telephone"] = "String";
         model_internal::propertyTypeMap["modifyTime"] = "Date";
-        model_internal::propertyTypeMap["companyFullName"] = "String";
         model_internal::propertyTypeMap["mobile"] = "String";
+        model_internal::propertyTypeMap["companyFullName"] = "String";
 
         model_internal::_instance = value;
     }
@@ -423,13 +423,13 @@ internal class _IDBFullAccountDTOEntityMetadata extends com.adobe.fiber.valueobj
     }
 
     [Bindable(event="propertyChange")]
-    public function get isCompanyFullNameAvailable():Boolean
+    public function get isMobileAvailable():Boolean
     {
         return true;
     }
 
     [Bindable(event="propertyChange")]
-    public function get isMobileAvailable():Boolean
+    public function get isCompanyFullNameAvailable():Boolean
     {
         return true;
     }
@@ -547,13 +547,13 @@ internal class _IDBFullAccountDTOEntityMetadata extends com.adobe.fiber.valueobj
     }
 
     [Bindable(event="propertyChange")]   
-    public function get companyFullNameStyle():com.adobe.fiber.styles.Style
+    public function get mobileStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }
 
     [Bindable(event="propertyChange")]   
-    public function get mobileStyle():com.adobe.fiber.styles.Style
+    public function get companyFullNameStyle():com.adobe.fiber.styles.Style
     {
         return model_internal::_nullStyle;
     }

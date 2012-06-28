@@ -52,8 +52,10 @@ public class _Super_DepartmentDTO extends flash.events.EventDispatcher implement
     private var _internal_status : String;
     private var _internal_description : String;
     private var _internal_name : String;
+    private var _internal_messageChannelClass : String;
     private var _internal_messageChannelURL : String;
     private var _internal_departmentCode : String;
+    private var _internal_endTime : Date;
     private var _internal_endpoint : String;
 
     private static var emptyArray:Array = new Array();
@@ -103,6 +105,12 @@ public class _Super_DepartmentDTO extends flash.events.EventDispatcher implement
     }
 
     [Bindable(event="propertyChange")]
+    public function get messageChannelClass() : String
+    {
+        return _internal_messageChannelClass;
+    }
+
+    [Bindable(event="propertyChange")]
     public function get messageChannelURL() : String
     {
         return _internal_messageChannelURL;
@@ -112,6 +120,12 @@ public class _Super_DepartmentDTO extends flash.events.EventDispatcher implement
     public function get departmentCode() : String
     {
         return _internal_departmentCode;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get endTime() : Date
+    {
+        return _internal_endTime;
     }
 
     [Bindable(event="propertyChange")]
@@ -168,6 +182,16 @@ public class _Super_DepartmentDTO extends flash.events.EventDispatcher implement
         }
     }
 
+    public function set messageChannelClass(value:String) : void
+    {
+        var oldValue:String = _internal_messageChannelClass;
+        if (oldValue !== value)
+        {
+            _internal_messageChannelClass = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "messageChannelClass", oldValue, _internal_messageChannelClass));
+        }
+    }
+
     public function set messageChannelURL(value:String) : void
     {
         var oldValue:String = _internal_messageChannelURL;
@@ -185,6 +209,16 @@ public class _Super_DepartmentDTO extends flash.events.EventDispatcher implement
         {
             _internal_departmentCode = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "departmentCode", oldValue, _internal_departmentCode));
+        }
+    }
+
+    public function set endTime(value:Date) : void
+    {
+        var oldValue:Date = _internal_endTime;
+        if (oldValue !== value)
+        {
+            _internal_endTime = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "endTime", oldValue, _internal_endTime));
         }
     }
 

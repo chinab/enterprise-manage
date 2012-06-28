@@ -65,8 +65,8 @@ public class _Super_IDBFullAccountDTO extends flash.events.EventDispatcher imple
     private var _internal_displayName : String;
     private var _internal_telephone : String;
     private var _internal_modifyTime : Date;
-    private var _internal_companyFullName : String;
     private var _internal_mobile : String;
+    private var _internal_companyFullName : String;
 
     private static var emptyArray:Array = new Array();
 
@@ -193,15 +193,15 @@ public class _Super_IDBFullAccountDTO extends flash.events.EventDispatcher imple
     }
 
     [Bindable(event="propertyChange")]
-    public function get companyFullName() : String
-    {
-        return _internal_companyFullName;
-    }
-
-    [Bindable(event="propertyChange")]
     public function get mobile() : String
     {
         return _internal_mobile;
+    }
+
+    [Bindable(event="propertyChange")]
+    public function get companyFullName() : String
+    {
+        return _internal_companyFullName;
     }
 
     public function clearAssociations() : void
@@ -382,16 +382,6 @@ public class _Super_IDBFullAccountDTO extends flash.events.EventDispatcher imple
         }
     }
 
-    public function set companyFullName(value:String) : void
-    {
-        var oldValue:String = _internal_companyFullName;
-        if (oldValue !== value)
-        {
-            _internal_companyFullName = value;
-            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "companyFullName", oldValue, _internal_companyFullName));
-        }
-    }
-
     public function set mobile(value:String) : void
     {
         var oldValue:String = _internal_mobile;
@@ -399,6 +389,16 @@ public class _Super_IDBFullAccountDTO extends flash.events.EventDispatcher imple
         {
             _internal_mobile = value;
             this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "mobile", oldValue, _internal_mobile));
+        }
+    }
+
+    public function set companyFullName(value:String) : void
+    {
+        var oldValue:String = _internal_companyFullName;
+        if (oldValue !== value)
+        {
+            _internal_companyFullName = value;
+            this.dispatchEvent(mx.events.PropertyChangeEvent.createUpdateEvent(this, "companyFullName", oldValue, _internal_companyFullName));
         }
     }
 
