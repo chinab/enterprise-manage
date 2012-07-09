@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" color="0x000000" width="624" height="564" close="PopUpManager.removePopUp(this);">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.ListEvent;
+			import mx.managers.PopUpManager;
+
+			[Bindable]
+			private var uis:ArrayCollection=new ArrayCollection();
+			private var _ui:Object;
+
+			public static function openPJ(ui:Object, p:DisplayObject):void {
+				var pj:ChaoJiPoJie=new ChaoJiPoJie();
+				pj._ui=ui;
+				PopUpManager.addPopUp(pj, p);
+				PopUpManager.centerPopUp(pj);
+			}
+
+			protected function buttonBar_itemClickHandler(event:ListEvent):void {
+				if (allElementTree.selectedItem != null) {
+					nodeName.text = allElementTree.selectedItem.label;
+					var ui:Object=allElementTree.selectedItem.ui;
+					if (ui != null) {
+						(ui as DisplayObject).visible=!(ui as DisplayObject).visible;
+						allElementTree.selectedItem.label=ui.toString() + "_" + (ui.visible ? "√" : "X");
+						uis.refresh();
+					}
+				}
+			}
+
+			private function showAllElement(uisTemp:ArrayCollection, ui:Object):void {
+				if (ui == null) {
+					return;
+				}
+				var childrenUis:ArrayCollection=new ArrayCollection();
+				if (ui is DisplayObjectContainer) {
+					var ivc:DisplayObjectContainer=(ui as DisplayObjectContainer);
+					for (var i:int=0; i < ivc.numChildren; i++) {
+						showAllElement(childrenUis, ivc.getChildAt(i));
+					}
+				}
+
+				var o:Object={ui: ui, label: ui.toString() + "_" + (ui.visible ? "√" : "X")};
+				if (childrenUis.length > 0) {
+					o.children=childrenUis;
+				}
+				uisTemp.addItem(o);
+			}
+		]]>
+	</fx:Script>
+
+	<s:Button x="22" y="10" width="206" height="35" label="点击这里获得图表上的元素列表" click="uis.removeAll();showAllElement(uis,_ui);" color="0x000000" />
+	<mx:Tree id="allElementTree" left="240" top="10" width="349" height="502" dataProvider="{uis}"
+			 itemClick="buttonBar_itemClickHandler(event)" labelField="label" color="0x000000" horizontalScrollPolicy="on"/>
+	<s:Label x="22" y="70" width="204" height="81" text="这个树上的结点对应表图中的元素，你可以点击结点使元素隐藏或显示。于是你可以得知哪个元素是你的要操作的元素!" color="0x000000" />
+	<s:Label id="nodeName" x="22" y="159" width="204" height="289" text="这个树上的结点对应表图中的元素，你可以点击结点使元素隐藏或显示。于是你可以得知哪个元素是你的要操作的元素!" color="0x000000" />
+</s:TitleWindow>
