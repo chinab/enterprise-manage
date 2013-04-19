@@ -102,7 +102,7 @@ public class FileManager extends BaseManager {
 			response.addHeader("Content-Disposition", "attachment; filename=\"" + filename + ".air\"");
 
 			String path = request.getSession().getServletContext().getRealPath("/files");
-			java.io.File file = new java.io.File(path, id);
+			java.io.File file = new java.io.File(path, id+".air");
 			InputStream input = new FileInputStream(file);
 			OutputStream output = response.getOutputStream();
 			IOUtils.copy(input, output);
@@ -201,7 +201,7 @@ public class FileManager extends BaseManager {
 				fileObj.setUpdateInfo(paramMap.get("updateInfo"));
 				fileObj.setVersion(paramMap.get("version"));
 
-				OutputStream output = new FileOutputStream(new java.io.File(path, fileObj.getId()));
+				OutputStream output = new FileOutputStream(new java.io.File(path, fileObj.getId()+".air"));
 				IOUtils.copy(input, output);
 				input.close();
 				output.close();

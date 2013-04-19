@@ -1,6 +1,5 @@
 package com.idb.flexclient.manager;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.idb.flexclient.domain.File;
 
 public class XMLManager extends BaseManager {
-	private static final String CONTENT_TYPE = "application/xml,charset=UTF-8";
 
 	@Override
 	public void requestHandler(HttpServletRequest request, HttpServletResponse response) {
@@ -43,20 +41,18 @@ public class XMLManager extends BaseManager {
 			rs.close();
 			conn.close();
 
-			response.setContentType(CONTENT_TYPE);
-			response.getWriter().print(result);
+			request.setAttribute("result", result);
+			forward(request, response, "/jsps/xml.jsp");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private String createXML(File file, String urlPre) {
 		return "<?xml version=\"1.0\" encoding=\"utf-8\"?><update xmlns=\"http://ns.adobe.com/air/framework/update/description/2.5\"><version>" + file.getVersion()
-				+ "</version><versionNumber>" + file.getVersion() + "</versionNumber><url>" + urlPre + "FileServlet?method=download&amp;filename=arifromxml&amp;id=" + file.getId() + "</url><description>"
+				+ "</version><versionNumber>" + file.getVersion() + "</versionNumber><url>" + urlPre + "files/" + file.getId() + ".air</url><description>"
 				+ file.getUpdateInfo() + "</description></update>";
 	}
 }
