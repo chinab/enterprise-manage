@@ -4,7 +4,7 @@ body {
 	font-size: 14px;
 }
 
-textarea{
+textarea {
 	font-size: 14px;
 	width: 268px;
 	height: 153px;
@@ -13,12 +13,13 @@ textarea{
 a {
 	list-style: none;
 	float: left;
-	padding: 0px;
+	padding: 1px 3px 1px 3px;
 	margin-right: 10px;
-	background-color: #A3BAE9;
-	color: #333333;
+	color: #000000;
+	background-color: #EEEEEE;
 	border-style: solid;
-	border-color: #A3BAE9;
+	border-width: 1px;
+	border-radius: 3px;
 	text-decoration: none;
 	font-weight: bold;
 }
@@ -26,7 +27,7 @@ a {
 table {
 	border: 1px solid black;
 	border-collapse: collapse;
-	width: 700px;
+	width: 900px;
 	border: 1px solid black;
 }
 
@@ -38,30 +39,35 @@ table th {
 	border: 1px solid black;
 }
 
-table tr.productTr{
+table tr.productTr {
 	color: #000000;
 	font-weight: bold;
 	background-color: #DDDDDD;
 }
 
 tr.tableTitle th {
-	border: 1px solid black;
-	background-color: #A3BAE9;
+	border: 1px solid rgb(0, 0, 0);
+	background-color: rgb(121, 129, 143);
+	color: #FFFFFF;
 }
+
 .uploadContent,.editContent {
 	clear: left;
-	background-color: #A3BAE9;
+	background-color: #EEEEEE;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 3px;
 	color: #333333;
 	padding: 5px;
 	display: block;
 }
 
-.uploadContent{
+.uploadContent {
 	height: 290px;
 	width: 280px;
 }
 
-.editContent{
+.editContent {
 	height: 250px;
 	width: 280px;
 }

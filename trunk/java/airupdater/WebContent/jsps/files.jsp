@@ -34,7 +34,7 @@
 				<td class="version">${file.version }</td>
 				<td class="updateInfo">${file.updateInfo }</td>
 				<td width="155">${file.createTime }</td>
-				<td id="${file.id }" title="${fileGroup.product.name }_${file.version }" width="140">
+				<td id="${file.id }" title="${fileGroup.product.name }_${file.version }" width="160">
 					<a href="#" class="downloadButton" title="${fileGroup.product.name }_${file.version }.air下载">下载</a> 
 					<a href="#" class="editButton"  title="${fileGroup.product.name }_${file.version }编辑">编辑</a> 
 					<a href="#" class="deleteButton"  title="${fileGroup.product.name }_${file.version }删除">删除</a>
