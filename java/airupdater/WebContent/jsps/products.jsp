@@ -29,7 +29,7 @@
 				<td class="productName">${product.name }</td>
 				<td class="productInfo">${product.productInfo }</td>
 				<td width="155">${product.createTime }</td>
-				<td id="${product.id }" width="140"><a href="${product.name }.xml" target="_blank">xml</a> <a class="editButton" href="#">编辑</a> <a class="deleteButton" href="#">删除</a></td>
+				<td id="${product.id }" width="160"><a href="${product.name }.xml" target="_blank">xml</a> <a class="editButton" href="#">编辑</a> <a class="deleteButton" href="#">删除</a></td>
 			</tr>
 		</c:forEach>
 		</tbody>
