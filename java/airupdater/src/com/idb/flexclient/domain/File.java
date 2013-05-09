@@ -11,7 +11,7 @@ public class File {
 	private String version;
 	private String updateInfo;
 	private String createTime;
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	public File() {
 	}
