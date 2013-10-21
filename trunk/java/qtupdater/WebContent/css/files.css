@@ -1,0 +1,78 @@
+@CHARSET "UTF-8";
+
+body {
+	font-size: 14px;
+}
+
+textarea {
+	font-size: 14px;
+	width: 268px;
+	height: 153px;
+}
+
+a {
+	list-style: none;
+	float: left;
+	padding: 1px 3px 1px 3px;
+	margin-right: 10px;
+	color: #000000;
+	background-color: #EEEEEE;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 3px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+table {
+	border: 1px solid black;
+	border-collapse: collapse;
+	width: 900px;
+	border: 1px solid black;
+}
+
+table td {
+	border: 1px solid black;
+}
+
+table th {
+	border: 1px solid black;
+}
+
+table tr.productTr {
+	color: #000000;
+	font-weight: bold;
+	background-color: #DDDDDD;
+}
+
+tr.tableTitle th {
+	border: 1px solid rgb(0, 0, 0);
+	background-color: rgb(121, 129, 143);
+	color: #FFFFFF;
+}
+
+.uploadContent,.editContent {
+	clear: left;
+	background-color: #EEEEEE;
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 3px;
+	color: #333333;
+	padding: 5px;
+	display: block;
+}
+
+.uploadContent {
+	/**height: 400px;**/
+	width: 600px;
+}
+
+.editContent {
+	/**height: 400px;**/
+	width: 600px;
+}
+
+div.updatedFile {
+	width: 200px;
+	float: left;
+}
