@@ -4,9 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.idb.flexclient.domain.File;
 
@@ -56,17 +60,25 @@ public class XMLManager extends BaseManager {
 		String updatedFilesStr = file.getUpdatedFiles();
 		String id = file.getId();
 
-		String result = "<?xml version=\"1.0\" encoding=\"utf-8\"?><update><version>" + file.getVersion()
-				+ "</version><updatedFiles>";
-		if (updatedFilesStr != null) {
-			String[] updatedFiles = updatedFilesStr.split(",");
-			for (String updatedFile : updatedFiles) {
-				result += "<file>" + urlPre + "files/" + id + "/" + updatedFile + "</file>";
-			}
-		}
+		String result = "<?xml version=\"1.0\" encoding=\"utf-8\"?><update><version>" + file.getVersion() + "</version><rootUrl>" + urlPre + "files/" + id + "/"
+				+ "</rootUrl><allFiles>" + file.getFiles() + "</allFiles><otherFiles>" + getOtherFiles(file.getFiles(), file.getUpdatedFiles()) + "</otherFiles><updatedFiles>";
+		result += updatedFilesStr;
 		result += "</updatedFiles><zipFile><file>";
 		result += urlPre + "files/" + id;
 		result += ".zip</file></zipFile><description>" + file.getUpdateInfo() + "</description></update>";
 		return result;
+	}
+
+	private String getOtherFiles(String allFiles, String updatedFiles) {
+		String[] alls = allFiles.split(",");
+		Set<String> others = new HashSet<String>();
+		for (String all : alls) {
+			others.add(all);
+		}
+		String[] updateds = updatedFiles.split(",");
+		for (String updated : updateds) {
+			others.remove(updated);
+		}
+		return StringUtils.join(others, ",");
 	}
 }
