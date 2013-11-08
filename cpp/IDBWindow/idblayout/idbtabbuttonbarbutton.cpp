@@ -59,7 +59,7 @@ void IDBTabButtonBarButton::mouseMoveEvent(QMouseEvent *event)
         QDataStream dataStream(&itemData, QIODevice::WriteOnly);
         QString tabName = text();
         dataStream << tabName;
-        QMimeData *mimeData = new QMimeData;
+        QMimeData *mimeData = new QMimeData();
         mimeData->setData("tab/x-idblayoutwindow-idbtab", itemData);
 
         QPixmap pixmap(300,200);
