@@ -22,6 +22,8 @@ public:
     void addButtonToButtons(IDBTabButtonBarButton *);
     void removeButtonFromButtons(IDBTabButtonBarButton *);
 
+    void addButton(IDBTabButtonBarButton *);
+
     void addTab(IDBTab *);
     void openTab(IDBTab *);
     void openTab(const int &index);
@@ -29,9 +31,15 @@ public:
     bool containsTab(IDBTab *);
     bool containsButton(IDBTabButtonBarButton *button);
     QWidget *tabParent();
-    QList<IDBTab *>& tabs();
-    QList<IDBTabButtonBarButton *>& buttons();
+    IDBTabButtonBarList *buttonBarList();
+//    QList<IDBTab *>& tabs();
+//    QList<IDBTabButtonBarButton *>& buttons();
+    int tabSize();
     virtual void resizeEvent(QResizeEvent *event);
+    IDBTabButtonBarButton *getButtonByIndex(const int &tabIndex);
+    void moveButton(const int &fromTabIndex,const int &toTabIndex);
+    void removeButton(const int &tabIndex);
+    void moveByIndexAll();
 
 private:
     IDBTab *currTab_;

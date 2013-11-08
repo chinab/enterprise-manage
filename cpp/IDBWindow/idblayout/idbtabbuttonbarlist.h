@@ -18,11 +18,7 @@ class IDBTabButtonBarList : public QWidget
 public:
     explicit IDBTabButtonBarList(QWidget *parent = 0);
     void setParentWindow(IDBLayoutWindow *);
-    void addTab(IDBTab *tab,const int &index);
     void addButton(IDBTabButtonBarButton *button,const int &index);
-    void moveButton(const int &fromTabIndex,const int &toTabIndex);
-    void removeButton(const int &tabIndex);
-    void moveByIndexAll();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *);
@@ -36,7 +32,6 @@ public slots:
 
 private:
     IDBLayoutWindow * parentWindow_;
-    IDBTabButtonBarButton *getButtonByIndex(const int &tabIndex);
     IDBTabButtonBarButton *dragButton;
 };
 

@@ -18,15 +18,13 @@ IDBTab::~IDBTab()
 }
 
 void IDBTab::setParentWindow(IDBLayoutWindow * parentWindow){
-    if(parentWindow==NULL&&parentWindow_==parentWindow){
-        return;
-    }
-    if(parentWindow_!=NULL){
-        parentWindow_->removeTabFromTabs(this);
-    }
     parentWindow_ = parentWindow;
-    setParent(parentWindow->tabParent());
-    parentWindow->addTabToTabs(this);
+
+    if(parentWindow==NULL){
+        setParent(NULL);
+    }else{
+        setParent(parentWindow->tabParent());
+    }
 }
 
 QString IDBTab::name(){

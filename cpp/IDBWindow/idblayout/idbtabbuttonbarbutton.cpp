@@ -1,10 +1,10 @@
 #include "idbtabbuttonbarbutton.h"
-#include <QDrag>
 #include <QMimeData>
 #include <QDebug>
 #include <QPainter>
 #include "idbdrag.h"
 #include "idbtabbuttonbarlist.h"
+#include "idblayoutmanager.h"
 
 int IDBTabButtonBarButton::WIDTH_DEFULT = 50;
 int IDBTabButtonBarButton::HEIGHT_DEFULT = 25;
@@ -27,6 +27,11 @@ IDBTabButtonBarButton::~IDBTabButtonBarButton(){
 
 void IDBTabButtonBarButton::setParentWindow(IDBLayoutWindow * parentWindow){
     parentWindow_ = parentWindow;
+    if(parentWindow_==NULL){
+        setParent(NULL);
+    }else{
+        setParent(parentWindow_->buttonBarList());
+    }
 }
 
 void IDBTabButtonBarButton::mousePressEvent(QMouseEvent *event)
@@ -39,16 +44,16 @@ void IDBTabButtonBarButton::mousePressEvent(QMouseEvent *event)
 void IDBTabButtonBarButton::mouseMoveEvent(QMouseEvent *event)
 {
     int newX = event->screenPos().x()+mouseOffset_;
-    IDBTabButtonBarList *list = qobject_cast<IDBTabButtonBarList *>(parentWidget());
+//    IDBTabButtonBarList *list = qobject_cast<IDBTabButtonBarList *>(parentWidget());
     if (event->pos().y() > -20 &&
             event->pos().y() < HEIGHT_DEFULT+20 &&
             newX > -WIDTH_DEFULT &&
             newX < parentWindow_->width() - 200 ) {
         move(newX,0);
         int newTabIndex = (newX+WIDTH_DEFULT/2)/WIDTH_DEFULT;
-        list->moveButton(tabIndex_,newTabIndex);
+        parentWindow_->moveButton(tabIndex_,newTabIndex);
     }else{
-        list->removeButton(tabIndex_);
+        parentWindow_->removeButton(tabIndex_);
         QByteArray itemData;
         QDataStream dataStream(&itemData, QIODevice::WriteOnly);
         QString tabName = text();
@@ -72,6 +77,9 @@ void IDBTabButtonBarButton::mouseMoveEvent(QMouseEvent *event)
         drag.setMimeData(mimeData);
         drag.setHotSpot(QPoint(0, 0));
         drag.setPixmap(pixmap);
+        QPixmap cursorPixmap(1,1);
+        cursorPixmap.fill();
+        drag.setDragCursor(cursorPixmap,Qt::IgnoreAction);
 
         switch (drag.exec(Qt::MoveAction)) {
         case Qt::MoveAction:
@@ -79,11 +87,13 @@ void IDBTabButtonBarButton::mouseMoveEvent(QMouseEvent *event)
             moveByIndex();
             break;
         case Qt::IgnoreAction:
-//            qDebug()<<"idbtabbuttonbarbutton exec IgnoreAction";
+            mouseOffset_ = 0;
+            IDBLayoutManager::instance().createWindow(this);
             break;
         default:
             break;
         }
+        IDBLayoutManager::instance().tryCloseWindow();
     }
 }
 

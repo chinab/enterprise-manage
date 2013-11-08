@@ -5,6 +5,7 @@
 #include <QVariant>
 #include "idblayoutwindow.h"
 #include "idbtab.h"
+#include "idbtabbuttonbarbutton.h"
 
 namespace IDBLayout {
     enum IDBTabType{
@@ -19,14 +20,18 @@ public:
     static IDBLayoutManager &instance();
 
     IDBLayoutWindow *createWindow(const QVariant &);
+    void createWindow(IDBTabButtonBarButton *);
     IDBTab *createTab(IDBLayoutWindow *,const QVariant &);
     void fromJson(const QByteArray &);
+    void tryPrepareCloseWindow(IDBLayoutWindow *);
+    void tryCloseWindow();
 
 private:
     IDBLayoutManager();
     IDBLayoutManager(const IDBLayoutManager &);
     const IDBLayoutManager& operator=(const IDBLayoutManager &);
-    QList<IDBLayoutWindow *> windows;
+    QList<IDBLayoutWindow *> windows_;
+    IDBLayoutWindow *willRemoveWindow;
 
 };
 
