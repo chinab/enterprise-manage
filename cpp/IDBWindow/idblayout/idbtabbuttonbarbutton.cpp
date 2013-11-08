@@ -23,6 +23,7 @@ IDBTabButtonBarButton::IDBTabButtonBarButton(IDBTab *tab ,QWidget *parent) :
 
 IDBTabButtonBarButton::~IDBTabButtonBarButton(){
     delete animation_;
+    qDebug() << "tab closed!";
 }
 
 void IDBTabButtonBarButton::setParentWindow(IDBLayoutWindow * parentWindow){
