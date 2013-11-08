@@ -6,7 +6,7 @@
 #include "idbdeal.h"
 
 IDBLayoutManager::IDBLayoutManager(){
-
+    willRemoveWindow = NULL;
 }
 
 IDBLayoutManager &IDBLayoutManager::instance(){
@@ -21,8 +21,17 @@ void IDBLayoutManager::fromJson(const QByteArray &json){
     foreach (QVariant (windowInfo), windowVars) {
        IDBLayoutWindow * window = createWindow(windowInfo);
        window->show();
-       windows.append(window);
+       windows_.append(window);
     }
+}
+
+void IDBLayoutManager::createWindow(IDBTabButtonBarButton *button){
+    IDBLayoutWindow *window = new IDBLayoutWindow();
+    window->setGeometry(QCursor::pos().x(),QCursor::pos().y(),
+                        button->tab()->width(),button->tab()->height());
+    window->show();
+    windows_.append(window);
+    window->addButton(button);
 }
 
 IDBLayoutWindow *IDBLayoutManager::createWindow(const QVariant &info){
@@ -63,4 +72,27 @@ IDBTab *IDBLayoutManager::createTab(IDBLayoutWindow * parentWindow,const QVarian
     return tab;
 }
 
+void IDBLayoutManager::tryPrepareCloseWindow(IDBLayoutWindow *window){
+    if(window!=NULL&&window->tabSize()==0){
+        if(windows_.contains(window)){
+            windows_.removeOne(window);
+        }
+        /**
+        window->close();
+        delete window;
+        @ses doTypeCloseWindow
+        **/
+        window->setVisible(false);
+        willRemoveWindow = window;
+        qDebug() << "window Prepare close!";
+    }
+}
 
+void IDBLayoutManager::tryCloseWindow(){
+    if(willRemoveWindow!=NULL){
+        willRemoveWindow->close();
+        delete willRemoveWindow;
+        willRemoveWindow = NULL;
+        qDebug() << "window closed!";
+    }
+}

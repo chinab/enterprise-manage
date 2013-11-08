@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QApplication>
 #include <QPainter>
+#include "idblayoutmanager.h"
 #include "idbdrag.h"
 
 IDBTabButtonBarList::IDBTabButtonBarList(QWidget *parent)
@@ -32,9 +33,9 @@ void IDBTabButtonBarList::dragEnterEvent(QDragEnterEvent *event){
 
 void IDBTabButtonBarList::dragLeaveEvent(QDragLeaveEvent *){
     if(dragButton!=NULL){
-        removeButton(dragButton->tabIndex());
+        parentWindow_->removeButton(dragButton->tabIndex());
         dragButton=NULL;
-        moveByIndexAll();
+        parentWindow_->moveByIndexAll();
     }
 }
 
@@ -44,7 +45,7 @@ void IDBTabButtonBarList::dragMoveEvent(QDragMoveEvent *event){
         int newX = event->pos().x()-30;
         dragButton->move(newX,0);
         int newTabIndex = (newX+IDBTabButtonBarButton::WIDTH_DEFULT/2)/IDBTabButtonBarButton::WIDTH_DEFULT;
-        moveButton(dragButton->tabIndex(),newTabIndex);
+        parentWindow_->moveButton(dragButton->tabIndex(),newTabIndex);
     } else{
         event->ignore();
     }
@@ -63,91 +64,15 @@ void IDBTabButtonBarList::dropEvent(QDropEvent *event){
     }
 }
 
-void IDBTabButtonBarList::addTab(IDBTab *tab,const int &index){
-    IDBTabButtonBarButton *button = new IDBTabButtonBarButton(tab,this);
-    button->setParentWindow(parentWindow_);
-    int tabSize = parentWindow_->buttons().size();
-    button->setTabIndex(tabSize);
-    if(index<tabSize){
-        moveButton(tabSize,index);
-    }
-    parentWindow_->addButtonToButtons(button);
-}
-
 void IDBTabButtonBarList::addButton(IDBTabButtonBarButton *button,const int &index){
-    button->setParentWindow(parentWindow_);
-    button->tab()->setParentWindow(parentWindow_);
-    button->setParent(this);
+    int tabSize = parentWindow_->tabSize();
+
+    parentWindow_->addTabToTabs(button->tab());
+    parentWindow_->addButtonToButtons(button);
     button->show();
-    int tabSize = parentWindow_->buttons().size();
     button->setTabIndex(tabSize);
     if(index<tabSize){
-        moveButton(tabSize,index);
+        parentWindow_->moveButton(tabSize,index);
     }
-    parentWindow_->addButtonToButtons(button);
     parentWindow_->openTab(button->tabIndex());
-}
-
-IDBTabButtonBarButton *IDBTabButtonBarList::getButtonByIndex(const int &tabIndex){
-    IDBTabButtonBarButton *currButton = NULL;
-    foreach (IDBTabButtonBarButton *button, parentWindow_->buttons()) {
-        if(button->tabIndex()==tabIndex){
-            currButton = button;
-        }
-    }
-    return currButton;
-}
-
-void IDBTabButtonBarList::moveButton(const int &fromTabIndex,const int &toTabIndex){
-//    qDebug() << parentWindow_->buttons().size();
-    if(toTabIndex>=parentWindow_->buttons().size()||
-        toTabIndex<0||
-        fromTabIndex>=parentWindow_->buttons().size()||
-        fromTabIndex<0){
-        return;
-    }
-    IDBTabButtonBarButton *currButton = getButtonByIndex(fromTabIndex);
-    if(fromTabIndex>toTabIndex){
-        foreach (IDBTabButtonBarButton *button, parentWindow_->buttons()) {
-            if(button->tabIndex()>=toTabIndex && button->tabIndex()<fromTabIndex ){
-                button->setTabIndex(button->tabIndex()+1);
-            }
-        }
-    }else if(fromTabIndex<toTabIndex){
-        foreach (IDBTabButtonBarButton *button, parentWindow_->buttons()) {
-            if(button->tabIndex()<=toTabIndex && button->tabIndex()>fromTabIndex ){
-                button->setTabIndex(button->tabIndex()-1);
-            }
-        }
-    }
-    if(currButton!=NULL){
-        currButton->setTabIndex(toTabIndex);
-    }
-}
-
-void IDBTabButtonBarList::removeButton(const int &tabIndex){
-    if(tabIndex>=parentWindow_->buttons().size()||
-        tabIndex<0){
-        return;
-    }
-    IDBTabButtonBarButton *currButton = getButtonByIndex(tabIndex);
-    foreach (IDBTabButtonBarButton *button, parentWindow_->buttons()) {
-        if(button->tabIndex()>tabIndex ){
-            button->setTabIndex(button->tabIndex()-1);
-        }
-    }
-    if(currButton!=NULL){
-        parentWindow_->buttons().removeOne(currButton);
-        currButton->setParent(NULL);
-        if(tabIndex>0){
-            parentWindow_->openTab(tabIndex-1);
-        }else{
-            parentWindow_->openTab(0);
-        }
-    }
-}
-void IDBTabButtonBarList::moveByIndexAll(){
-    foreach (IDBTabButtonBarButton *button, parentWindow_->buttons()) {
-        button->moveByIndex();
-    }
 }
