@@ -15,6 +15,7 @@ IDBTab::IDBTab(QWidget *parent) :
 IDBTab::~IDBTab()
 {
     delete ui;
+    qDebug() << "tab closed!";
 }
 
 void IDBTab::setParentWindow(IDBLayoutWindow * parentWindow){
