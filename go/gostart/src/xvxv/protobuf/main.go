@@ -1,7 +1,7 @@
 package main
 
-import proto "code.google.com/p/goprotobuf/proto"
 import (
+	"code.google.com/p/goprotobuf/proto"
 	"fmt"
 	"io"
 	"os"
@@ -28,16 +28,16 @@ func read() {
 	buffer := make([]byte, fi.Size())
 	_, err = io.ReadFull(file, buffer) //read all content
 	CheckError(err)
-	msg := &example.Helloworld{}
+	msg := &example.User{}
 	err = proto.Unmarshal(buffer, msg) //unSerialize
 	CheckError(err)
 	fmt.Printf("read: %s\n", msg.String())
 }
 
 func write() {
-	msg := &example.Helloworld{
-		Id:  proto.Int32(101),
-		Str: proto.String("hello"),
+	msg := &example.User{
+		Username: proto.String("xvxv"),
+		Password: proto.String("123456"),
 	} //msg init
 
 	f, err := os.Create(path)
