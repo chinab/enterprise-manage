@@ -1,0 +1,9 @@
+package example; 
+option java_package = "com.artogrid.bundle.rabbitmq.demo";
+option java_outer_classname = "UserProto";
+message User 
+{ 
+    required string    username = 1;
+    required string    password = 2;
+    optional int32     opt = 3;
+}
