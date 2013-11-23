@@ -1,0 +1,48 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'git://github.com/felixge/node-mysql.git' ]
+2 info using npm@1.2.2
+3 info using node@v0.8.18
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose read json D:\node.js\projects\mysql\package.json
+6 verbose read json D:\node.js\projects\mysql\node_modules\mysql\package.json
+7 verbose read json D:\node.js\projects\mysql\package.json
+8 verbose cache add [ 'git://github.com/felixge/node-mysql.git', null ]
+9 verbose cache add name=undefined spec="git://github.com/felixge/node-mysql.git" args=["git://github.com/felixge/node-mysql.git",null]
+10 verbose parsed url { protocol: 'git:',
+10 verbose parsed url   slashes: true,
+10 verbose parsed url   host: 'github.com',
+10 verbose parsed url   hostname: 'github.com',
+10 verbose parsed url   href: 'git://github.com/felixge/node-mysql.git',
+10 verbose parsed url   pathname: '/felixge/node-mysql.git',
+10 verbose parsed url   path: '/felixge/node-mysql.git' }
+11 silly lockFile 80878665-ithub-com-felixge-node-mysql-git git://github.com/felixge/node-mysql.git
+12 verbose lock git://github.com/felixge/node-mysql.git C:\Users\yinshuwei\AppData\Roaming\npm-cache\80878665-ithub-com-felixge-node-mysql-git.lock
+13 verbose addRemoteGit [ 'git://github.com/felixge/node-mysql.git', 'master' ]
+14 silly exec git "config" "--get" "remote.origin.url"
+15 silly git,config,--get,remote.origin.url,C:\Users\yinshuwei\AppData\Roaming\npm-cache\_git-remotes\git-github-com-felixge-node-mysql-git-80878665 spawning
+16 warn `git config --get remote.origin.url` returned wrong result (git://github.com/felixge/node-mysql.git) CreateProcessW: ϵͳ�Ҳ���ָ�����ļ���
+17 silly exec git "clone" "--mirror" "git://github.com/felixge/node-mysql.git" "C:\\Users\\yinshuwei\\AppData\\Roaming\\npm-cache\\_git-remotes\\git-github-com-felixge-node-mysql-git-80878665"
+18 silly git,clone,--mirror,git://github.com/felixge/node-mysql.git,C:\Users\yinshuwei\AppData\Roaming\npm-cache\_git-remotes\git-github-com-felixge-node-mysql-git-80878665, spawning
+19 error git clone git://github.com/felixge/node-mysql.git CreateProcessW: ϵͳ�Ҳ���ָ�����ļ���
+20 silly lockFile 80878665-ithub-com-felixge-node-mysql-git git://github.com/felixge/node-mysql.git
+21 error Error: `git "clone" "--mirror" "git://github.com/felixge/node-mysql.git" "C:\\Users\\yinshuwei\\AppData\\Roaming\\npm-cache\\_git-remotes\\git-github-com-felixge-node-mysql-git-80878665"` failed with 127
+21 error     at ChildProcess.<anonymous> (C:\Program Files\nodejs\node_modules\npm\lib\utils\exec.js:56:20)
+21 error     at ChildProcess.EventEmitter.emit (events.js:99:17)
+21 error     at maybeClose (child_process.js:638:16)
+21 error     at Socket.ChildProcess.spawn.stdin (child_process.js:815:11)
+21 error     at Socket.EventEmitter.emit (events.js:96:17)
+21 error     at Socket._destroy.destroyed (net.js:358:10)
+21 error     at process.startup.processNextTick.process._tickCallback (node.js:244:9)
+22 error If you need help, you may report this log at:
+22 error     <http://github.com/isaacs/npm/issues>
+22 error or email it to:
+22 error     <npm-@googlegroups.com>
+23 error System Windows_NT 6.1.7601
+24 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "git://github.com/felixge/node-mysql.git"
+25 error cwd D:\node.js\projects\mysql
+26 error node -v v0.8.18
+27 error npm -v 1.2.2
+28 verbose exit [ 1, true ]
