@@ -114,7 +114,11 @@ func createModel(model string) {
 
 	cppFile.WriteString("void " + name + "::toMap(QVariantMap &map){\r\n")
 	for _, attrRow := range attrRows {
-		cppFile.WriteString("    map[\"" + attrRow[1] + "\"] = _" + attrRow[1] + ";\r\n")
+		if attrRow[0] == "QDateTime" {
+			cppFile.WriteString("    map[\"" + attrRow[1] + "\"] = _" + attrRow[1] + ".toMSecsSinceEpoch();\r\n")
+		} else {
+			cppFile.WriteString("    map[\"" + attrRow[1] + "\"] = _" + attrRow[1] + ";\r\n")
+		}
 	}
 	cppFile.WriteString("}\r\n")
 
