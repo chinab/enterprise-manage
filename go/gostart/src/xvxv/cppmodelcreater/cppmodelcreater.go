@@ -65,7 +65,7 @@ func createModel(model string) {
 	hFile.WriteString("\r\n")
 	hFile.WriteString("private:\r\n")
 	for _, attrRow := range attrRows {
-		hFile.WriteString("    " + attrRow[0] + " " + attrRow[1] + "_;\r\n")
+		hFile.WriteString("    " + attrRow[0] + " _" + attrRow[1] + ";\r\n")
 	}
 	hFile.WriteString("};\r\n")
 	hFile.WriteString("\r\n")
@@ -83,38 +83,38 @@ func createModel(model string) {
 
 	for _, attrRow := range attrRows {
 		cppFile.WriteString(attrRow[0] + " " + name + "::" + attrRow[1] + "(){\r\n")
-		cppFile.WriteString("    return " + attrRow[1] + "_;\r\n")
+		cppFile.WriteString("    return _" + attrRow[1] + ";\r\n")
 		cppFile.WriteString("}\r\n")
 		cppFile.WriteString("\r\n")
 	}
 
 	for _, attrRow := range attrRows {
 		cppFile.WriteString("void " + name + "::" + getSetterName(attrRow[1]) + "(" + attrRow[0] + " " + attrRow[1] + "){\r\n")
-		cppFile.WriteString("    " + attrRow[1] + "_ = " + attrRow[1] + ";\r\n")
+		cppFile.WriteString("    _" + attrRow[1] + " = " + attrRow[1] + ";\r\n")
 		cppFile.WriteString("}\r\n")
 		cppFile.WriteString("\r\n")
 	}
 
-	cppFile.WriteString("void MmTerm::fromMap(const QVariantMap &map){\r\n")
+	cppFile.WriteString("void " + name + "::fromMap(const QVariantMap &map){\r\n")
 	for _, attrRow := range attrRows {
 		if attrRow[0] == "QDateTime" {
-			cppFile.WriteString("    " + attrRow[1] + "_ = QDateTime::fromMSecsSinceEpoch(map[\"" + attrRow[1] + "\"].toULongLong());\r\n")
+			cppFile.WriteString("    _" + attrRow[1] + " = QDateTime::fromMSecsSinceEpoch(map[\"" + attrRow[1] + "\"].toULongLong());\r\n")
 		} else if attrRow[0] == "double" {
-			cppFile.WriteString("    " + attrRow[1] + "_ = map[\"" + attrRow[1] + "\"].toDouble();\r\n")
+			cppFile.WriteString("    _" + attrRow[1] + " = map[\"" + attrRow[1] + "\"].toDouble();\r\n")
 		} else if attrRow[0] == "int" {
-			cppFile.WriteString("    " + attrRow[1] + "_ = map[\"" + attrRow[1] + "\"].toInt();\r\n")
+			cppFile.WriteString("    _" + attrRow[1] + " = map[\"" + attrRow[1] + "\"].toInt();\r\n")
 		} else if attrRow[0] == "bool" {
-			cppFile.WriteString("    " + attrRow[1] + "_ = map[\"" + attrRow[1] + "\"].toBool();\r\n")
+			cppFile.WriteString("    _" + attrRow[1] + " = map[\"" + attrRow[1] + "\"].toBool();\r\n")
 		} else {
-			cppFile.WriteString("    " + attrRow[1] + "_ = map[\"" + attrRow[1] + "\"].toString();\r\n")
+			cppFile.WriteString("    _" + attrRow[1] + " = map[\"" + attrRow[1] + "\"].toString();\r\n")
 		}
 	}
 	cppFile.WriteString("}\r\n")
 	cppFile.WriteString("\r\n")
 
-	cppFile.WriteString("void MmTerm::toMap(QVariantMap &map){\r\n")
+	cppFile.WriteString("void " + name + "::toMap(QVariantMap &map){\r\n")
 	for _, attrRow := range attrRows {
-		cppFile.WriteString("    map[\"" + attrRow[1] + "\"] = " + attrRow[1] + "_;\r\n")
+		cppFile.WriteString("    map[\"" + attrRow[1] + "\"] = _" + attrRow[1] + ";\r\n")
 	}
 	cppFile.WriteString("}\r\n")
 
