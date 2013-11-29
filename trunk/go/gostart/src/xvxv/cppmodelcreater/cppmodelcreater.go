@@ -53,11 +53,11 @@ func createModel(model string) {
 	hFile.WriteString("    " + name + "();\r\n\r\n")
 
 	for _, attrRow := range attrRows {
-		hFile.WriteString("    " + attrRow[0] + " " + attrRow[1] + "();\r\n")
+		hFile.WriteString("    " + attrRow[0] + " " + attrRow[1] + "() const;\r\n")
 	}
 	hFile.WriteString("\r\n")
 	for _, attrRow := range attrRows {
-		hFile.WriteString("    void " + getSetterName(attrRow[1]) + " (const " + attrRow[0] + ");\r\n")
+		hFile.WriteString("    void " + getSetterName(attrRow[1]) + " (const " + attrRow[0] + " &);\r\n")
 	}
 	hFile.WriteString("\r\n")
 	hFile.WriteString("    void fromMap(const QVariantMap &map);\r\n")
@@ -82,14 +82,14 @@ func createModel(model string) {
 	cppFile.WriteString("\r\n")
 
 	for _, attrRow := range attrRows {
-		cppFile.WriteString(attrRow[0] + " " + name + "::" + attrRow[1] + "(){\r\n")
+		cppFile.WriteString(attrRow[0] + " " + name + "::" + attrRow[1] + "() const{\r\n")
 		cppFile.WriteString("    return _" + attrRow[1] + ";\r\n")
 		cppFile.WriteString("}\r\n")
 		cppFile.WriteString("\r\n")
 	}
 
 	for _, attrRow := range attrRows {
-		cppFile.WriteString("void " + name + "::" + getSetterName(attrRow[1]) + "(" + attrRow[0] + " " + attrRow[1] + "){\r\n")
+		cppFile.WriteString("void " + name + "::" + getSetterName(attrRow[1]) + "(const " + attrRow[0] + " &" + attrRow[1] + "){\r\n")
 		cppFile.WriteString("    _" + attrRow[1] + " = " + attrRow[1] + ";\r\n")
 		cppFile.WriteString("}\r\n")
 		cppFile.WriteString("\r\n")
