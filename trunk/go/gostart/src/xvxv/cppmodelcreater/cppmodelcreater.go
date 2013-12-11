@@ -30,11 +30,12 @@ func getSetterName(name string) string {
 func createModel(model string) {
 	rows := strings.Split(model, "\r\n")
 	packageName := rows[0]
-	name := rows[1]
+	javaPackageName := rows[1]
+	name := rows[2]
 
-	attrRows := make([][]string, len(rows)-2)
-	for i := 2; i < len(rows); i++ {
-		attrRows[i-2] = strings.Split(rows[i], " ")
+	attrRows := make([][]string, len(rows)-3)
+	for i := 3; i < len(rows); i++ {
+		attrRows[i-3] = strings.Split(rows[i], " ")
 	}
 
 	_, err := os.Stat("models/" + packageName + "")
@@ -62,6 +63,9 @@ func createModel(model string) {
 	hFile.WriteString("\r\n")
 	hFile.WriteString("    void fromMap(const QVariantMap &map);\r\n")
 	hFile.WriteString("    void toMap(QVariantMap &map);\r\n")
+	hFile.WriteString("\r\n")
+	hFile.WriteString("    bool operator==(const " + name + " &other) const;\r\n")
+	hFile.WriteString("    bool operator!=(const " + name + " &other) const;\r\n")
 	hFile.WriteString("\r\n")
 	hFile.WriteString("private:\r\n")
 	for _, attrRow := range attrRows {
@@ -120,6 +124,27 @@ func createModel(model string) {
 			cppFile.WriteString("    map[\"" + attrRow[1] + "\"] = _" + attrRow[1] + ";\r\n")
 		}
 	}
+	cppFile.WriteString("    map[\"javaname\"] = \"" + javaPackageName + "." + name + "\";\r\n")
+
+	cppFile.WriteString("}\r\n")
+	cppFile.WriteString("\r\n")
+
+	cppFile.WriteString("bool " + name + "::operator==(const " + name + " &other) const{\r\n")
+	for _, attrRow := range attrRows {
+		cppFile.WriteString("    if(_" + attrRow[1] + "!=other._" + attrRow[1] + "){\r\n")
+		cppFile.WriteString("        return false;\r\n")
+		cppFile.WriteString("    }\r\n")
+	}
+	cppFile.WriteString("    return true;\r\n")
+	cppFile.WriteString("}\r\n")
+
+	cppFile.WriteString("bool " + name + "::operator!=(const " + name + " &other) const{\r\n")
+	for _, attrRow := range attrRows {
+		cppFile.WriteString("    if(_" + attrRow[1] + "!=other._" + attrRow[1] + "){\r\n")
+		cppFile.WriteString("        return true;\r\n")
+		cppFile.WriteString("    }\r\n")
+	}
+	cppFile.WriteString("    return false;\r\n")
 	cppFile.WriteString("}\r\n")
 
 	cppFile.WriteString("\r\n")
