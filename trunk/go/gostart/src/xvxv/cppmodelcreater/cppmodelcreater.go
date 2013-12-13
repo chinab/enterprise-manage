@@ -48,6 +48,10 @@ func createModel(model string) {
 	hFile, _ := os.Create("models/" + packageName + "/" + fileName + ".h")
 	defer hFile.Close()
 
+	hFile.WriteString("/**\r\n")
+	hFile.WriteString(" *  create by tools,\r\n")
+	hFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/cpp-model生成器\r\n")
+	hFile.WriteString(" **/\r\n")
 	hFile.WriteString("#ifndef " + upperFileName + "_H\r\n#define " + upperFileName + "_H\r\n\r\n#include <QString>\r\n#include <QDateTime>\r\n#include <QVariantMap>\r\n")
 	hFile.WriteString("#include \"../model_global.h\"\r\n\r\n")
 	hFile.WriteString("class MODELSHARED_EXPORT " + name + "\r\n{\r\npublic:\r\n")
@@ -78,10 +82,27 @@ func createModel(model string) {
 	cppFile, _ := os.Create("models/" + packageName + "/" + fileName + ".cpp")
 	defer cppFile.Close()
 
+	cppFile.WriteString("/**\r\n")
+	cppFile.WriteString(" *  create by tools,\r\n")
+	cppFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/cpp-model生成器\r\n")
+	cppFile.WriteString(" **/\r\n")
 	cppFile.WriteString("#include \"" + fileName + ".h\"\r\n")
 	cppFile.WriteString("\r\n")
 	cppFile.WriteString(name + "::" + name + "()\r\n")
 	cppFile.WriteString("{\r\n")
+	for _, attrRow := range attrRows {
+		if attrRow[0] == "QDateTime" {
+			cppFile.WriteString("    _" + attrRow[1] + " = QDateTime::currentDateTime();\r\n")
+		} else if attrRow[0] == "double" {
+			cppFile.WriteString("    _" + attrRow[1] + " = 0.0;\r\n")
+		} else if attrRow[0] == "int" {
+			cppFile.WriteString("    _" + attrRow[1] + " = 0;\r\n")
+		} else if attrRow[0] == "bool" {
+			cppFile.WriteString("    _" + attrRow[1] + " = false;\r\n")
+		} else {
+			cppFile.WriteString("    _" + attrRow[1] + " = \"\";\r\n")
+		}
+	}
 	cppFile.WriteString("}\r\n")
 	cppFile.WriteString("\r\n")
 
