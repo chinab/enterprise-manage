@@ -1,4 +1,5 @@
 boot
+com.xvxv.model
 MmTerm
 QString id
 QString name
