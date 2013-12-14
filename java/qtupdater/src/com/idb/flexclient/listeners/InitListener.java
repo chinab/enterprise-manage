@@ -16,6 +16,7 @@ public class InitListener implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent arg0) {
 		try {
+			BaseManager.dbPath = arg0.getServletContext().getRealPath("/files");
 			Connection conn = BaseManager.getConn();
 			Statement stat = conn.createStatement();
 			stat.executeUpdate("create table if not exists product (id, name, version,productInfo, createTime);");
