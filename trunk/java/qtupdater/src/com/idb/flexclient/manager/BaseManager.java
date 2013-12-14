@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 public abstract class BaseManager {
 	public abstract void requestHandler(HttpServletRequest request, HttpServletResponse response);
 
+	static public String dbPath = "";
+
 	protected void forward(HttpServletRequest request, HttpServletResponse response, String url) {
 		try {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher(url);
@@ -34,7 +36,7 @@ public abstract class BaseManager {
 
 	public static Connection getConn() throws ClassNotFoundException, SQLException {
 		Class.forName("org.sqlite.JDBC");
-		Connection conn = DriverManager.getConnection("jdbc:sqlite:qtclient1.db");
+		Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbPath + "/qtclient.db");
 		return conn;
 	}
 
