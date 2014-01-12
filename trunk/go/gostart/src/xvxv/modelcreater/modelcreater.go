@@ -61,7 +61,7 @@ func createAsModel(model string) {
 
 	cppFile.WriteString("/**\r\n")
 	cppFile.WriteString(" *  create by tools,\r\n")
-	cppFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/model生成器\r\n")
+	cppFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/as-model生成器\r\n")
 	cppFile.WriteString(" **/\r\n")
 	cppFile.WriteString("package " + javaPackageName + " {\r\n")
 	cppFile.WriteString("\r\n")
@@ -186,7 +186,7 @@ func createCppModel(model string) {
 
 	hFile.WriteString("/**\r\n")
 	hFile.WriteString(" *  create by tools,\r\n")
-	hFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/model生成器\r\n")
+	hFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/cpp-model生成器\r\n")
 	hFile.WriteString(" **/\r\n")
 	hFile.WriteString("#ifndef " + upperFileName + "_H\r\n#define " + upperFileName + "_H\r\n\r\n#include <QString>\r\n#include <QDateTime>\r\n#include <QVariantMap>\r\n")
 	hFile.WriteString("#include \"../model_global.h\"\r\n\r\n")
@@ -220,7 +220,7 @@ func createCppModel(model string) {
 
 	cppFile.WriteString("/**\r\n")
 	cppFile.WriteString(" *  create by tools,\r\n")
-	cppFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/model生成器\r\n")
+	cppFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/cpp-model生成器\r\n")
 	cppFile.WriteString(" **/\r\n")
 	cppFile.WriteString("#include \"" + fileName + ".h\"\r\n")
 	cppFile.WriteString("\r\n")
