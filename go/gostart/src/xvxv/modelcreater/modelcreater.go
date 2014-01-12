@@ -16,8 +16,9 @@ func main() {
 			file, _ := os.Open("models/" + fileName)
 			r := bufio.NewReader(file)
 			model, _ := r.ReadString(0)
-			createModel(model)
 			file.Close()
+			createAsModel(model)
+			createCppModel(model)
 		}
 	}
 }
@@ -27,7 +28,151 @@ func getSetterName(name string) string {
 	return "set" + strings.ToUpper(string(name[0])) + string(name[1:])
 }
 
-func createModel(model string) {
+func createAsModel(model string) {
+	rows := strings.Split(model, "\r\n")
+	packageName := rows[0]
+	javaPackageName := rows[1]
+	name := rows[2]
+
+	attrRows := make([][]string, len(rows)-3)
+	for i := 3; i < len(rows); i++ {
+		attrRows[i-3] = strings.Split(rows[i], " ")
+	}
+
+	_, err := os.Stat("models/" + packageName + "")
+	if err != nil && os.IsNotExist(err) {
+		os.Mkdir("models/"+packageName, os.ModeDir)
+	}
+
+	fileName := strings.ToLower(name)
+	upperFileName := strings.ToUpper(name)
+	hFile, _ := os.Create("models/" + packageName + "/" + fileName + ".h")
+	defer hFile.Close()
+
+	hFile.WriteString("/**\r\n")
+	hFile.WriteString(" *  create by tools,\r\n")
+	hFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/cpp-model生成器\r\n")
+	hFile.WriteString(" **/\r\n")
+	hFile.WriteString("#ifndef " + upperFileName + "_H\r\n#define " + upperFileName + "_H\r\n\r\n#include <QString>\r\n#include <QDateTime>\r\n#include <QVariantMap>\r\n")
+	hFile.WriteString("#include \"../model_global.h\"\r\n\r\n")
+	hFile.WriteString("class MODELSHARED_EXPORT " + name + "\r\n{\r\npublic:\r\n")
+	hFile.WriteString("    " + name + "();\r\n\r\n")
+
+	for _, attrRow := range attrRows {
+		hFile.WriteString("    " + attrRow[0] + " " + attrRow[1] + "() const;\r\n")
+	}
+	hFile.WriteString("\r\n")
+	for _, attrRow := range attrRows {
+		hFile.WriteString("    void " + getSetterName(attrRow[1]) + " (const " + attrRow[0] + " &);\r\n")
+	}
+	hFile.WriteString("\r\n")
+	hFile.WriteString("    void fromMap(const QVariantMap &map);\r\n")
+	hFile.WriteString("    void toMap(QVariantMap &map);\r\n")
+	hFile.WriteString("\r\n")
+	hFile.WriteString("    bool operator==(const " + name + " &other) const;\r\n")
+	hFile.WriteString("    bool operator!=(const " + name + " &other) const;\r\n")
+	hFile.WriteString("\r\n")
+	hFile.WriteString("private:\r\n")
+	for _, attrRow := range attrRows {
+		hFile.WriteString("    " + attrRow[0] + " _" + attrRow[1] + ";\r\n")
+	}
+	hFile.WriteString("};\r\n")
+	hFile.WriteString("\r\n")
+	hFile.WriteString("#endif // " + upperFileName + "_H\r\n")
+
+	cppFile, _ := os.Create("models/" + packageName + "/" + fileName + ".cpp")
+	defer cppFile.Close()
+
+	cppFile.WriteString("/**\r\n")
+	cppFile.WriteString(" *  create by tools,\r\n")
+	cppFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/cpp-model生成器\r\n")
+	cppFile.WriteString(" **/\r\n")
+	cppFile.WriteString("#include \"" + fileName + ".h\"\r\n")
+	cppFile.WriteString("\r\n")
+	cppFile.WriteString(name + "::" + name + "()\r\n")
+	cppFile.WriteString("{\r\n")
+	for _, attrRow := range attrRows {
+		if attrRow[0] == "QDateTime" {
+			cppFile.WriteString("    _" + attrRow[1] + " = QDateTime::currentDateTime();\r\n")
+		} else if attrRow[0] == "double" {
+			cppFile.WriteString("    _" + attrRow[1] + " = 0.0;\r\n")
+		} else if attrRow[0] == "int" {
+			cppFile.WriteString("    _" + attrRow[1] + " = 0;\r\n")
+		} else if attrRow[0] == "bool" {
+			cppFile.WriteString("    _" + attrRow[1] + " = false;\r\n")
+		} else {
+			cppFile.WriteString("    _" + attrRow[1] + " = \"\";\r\n")
+		}
+	}
+	cppFile.WriteString("}\r\n")
+	cppFile.WriteString("\r\n")
+
+	for _, attrRow := range attrRows {
+		cppFile.WriteString(attrRow[0] + " " + name + "::" + attrRow[1] + "() const{\r\n")
+		cppFile.WriteString("    return _" + attrRow[1] + ";\r\n")
+		cppFile.WriteString("}\r\n")
+		cppFile.WriteString("\r\n")
+	}
+
+	for _, attrRow := range attrRows {
+		cppFile.WriteString("void " + name + "::" + getSetterName(attrRow[1]) + "(const " + attrRow[0] + " &" + attrRow[1] + "){\r\n")
+		cppFile.WriteString("    _" + attrRow[1] + " = " + attrRow[1] + ";\r\n")
+		cppFile.WriteString("}\r\n")
+		cppFile.WriteString("\r\n")
+	}
+
+	cppFile.WriteString("void " + name + "::fromMap(const QVariantMap &map){\r\n")
+	for _, attrRow := range attrRows {
+		if attrRow[0] == "QDateTime" {
+			cppFile.WriteString("    _" + attrRow[1] + " = QDateTime::fromMSecsSinceEpoch(map[\"" + attrRow[1] + "\"].toULongLong());\r\n")
+		} else if attrRow[0] == "double" {
+			cppFile.WriteString("    _" + attrRow[1] + " = map[\"" + attrRow[1] + "\"].toDouble();\r\n")
+		} else if attrRow[0] == "int" {
+			cppFile.WriteString("    _" + attrRow[1] + " = map[\"" + attrRow[1] + "\"].toInt();\r\n")
+		} else if attrRow[0] == "bool" {
+			cppFile.WriteString("    _" + attrRow[1] + " = map[\"" + attrRow[1] + "\"].toBool();\r\n")
+		} else {
+			cppFile.WriteString("    _" + attrRow[1] + " = map[\"" + attrRow[1] + "\"].toString();\r\n")
+		}
+	}
+	cppFile.WriteString("}\r\n")
+	cppFile.WriteString("\r\n")
+
+	cppFile.WriteString("void " + name + "::toMap(QVariantMap &map){\r\n")
+	for _, attrRow := range attrRows {
+		if attrRow[0] == "QDateTime" {
+			cppFile.WriteString("    map[\"" + attrRow[1] + "\"] = _" + attrRow[1] + ".toMSecsSinceEpoch();\r\n")
+		} else {
+			cppFile.WriteString("    map[\"" + attrRow[1] + "\"] = _" + attrRow[1] + ";\r\n")
+		}
+	}
+	cppFile.WriteString("    map[\"javaname\"] = \"" + javaPackageName + "." + name + "\";\r\n")
+
+	cppFile.WriteString("}\r\n")
+	cppFile.WriteString("\r\n")
+
+	cppFile.WriteString("bool " + name + "::operator==(const " + name + " &other) const{\r\n")
+	for _, attrRow := range attrRows {
+		cppFile.WriteString("    if(_" + attrRow[1] + "!=other._" + attrRow[1] + "){\r\n")
+		cppFile.WriteString("        return false;\r\n")
+		cppFile.WriteString("    }\r\n")
+	}
+	cppFile.WriteString("    return true;\r\n")
+	cppFile.WriteString("}\r\n")
+
+	cppFile.WriteString("bool " + name + "::operator!=(const " + name + " &other) const{\r\n")
+	for _, attrRow := range attrRows {
+		cppFile.WriteString("    if(_" + attrRow[1] + "!=other._" + attrRow[1] + "){\r\n")
+		cppFile.WriteString("        return true;\r\n")
+		cppFile.WriteString("    }\r\n")
+	}
+	cppFile.WriteString("    return false;\r\n")
+	cppFile.WriteString("}\r\n")
+
+	cppFile.WriteString("\r\n")
+}
+
+func createCppModel(model string) {
 	rows := strings.Split(model, "\r\n")
 	packageName := rows[0]
 	javaPackageName := rows[1]
