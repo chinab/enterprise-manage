@@ -40,6 +40,7 @@ public class FileManager extends BaseManager {
 	private static final String CONTENT_TYPE = "text/html,charset=UTF-8";
 	private static final String AIR_CONTENT_TYPE = "text/html,charset=UTF-8";
 	private static final String ENCODING = "UTF-8";
+	private static String[] fileList;
 
 	public void requestHandler(HttpServletRequest request, HttpServletResponse response) {
 
@@ -118,8 +119,7 @@ public class FileManager extends BaseManager {
 			response.setContentType(AIR_CONTENT_TYPE);
 			response.addHeader("Content-Disposition", "attachment; filename=\"" + filename + ".zip\"");
 
-			String path = request.getSession().getServletContext().getRealPath("/files");
-			java.io.File file = new java.io.File(path, id + ".zip");
+			java.io.File file = new java.io.File(dbPath, id + ".zip");
 			InputStream input = new FileInputStream(file);
 			OutputStream output = response.getOutputStream();
 			IOUtils.copy(input, output);
@@ -189,8 +189,7 @@ public class FileManager extends BaseManager {
 	private String[] uplaod(HttpServletRequest request, HttpServletResponse response, String id) {
 		response.setContentType(CONTENT_TYPE);
 		DiskFileItemFactory factory = new DiskFileItemFactory();
-		String path = request.getSession().getServletContext().getRealPath("/files");
-		java.io.File file = new java.io.File(path);
+		java.io.File file = new java.io.File(dbPath);
 		if (!file.exists()) {
 			file.mkdir();
 		}
@@ -220,17 +219,17 @@ public class FileManager extends BaseManager {
 				// fileObj.setUpdateInfo(paramMap.get("updateInfo"));
 				// fileObj.setVersion(paramMap.get("version"));
 
-				java.io.File zipFile = new java.io.File(path, id + ".zip");
+				java.io.File zipFile = new java.io.File(dbPath, id + ".zip");
 				OutputStream output = new FileOutputStream(zipFile);
 				IOUtils.copy(input, output);
 				input.close();
 				output.close();
 
-				String descDir = path + "/" + id + "/";
-				ZipUtils.unZipFiles(zipFile, descDir);
-
-				String[] fileList = new java.io.File(descDir).list();
-
+				String descDir = dbPath + "/" + id + "/";
+				List<String> unZipFiles = ZipUtils.unZipFiles(zipFile, descDir);
+				
+				fileList = (String[]) (unZipFiles.toArray(new String[unZipFiles.size()]));
+				
 				sortFileList(fileList);
 
 				// Connection conn = getConn();
@@ -271,13 +270,13 @@ public class FileManager extends BaseManager {
 			public int compare(String o1, String o2) {
 				int a = 0;
 				int b = 0;
-				if (o1.startsWith("idb")) {
+				if (o1.startsWith("/: idb")) {
 					a += 9;
 				}
 				if (!o1.endsWith(".dll")) {
 					a += 10;
 				}
-				if (o2.startsWith("idb")) {
+				if (o2.startsWith("/: idb")) {
 					b += 9;
 				}
 				if (!o2.endsWith(".dll")) {
@@ -292,9 +291,14 @@ public class FileManager extends BaseManager {
 	private void save(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String id = request.getParameter("fileId");
-			String path = request.getSession().getServletContext().getRealPath("/files");
-			String descDir = path + "/" + id + "/";
-			String[] files = new java.io.File(descDir).list();
+//			String descDir = dbPath + "/" + id + "/";
+//			String[] files = new java.io.File(descDir).list();
+
+			if (fileList == null) {
+				return;
+			}
+			String[] files = fileList;
+			
 			sortFileList(files);
 			String[] updatedFiles = request.getParameterValues("updatedFile");
 			File fileObj = new File();
