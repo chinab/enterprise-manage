@@ -19,7 +19,7 @@ public class XMLManager extends BaseManager {
 	@Override
 	public void requestHandler(HttpServletRequest request, HttpServletResponse response) {
 		StringBuffer requestURL = request.getRequestURL();
-		String productName = requestURL.substring(requestURL.lastIndexOf("/") + 1, requestURL.lastIndexOf(".xml"));
+		String productName = requestURL.substring(requestURL.lastIndexOf("/") + 1, requestURL.lastIndexOf(".xmlfile"));
 		String urlPre = requestURL.substring(0, requestURL.lastIndexOf("/") + 1);
 
 		try {

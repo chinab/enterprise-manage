@@ -29,7 +29,7 @@
 		<c:forEach items="${fileGroups }" var="fileGroup">
 			<tr class="productTr" title="${fileGroup.product.name }(${fileGroup.product.productInfo })">
 				<td class="productName" colspan="3">${fileGroup.product.name }</td>
-				<td id="${fileGroup.product.id }"><a href="${fileGroup.product.name }.xml" target="_blank">xml</a><a href="#" class="uploadButton">上传</a></td>
+				<td id="${fileGroup.product.id }"><a href="${fileGroup.product.name }.jsonfile" target="_blank">json</a><a href="#" class="uploadButton">上传</a></td>
 			</tr>
 			<c:forEach items="${fileGroup.files }" var="file">
 			<tr title="${file.version }">

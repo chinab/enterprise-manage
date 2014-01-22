@@ -6,7 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -91,7 +93,8 @@ public class ZipUtils {
 	 * @author isea533
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void unZipFiles(File zipFile, String descDir) throws IOException {
+	public static List<String> unZipFiles(File zipFile, String descDir) throws IOException {
+		List<String> result = new ArrayList<String>();
 		File pathFile = new File(descDir);
 		if (!pathFile.exists()) {
 			pathFile.mkdirs();
@@ -111,8 +114,16 @@ public class ZipUtils {
 			if (new File(outPath).isDirectory()) {
 				continue;
 			}
-			// 输出文件路径信息
-			System.out.println(outPath);
+
+			String r = zipEntryName.replaceAll("\\*", "/");
+			if (r.contains("/")) {
+				int lastIndexOf = r.lastIndexOf("/");
+				String front = r.substring(0, lastIndexOf+1);
+				String last = r.substring(lastIndexOf+1);
+				result.add("/" + front + ": " + last);
+			} else {
+				result.add("/: " + r);
+			}
 
 			OutputStream out = new FileOutputStream(outPath);
 			byte[] buf1 = new byte[1024];
@@ -125,5 +136,6 @@ public class ZipUtils {
 		}
 		zip.close();
 		System.out.println("******************解压完毕********************");
+		return result;
 	}
 }

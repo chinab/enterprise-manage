@@ -92,7 +92,7 @@ $(function(){
 	        	
 	        	for(var i=0;i<jsonData.files.length;i++){
 	        		htmlContent += ' <div class="updatedFile"><label><input name="updatedFile" value="'+jsonData.files[i]+'" type="checkbox" ';
-	        		if (jsonData.files[i].indexOf("idb")==0||jsonData.files[i].indexOf(".dll")!=jsonData.files[i].length-4) {
+	        		if (jsonData.files[i].indexOf("/: idb")==0||(jsonData.files[i].indexOf(".dll")!=jsonData.files[i].length-4&&jsonData.files[i].indexOf(".ttf")!=jsonData.files[i].length-4)) {
 	        			htmlContent += 'checked="checked"';
 					}
 	        		htmlContent += '>'+jsonData.files[i]+'</label></div>';

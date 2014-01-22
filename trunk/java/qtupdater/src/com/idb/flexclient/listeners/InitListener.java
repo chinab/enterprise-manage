@@ -16,7 +16,15 @@ public class InitListener implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent arg0) {
 		try {
+			// File f = new File(arg0.getServletContext().getRealPath("/"));
+			// String parent = f.getParentFile().getParent();
 			BaseManager.dbPath = arg0.getServletContext().getRealPath("/files");
+
+			// f = new File(BaseManager.dbPath);
+			// if(!f.exists()){
+			// f.mkdir();
+			// }
+
 			Connection conn = BaseManager.getConn();
 			Statement stat = conn.createStatement();
 			stat.executeUpdate("create table if not exists product (id, name, version,productInfo, createTime);");

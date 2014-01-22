@@ -53,6 +53,16 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>XMLServlet</servlet-name>
-    <url-pattern>*.xml</url-pattern>
+    <url-pattern>*.xmlfile</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>JSONServlet</display-name>
+    <servlet-name>JSONServlet</servlet-name>
+    <servlet-class>com.idb.flexclient.web.JSONServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>JSONServlet</servlet-name>
+    <url-pattern>*.jsonfile</url-pattern>
   </servlet-mapping>
 </web-app>
