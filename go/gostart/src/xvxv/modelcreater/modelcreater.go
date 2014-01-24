@@ -223,12 +223,13 @@ func createCppModel(model string) {
 	cppFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/cpp-model生成器\r\n")
 	cppFile.WriteString(" **/\r\n")
 	cppFile.WriteString("#include \"" + fileName + ".h\"\r\n")
+	cppFile.WriteString("#include \"../model.h\"\r\n")
 	cppFile.WriteString("\r\n")
 	cppFile.WriteString(name + "::" + name + "()\r\n")
 	cppFile.WriteString("{\r\n")
 	for _, attrRow := range attrRows {
 		if attrRow[0] == "QDateTime" {
-			cppFile.WriteString("    _" + attrRow[1] + " = QDateTime::currentDateTime();\r\n")
+			cppFile.WriteString("    _" + attrRow[1] + " = Model::instance().currentDateTime();\r\n")
 		} else if attrRow[0] == "double" {
 			cppFile.WriteString("    _" + attrRow[1] + " = 0.0;\r\n")
 		} else if attrRow[0] == "int" {
