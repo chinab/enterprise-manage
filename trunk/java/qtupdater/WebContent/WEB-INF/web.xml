@@ -29,6 +29,16 @@
     <servlet-name>ProductServlet</servlet-name>
     <url-pattern>/ProductServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LoginServlet</display-name>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>com.idb.flexclient.web.LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
   <listener>
     <listener-class>com.idb.flexclient.listeners.InitListener</listener-class>
   </listener>

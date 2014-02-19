@@ -19,6 +19,12 @@ import com.idb.flexclient.domain.Product;
 public class ProductManager extends BaseManager {
 
 	public void requestHandler(HttpServletRequest request, HttpServletResponse response) {
+		Object loginusername = request.getSession().getAttribute("username");
+		if(loginusername==null||!loginusername.toString().equals("admin")){
+			forward(request, response, "/jsps/login.jsp");
+			return;
+		}
+		
 		String method = request.getParameter("method");
 		if (StringUtils.isNotBlank(method)) {
 			if (method.equals("add")) {

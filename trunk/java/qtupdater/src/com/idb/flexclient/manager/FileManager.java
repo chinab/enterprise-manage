@@ -43,6 +43,11 @@ public class FileManager extends BaseManager {
 	private static String[] fileList;
 
 	public void requestHandler(HttpServletRequest request, HttpServletResponse response) {
+		Object loginusername = request.getSession().getAttribute("username");
+		if(loginusername==null||!loginusername.toString().equals("admin")){
+			forward(request, response, "/jsps/login.jsp");
+			return;
+		}
 
 		String method = request.getParameter("method");
 		if (StringUtils.isNotBlank(method)) {
