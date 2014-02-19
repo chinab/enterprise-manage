@@ -1,0 +1,10 @@
+boot
+com.xvxv.model
+MmTerm
+QString id
+QString name
+QString code
+double month
+QString description
+QDateTime createTime
+QString status
