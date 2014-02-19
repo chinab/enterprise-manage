@@ -188,10 +188,11 @@ func createCppModel(model string) {
 	hFile.WriteString(" *  create by tools,\r\n")
 	hFile.WriteString(" *  http://192.168.1.107/svn/guoliclient/moneymarket/docs/cpp-model生成器\r\n")
 	hFile.WriteString(" **/\r\n")
-	hFile.WriteString("#ifndef " + upperFileName + "_H\r\n#define " + upperFileName + "_H\r\n\r\n#include <QString>\r\n#include <QDateTime>\r\n#include <QVariantMap>\r\n")
+	hFile.WriteString("#ifndef " + upperFileName + "_H\r\n#define " + upperFileName + "_H\r\n\r\n#include <QString>\r\n#include <QDateTime>\r\n#include <QVariantMap>\r\n#include \"../modelbase.h\"\r\n")
 	hFile.WriteString("#include \"../model_global.h\"\r\n\r\n")
-	hFile.WriteString("class MODELSHARED_EXPORT " + name + "\r\n{\r\npublic:\r\n")
+	hFile.WriteString("class MODELSHARED_EXPORT " + name + ": public ModelBase\r\n{\r\npublic:\r\n")
 	hFile.WriteString("    " + name + "();\r\n\r\n")
+	hFile.WriteString("    ~" + name + "();\r\n\r\n")
 
 	for _, attrRow := range attrRows {
 		hFile.WriteString("    " + attrRow[0] + " " + attrRow[1] + "() const;\r\n")
@@ -203,6 +204,8 @@ func createCppModel(model string) {
 	hFile.WriteString("\r\n")
 	hFile.WriteString("    void fromMap(const QVariantMap &map);\r\n")
 	hFile.WriteString("    void toMap(QVariantMap &map);\r\n")
+	hFile.WriteString("\r\n")
+	hFile.WriteString("    QVariant valueByField(const QString &fieldName);\r\n")
 	hFile.WriteString("\r\n")
 	hFile.WriteString("    bool operator==(const " + name + " &other) const;\r\n")
 	hFile.WriteString("    bool operator!=(const " + name + " &other) const;\r\n")
@@ -225,7 +228,7 @@ func createCppModel(model string) {
 	cppFile.WriteString("#include \"" + fileName + ".h\"\r\n")
 	cppFile.WriteString("#include \"../model.h\"\r\n")
 	cppFile.WriteString("\r\n")
-	cppFile.WriteString(name + "::" + name + "()\r\n")
+	cppFile.WriteString(name + "::" + name + "():ModelBase()\r\n")
 	cppFile.WriteString("{\r\n")
 	for _, attrRow := range attrRows {
 		if attrRow[0] == "QDateTime" {
@@ -241,6 +244,8 @@ func createCppModel(model string) {
 		}
 	}
 	cppFile.WriteString("}\r\n")
+	cppFile.WriteString("\r\n")
+	cppFile.WriteString(name + "::~" + name + "(){}\r\n")
 	cppFile.WriteString("\r\n")
 
 	for _, attrRow := range attrRows {
@@ -283,6 +288,17 @@ func createCppModel(model string) {
 		}
 	}
 	cppFile.WriteString("    map[\"javaname\"] = \"" + javaPackageName + "." + name + "\";\r\n")
+
+	cppFile.WriteString("}\r\n")
+	cppFile.WriteString("\r\n")
+
+	cppFile.WriteString("QVariant " + name + "::valueByField(const QString &fieldName){\r\n")
+	for _, attrRow := range attrRows {
+		cppFile.WriteString("    if(fieldName==\"" + attrRow[1] + "\"){\r\n")
+		cppFile.WriteString("        return _" + attrRow[1] + ";\r\n")
+		cppFile.WriteString("    }\r\n")
+	}
+	cppFile.WriteString("    return QVariant();\r\n")
 
 	cppFile.WriteString("}\r\n")
 	cppFile.WriteString("\r\n")
