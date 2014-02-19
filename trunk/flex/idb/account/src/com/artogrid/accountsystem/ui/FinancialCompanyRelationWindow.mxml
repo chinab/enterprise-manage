@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:ro="com.artogrid.accountsystem.ro.*" width="486" height="408"
+			   close="PopUpManager.removePopUp(this)" keyUp="if(event.keyCode==Keyboard.ESCAPE)PopUpManager.removePopUp(this);" mouseDownOutside="PopUpManager.removePopUp(this)" title="金融公司授权-{_financialCompanyDTO.name}">
+	<fx:Script>
+		<![CDATA[
+			import com.artogrid.accountsystem.controls.MyAlert;
+			import com.artogrid.accountsystem.vo.DepartmentDTO;
+			import com.artogrid.accountsystem.vo.FinancialCompanyDTO;
+			import com.artogrid.accountsystem.vo.FinancialCompanyRelationDTO;
+
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.DragEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.ResultEvent;
+			private static var me:FinancialCompanyRelationWindow;
+			[Bindable]
+			private var _financialCompanyDTO:FinancialCompanyDTO;
+
+			[Bindable]
+			private var _authedDepartments:ArrayCollection;
+			[Bindable]
+			private var _notAuthedDepartments:ArrayCollection;
+
+			public function setFinancialCompanyRelationDTO(value:FinancialCompanyDTO):void {
+				_financialCompanyDTO=value;
+				getAuthedRelationsByCompanyIdResult.token=financialCompanyRO.getAuthedRelationsByCompanyId(_financialCompanyDTO.id);
+			}
+
+			public static function getMe(financialCompanyRelationDTO:FinancialCompanyDTO):FinancialCompanyRelationWindow {
+				if (me == null) {
+					me=new FinancialCompanyRelationWindow();
+				}
+				me.setFinancialCompanyRelationDTO(financialCompanyRelationDTO);
+				return me;
+			}
+
+			protected function getAuthedRelationsByCompanyIdResult_resultHandler(event:ResultEvent):void {
+				getAllDepartmentsResult.token=departmentRO.getAllDepartments();
+			}
+
+			protected function getAllDepartmentsResult_resultHandler(event:ResultEvent):void {
+				_notAuthedDepartments=new ArrayCollection();
+				_authedDepartments=new ArrayCollection();
+				var ids:Array=new Array();
+				var authedRelations:ArrayCollection=getAuthedRelationsByCompanyIdResult.lastResult as ArrayCollection;
+				for each (var financialCompanyRelationDTO:FinancialCompanyRelationDTO in authedRelations) {
+					ids.push(financialCompanyRelationDTO.departmentId);
+				}
+
+				var allDepartments:ArrayCollection=getAllDepartmentsResult.lastResult as ArrayCollection;
+				for each (var department:DepartmentDTO in allDepartments) {
+					var indexOf:int=ids.indexOf(department.id);
+					if (indexOf == -1) {
+						_notAuthedDepartments.addItem(department);
+					} else {
+						_authedDepartments.addItem(department);
+					}
+				}
+
+			}
+
+			protected function list1_dragStartHandler(event:DragEvent):void {
+				list2.dropEnabled=true;
+			}
+
+			protected function list1_dragCompleteHandler(event:DragEvent):void {
+				list2.dropEnabled=false;
+			}
+
+			protected function list2_dragStartHandler(event:DragEvent):void {
+				list1.dropEnabled=true;
+			}
+
+			protected function list2_dragCompleteHandler(event:DragEvent):void {
+				list1.dropEnabled=false;
+			}
+
+			protected function savebtn_clickHandler(event:MouseEvent):void {
+				var removeFinancialCompanyRelations:ArrayCollection=getAuthedRelationsByCompanyIdResult.lastResult as ArrayCollection;
+				var addFinancialCompanyRelations:ArrayCollection=new ArrayCollection();
+
+				for each (var department:DepartmentDTO in _authedDepartments) {
+					var authed:FinancialCompanyRelationDTO=null;
+					for each (var financialCompanyRelationDTO:FinancialCompanyRelationDTO in removeFinancialCompanyRelations) {
+						if (department.id == financialCompanyRelationDTO.departmentId) {
+							authed=financialCompanyRelationDTO;
+							break;
+						}
+					}
+					if (authed) {
+						removeFinancialCompanyRelations.removeItemAt(removeFinancialCompanyRelations.getItemIndex(authed));
+					} else {
+						var fcr:FinancialCompanyRelationDTO=new FinancialCompanyRelationDTO();
+						fcr.departmentId=department.id;
+						fcr.financialCompanyId=_financialCompanyDTO.id;
+						addFinancialCompanyRelations.addItem(fcr);
+					}
+				}
+
+				authFinancialCompanyResult.token=financialCompanyRO.authFinancialCompany(addFinancialCompanyRelations, removeFinancialCompanyRelations);
+				PopUpManager.removePopUp(this);
+			}
+
+			protected function addbtn_clickHandler(event:MouseEvent):void {
+				if (list1.selectedIndex != -1) {
+					_authedDepartments.addItem(list1.selectedItem);
+					_notAuthedDepartments.removeItemAt(list1.selectedIndex);
+				} else {
+					MyAlert.showAlert("请选择一个可选择部门！");
+				}
+			}
+
+			protected function delbtn_clickHandler(event:MouseEvent):void {
+				if (list2.selectedIndex != -1) {
+					_notAuthedDepartments.addItem(list2.selectedItem);
+					_authedDepartments.removeItemAt(list2.selectedIndex);
+				} else {
+					MyAlert.showAlert("请选择一个已关联部门！");
+				}
+			}
+
+			protected function authFinancialCompanyResult_resultHandler(event:ResultEvent):void {
+				if (authFinancialCompanyResult.lastResult == true) {
+					getAuthedRelationsByCompanyIdResult.token=financialCompanyRO.getAuthedRelationsByCompanyId(_financialCompanyDTO.id);
+					MyAlert.showSuccess("保存成功");
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<s:CallResponder id="getAllDepartmentsResult" result="getAllDepartmentsResult_resultHandler(event)"/>
+		<ro:DepartmentRO id="departmentRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<s:CallResponder id="getAuthedRelationsByCompanyIdResult" result="getAuthedRelationsByCompanyIdResult_resultHandler(event)"/>
+		<ro:FinancialCompanyRO id="financialCompanyRO" fault="Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail)" showBusyCursor="true"/>
+		<s:CallResponder id="authFinancialCompanyResult" result="authFinancialCompanyResult_resultHandler(event)"/>
+	</fx:Declarations>
+	<s:HGroup left="20" right="20" top="50" bottom="40" gap="5">
+		<s:List id="list1" width="50%" height="100%" dataProvider="{_notAuthedDepartments}" labelField="name" dropEnabled="false"
+				dragEnabled="true" dragMoveEnabled="true" dragStart="list1_dragStartHandler(event)" dragComplete="list1_dragCompleteHandler(event)">
+		</s:List>
+		<s:VGroup height="100%" gap="20" verticalAlign="middle">
+			<mx:LinkButton width="30" icon="@Embed('assets/add.png')" click="addbtn_clickHandler(event)"/>
+			<mx:LinkButton width="30" icon="@Embed('assets/delete.png')" click="delbtn_clickHandler(event)"/>
+		</s:VGroup>
+		<s:List id="list2" width="50%" height="100%" dataProvider="{_authedDepartments}" labelField="name" dropEnabled="false"
+				dragEnabled="true" dragMoveEnabled="true" dragStart="list2_dragStartHandler(event)" dragComplete="list2_dragCompleteHandler(event)">
+		</s:List>
+	</s:HGroup>
+	<s:Label x="20" y="30" text="可选择部门"/>
+	<s:Label x="263" y="30" text="已关联部门"/>
+	<s:Button id="button" bottom="10" label="保存" click="savebtn_clickHandler(event)" horizontalCenter="-50"/>
+	<s:Button bottom="10" label="关闭" horizontalCenter="50" click="PopUpManager.removePopUp(this);"/>
+
+</s:TitleWindow>
