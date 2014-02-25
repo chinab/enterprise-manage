@@ -6,7 +6,6 @@ import (
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/codegangsta/martini"
 	"github.com/codegangsta/martini-contrib/render"
-	"github.com/martini-contrib/gzip"
 	"github.com/sbinet/go-config/config"
 	"log"
 	"net/http"
@@ -40,13 +39,12 @@ func main() {
 	}
 
 	m := martini.Classic()
-	m.Use(gzip.All())
 	m.Use(martini.Static("assets"))
 
 	m.Use(render.Renderer())
 
 	m.Get("/showInfo/:id", func(r render.Render, params martini.Params, log *log.Logger) {
-		rows, err := db.Query("select info from etf_nav where id=?", params["id"])
+		rows, err := db.Query("select info from ETF_NAV where id=?", params["id"])
 		result := ""
 		fmt.Println(params["id"])
 
@@ -58,20 +56,18 @@ func main() {
 	})
 
 	m.Get("/", func(r render.Render, log *log.Logger) {
-		now := time.Now()
-		rows, err := db.Query("select max(create_time) from etf_nav")
+		dateStr := time.Now().Format("2006-01-02")
+		rows, err := db.Query("select date_format(max(create_time), '%Y-%m-%d') from ETF_NAV")
 
 		for rows.Next() {
-			err = rows.Scan(&now)
+			err = rows.Scan(&dateStr)
 			checkErr(err, log)
-			log.Println(now)
 		}
-		dateStr := now.Format("2006-01-02")
 
 		log.Println(dateStr)
 		begin := fmt.Sprintf("%v 00:00:00", dateStr)
 		end := fmt.Sprintf("%v 23:59:59", dateStr)
-		rows, err = db.Query("select nav_per_share,create_time,id from etf_nav where create_time > ? and create_time < ? order by create_time desc", begin, end)
+		rows, err = db.Query("select nav_per_share,create_time,id from ETF_NAV where create_time > ? and create_time < ? order by create_time desc", begin, end)
 
 		checkErr(err, log)
 		datas := make([]map[string]string, 0)
