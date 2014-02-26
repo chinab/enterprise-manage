@@ -298,7 +298,7 @@ func createCppModel(model string) {
 		cppFile.WriteString("        return _" + attrRow[1] + ";\r\n")
 		cppFile.WriteString("    }\r\n")
 	}
-	cppFile.WriteString("    return QVariant();\r\n")
+	cppFile.WriteString("    return defaultValue;\r\n")
 
 	cppFile.WriteString("}\r\n")
 	cppFile.WriteString("\r\n")
