@@ -10,9 +10,12 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"xvxv/utils"
 )
 
 func main() {
+	defer utils.SetLogOutPut("logs/etfnav.log")()
+
 	setting, err := config.ReadDefault("etfnav.cfg")
 	handlerErr(err)
 

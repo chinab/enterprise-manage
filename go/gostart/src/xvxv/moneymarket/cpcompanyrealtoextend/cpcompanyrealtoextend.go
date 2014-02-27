@@ -10,7 +10,7 @@ import (
 	_ "github.com/Go-SQL-Driver/MySQL"
 	//"io/ioutil"
 	//"strings"
-	"xvxv/uuid"
+	"xvxv/utils"
 )
 
 func main() {
@@ -37,7 +37,7 @@ SET id=?,company_id=?,level=?,display_name=?,is_fee=?,description=?,is_internal=
 		err = rows.Scan(&companyId, &shortName, &fullName)
 		checkErr(err)
 
-		id, err := uuid.GenUUID()
+		id, err := utils.GenUUID()
 		checkErr(err)
 
 		_, err = insertExtend.Exec(id, string(companyId), 0, string(shortName), "2", string(fullName), "2", "2", "2014-01-01 00:00:00", "1")
