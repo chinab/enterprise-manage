@@ -10,7 +10,7 @@ import (
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"io/ioutil"
 	"strings"
-	"xvxv/uuid"
+	"xvxv/utils"
 )
 
 func main() {
@@ -50,7 +50,7 @@ SET id=?,company_id=?,level=?,display_name=?,is_fee=?,description=?,is_internal=
 				enData = strings.Trim(enCnDatas[0], " ")
 			}
 
-			id, err := uuid.GenUUID()
+			id, err := utils.GenUUID()
 			checkErr(err)
 
 			_, err = insertTemp.Exec(id, cnData, enData, enShortData, cnData, "2014-01-01 00:00:00", "2014-01-01 00:00:00", "1", "2", "1")

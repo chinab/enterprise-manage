@@ -10,7 +10,7 @@ import (
 	_ "github.com/Go-SQL-Driver/MySQL"
 	//"io/ioutil"
 	//"strings"
-	"xvxv/uuid"
+	"xvxv/utils"
 )
 
 func main() {
@@ -50,7 +50,7 @@ func main() {
 		err = rows.Scan(&companyId, &companyName)
 		checkErr(err)
 
-		id, err := uuid.GenUUID()
+		id, err := utils.GenUUID()
 		checkErr(err)
 
 		name := fmt.Sprintf("trader%v", i)
