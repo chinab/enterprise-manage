@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	//"strconv"
 	"strings"
 )
 
@@ -190,13 +191,30 @@ func createCppModel(model string) {
 	hFile.WriteString(" **/\r\n")
 	hFile.WriteString("#ifndef " + upperFileName + "_H\r\n#define " + upperFileName + "_H\r\n\r\n#include <QString>\r\n#include <QDateTime>\r\n#include <QVariantMap>\r\n#include \"../modelbase.h\"\r\n")
 	hFile.WriteString("#include \"../model_global.h\"\r\n\r\n")
+
+	hFile.WriteString("namespace " + name + "Field {\r\n")
+	hFile.WriteString("    enum " + name + "Fields {\r\n")
+	for _, attrRow := range attrRows {
+		hFile.WriteString("        " + strings.ToUpper(attrRow[1]) + ",\r\n")
+	}
+	hFile.WriteString("    };\r\n")
+	hFile.WriteString("}\r\n\r\n")
+
 	hFile.WriteString("class MODELSHARED_EXPORT " + name + ": public ModelBase\r\n{\r\npublic:\r\n")
 	hFile.WriteString("    " + name + "();\r\n\r\n")
 	hFile.WriteString("    ~" + name + "();\r\n\r\n")
 
+	/**
+		for _, attrRow := range attrRows {
+			hFile.WriteString("    static int FIELD_" + strings.ToUpper(attrRow[1]) + ";\r\n")
+		}
+		hFile.WriteString("\r\n")
+	**/
+
 	for _, attrRow := range attrRows {
 		hFile.WriteString("    " + attrRow[0] + " " + attrRow[1] + "() const;\r\n")
 	}
+
 	hFile.WriteString("\r\n")
 	for _, attrRow := range attrRows {
 		hFile.WriteString("    void " + getSetterName(attrRow[1]) + " (const " + attrRow[0] + " &);\r\n")
@@ -205,7 +223,7 @@ func createCppModel(model string) {
 	hFile.WriteString("    void fromMap(const QVariantMap &map);\r\n")
 	hFile.WriteString("    void toMap(QVariantMap &map);\r\n")
 	hFile.WriteString("\r\n")
-	hFile.WriteString("    QVariant valueByField(const QString &fieldName);\r\n")
+	hFile.WriteString("    QVariant valueByField(const int &field) const;\r\n")
 	hFile.WriteString("\r\n")
 	hFile.WriteString("    bool operator==(const " + name + " &other) const;\r\n")
 	hFile.WriteString("    bool operator!=(const " + name + " &other) const;\r\n")
@@ -247,6 +265,13 @@ func createCppModel(model string) {
 	cppFile.WriteString("\r\n")
 	cppFile.WriteString(name + "::~" + name + "(){}\r\n")
 	cppFile.WriteString("\r\n")
+
+	/**
+		for i, attrRow := range attrRows {
+			cppFile.WriteString("int " + name + "::FIELD_" + strings.ToUpper(attrRow[1]) + " = " + strconv.Itoa(i) + ";\r\n")
+		}
+		cppFile.WriteString("\r\n")
+	**/
 
 	for _, attrRow := range attrRows {
 		cppFile.WriteString(attrRow[0] + " " + name + "::" + attrRow[1] + "() const{\r\n")
@@ -292,14 +317,15 @@ func createCppModel(model string) {
 	cppFile.WriteString("}\r\n")
 	cppFile.WriteString("\r\n")
 
-	cppFile.WriteString("QVariant " + name + "::valueByField(const QString &fieldName){\r\n")
+	cppFile.WriteString("QVariant " + name + "::valueByField(const int &field) const{\r\n")
+	cppFile.WriteString("    switch (field) {\r\n")
 	for _, attrRow := range attrRows {
-		cppFile.WriteString("    if(fieldName==\"" + attrRow[1] + "\"){\r\n")
+		cppFile.WriteString("    case " + name + "Field::" + strings.ToUpper(attrRow[1]) + ":\r\n")
 		cppFile.WriteString("        return _" + attrRow[1] + ";\r\n")
-		cppFile.WriteString("    }\r\n")
 	}
-	cppFile.WriteString("    return defaultValue;\r\n")
-
+	cppFile.WriteString("    default:\r\n")
+	cppFile.WriteString("        return defaultValue;\r\n")
+	cppFile.WriteString("    }\r\n")
 	cppFile.WriteString("}\r\n")
 	cppFile.WriteString("\r\n")
 
