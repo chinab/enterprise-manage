@@ -9,12 +9,13 @@ import (
 	"github.com/sbinet/go-config/config"
 	"log"
 	"net/http"
+	"strings"
 	"time"
-	"xvxv/utils"
+	//"xvxv/utils"
 )
 
 func main() {
-	defer utils.SetLogOutPut("logs/etfnav.log")()
+	//defer utils.SetLogOutPut("logs/etfnav.log")()
 
 	setting, err := config.ReadDefault("etfnav.cfg")
 	handlerErr(err)
@@ -59,12 +60,16 @@ func main() {
 	})
 
 	m.Get("/", func(r render.Render, log *log.Logger) {
+		var maxDate string
 		dateStr := time.Now().Format("2006-01-02")
-		rows, err := db.Query("select date_format(max(create_time), '%Y-%m-%d') from ETF_NAV")
+		rows, err := db.Query("select max(create_time) from ETF_NAV")
 
 		for rows.Next() {
-			err = rows.Scan(&dateStr)
+			err = rows.Scan(&maxDate)
 			checkErr(err, log)
+			if strings.Contains(maxDate, " ") {
+				dateStr = maxDate[0:strings.Index(maxDate, " ")]
+			}
 		}
 
 		log.Println(dateStr)
@@ -87,7 +92,11 @@ func main() {
 
 			datas = append(datas, data)
 		}
-		r.HTML(200, "index", datas)
+
+		result := make(map[string]interface{})
+		result["maxDate"] = maxDate
+		result["datas"] = datas
+		r.HTML(200, "index", result)
 
 	})
 	http.ListenAndServe(fmt.Sprintf(":%s", webPort), m)
