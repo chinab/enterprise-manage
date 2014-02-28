@@ -9,7 +9,7 @@ import (
 	"github.com/sbinet/go-config/config"
 	"log"
 	"net/http"
-	"strings"
+	//"strings"
 	"time"
 	//"xvxv/utils"
 )
@@ -60,16 +60,13 @@ func main() {
 	})
 
 	m.Get("/", func(r render.Render, log *log.Logger) {
-		var maxDate string
+		nowTime := time.Now().Format("2006-01-02 15:04:05")
 		dateStr := time.Now().Format("2006-01-02")
-		rows, err := db.Query("select max(create_time) from ETF_NAV")
+		rows, err := db.Query("select date_format(max(create_time), '%Y-%m-%d') from ETF_NAV")
 
 		for rows.Next() {
-			err = rows.Scan(&maxDate)
+			err = rows.Scan(&dateStr)
 			checkErr(err, log)
-			if strings.Contains(maxDate, " ") {
-				dateStr = maxDate[0:strings.Index(maxDate, " ")]
-			}
 		}
 
 		log.Println(dateStr)
@@ -94,7 +91,7 @@ func main() {
 		}
 
 		result := make(map[string]interface{})
-		result["maxDate"] = maxDate
+		result["nowTime"] = nowTime
 		result["datas"] = datas
 		r.HTML(200, "index", result)
 

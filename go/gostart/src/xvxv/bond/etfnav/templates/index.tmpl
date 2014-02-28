@@ -28,8 +28,12 @@
       <div class="panel-heading">
         <div class="row">
           <h4 class="col-md-8">CSOP China 5-Year Treasury Bond ETF</h4>
-          <h4 class="col-md-4">Last updated : <span class="text-info"> {{ .maxDate }}</span> </h4>
-         </div>
+          <div class="col-md-4">
+            Last updated : <span class="text-info"> {{ .nowTime }}</span>
+            <br>
+            <span class="text-danger">*</span>update every 10 seconds
+          </div>
+        </div>
       </div>
 
       <!-- Table -->
