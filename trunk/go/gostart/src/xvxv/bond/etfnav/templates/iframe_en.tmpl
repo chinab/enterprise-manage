@@ -8,7 +8,7 @@
 		<script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
 		<script type="text/JavaScript">
 			function refresh(){
-				$.get('/iframeData?timestamp='+Date()+'&l=en&i=HK0000112307&a=1',function(data) {
+				$.get('/iframeData_en?timestamp='+Date()+'&l=en&i=HK0000112307&a=1',function(data) {
 					var obj = $.parseJSON(data);
 					/**
 					$.each(obj.Result,function(){
