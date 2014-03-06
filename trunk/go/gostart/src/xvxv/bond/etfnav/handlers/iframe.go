@@ -8,19 +8,19 @@ import (
 	"time"
 )
 
-func IframeHandler(r render.Render, log *log.Logger) {
-	result := iframeData(log)
+func IframeEnHandler(r render.Render, log *log.Logger) {
+	result := iframeEnData(log)
 	r.HTML(200, "iframe", result)
 }
 
-func IframeDataHandler(log *log.Logger) string {
-	result := iframeData(log)
+func IframeEnDataHandler(log *log.Logger) string {
+	result := iframeEnData(log)
 	b, err := json.Marshal(result)
 	checkErr(err, log)
 	return string(b)
 }
 
-func iframeData(log *log.Logger) map[string]string {
+func iframeEnData(log *log.Logger) map[string]string {
 	result := make(map[string]string)
 
 	rows, err := db.Query("SELECT nav_per_share,DATE_FORMAT(create_time, '%m %b.%Y'),LOWER(DATE_FORMAT(create_time, '%h:%i%p')),id FROM ETF_NAV order by create_time desc LIMIT 0,1")
