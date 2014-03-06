@@ -23,7 +23,7 @@ func IframeEnDataHandler(log *log.Logger) string {
 func iframeEnData(log *log.Logger) map[string]string {
 	result := make(map[string]string)
 
-	rows, err := db.Query("SELECT nav_per_share,DATE_FORMAT(create_time, '%m %b.%Y'),LOWER(DATE_FORMAT(create_time, '%h:%i%p')),id FROM ETF_NAV order by create_time desc LIMIT 0,1")
+	rows, err := db.Query("SELECT nav_per_share,DATE_FORMAT(create_time, '%d %b.%Y'),LOWER(DATE_FORMAT(create_time, '%h:%i%p')),id FROM ETF_NAV order by create_time desc LIMIT 0,1")
 
 	checkErr(err, log)
 
