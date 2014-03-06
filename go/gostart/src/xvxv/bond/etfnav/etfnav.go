@@ -18,8 +18,8 @@ func main() {
 
 	m.Get("/showInfo/:id", handlers.ShowInfo)
 	m.Get("/", handlers.HomeHandler)
-	m.Get("/iframe", handlers.IframeHandler)
-	m.Get("/iframeData", handlers.IframeDataHandler)
+	m.Get("/iframe_en", handlers.IframeEnHandler)
+	m.Get("/iframeData_en", handlers.IframeEnDataHandler)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", handlers.WebPort), m)
 }
