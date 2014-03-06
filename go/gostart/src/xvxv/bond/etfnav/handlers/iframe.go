@@ -10,7 +10,7 @@ import (
 
 func IframeEnHandler(r render.Render, log *log.Logger) {
 	result := iframeEnData(log)
-	r.HTML(200, "iframe", result)
+	r.HTML(200, "iframe_en", result)
 }
 
 func IframeEnDataHandler(log *log.Logger) string {
