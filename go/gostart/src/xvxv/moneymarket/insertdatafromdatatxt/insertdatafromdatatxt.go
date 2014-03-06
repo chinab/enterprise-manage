@@ -53,7 +53,7 @@ SET id=?,company_id=?,level=?,display_name=?,is_fee=?,description=?,is_internal=
 			id, err := utils.GenUUID()
 			checkErr(err)
 
-			_, err = insertTemp.Exec(id, cnData, enData, enShortData, cnData, "2014-01-01 00:00:00", "2014-01-01 00:00:00", "1", "2", "1")
+			_, err = insertTemp.Exec(id, cnData, cnData, enShortData, enData, "2014-01-01 00:00:00", "2014-01-01 00:00:00", "1", "2", "1")
 			checkErr(err)
 
 			_, err = insertExtend.Exec(id, id, 0, cnData, "2", line, "2", "1", "2014-01-01 00:00:00", "1")
