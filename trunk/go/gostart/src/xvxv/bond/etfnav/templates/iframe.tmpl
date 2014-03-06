@@ -1,0 +1,85 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>CSOP Asset Management Limited</title>
+		<link href="/css/iframe.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
+		<script type="text/JavaScript">
+			function refresh(){
+				$.get('/iframeData?timestamp='+Date()+'&l=en&i=HK0000112307&a=1',function(data) {
+					var obj = $.parseJSON(data);
+					/**
+					$.each(obj.Result,function(){
+						$('#'+this.Name).html(this.Value);
+					});
+					**/
+					for(var key in obj){
+						$('#'+key).html(obj[key]);
+					}
+				});
+			}
+
+			$(document).ready(function(){
+				try {
+					setInterval("refresh();", "10000");
+				} catch(err) {}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="outter_wrapper">
+			<div id="outter">
+				<div class="main_wrapper">
+
+<div class="functionBox">
+  <div class="content">
+    <table class="tableFormat_v1">
+      <thead>
+        <tr>
+          <td></td>
+		  <td>Date</td>
+		  <td>Time</td>
+		  <td>(RMB)</td>
+		  <td>(HKD)</td>
+		</tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:left">Intra-day Estimated NAV per Unit*<sup>1</sup></td>
+		  <td id="sIopvDate">{{ .sIopvDate }}</td>
+		  <td id="sIopvTime">{{ .sIopvTime }}</td>
+		  <td id="nIopvPrice">{{ .nIopvPrice }}</td>
+		  <td id="nIopvPriceHKD">{{ .nIopvPriceHKD }}</td>
+		</tr>
+		<!--
+        <tr class="bgCol">
+          <td style="text-align:left">Intra-day Market Price<sup>d</sup></td>
+		  <td id="sDate">05 Mar. 2014</td>
+		  <td id="sTime">10:50am</td>
+		  <td id="nPrice">6.5600</td>
+		  <td id="nPriceHKD">8.3200</td>
+		</tr>
+		-->
+      </tbody>
+    </table>
+    <div class="remark">
+      <table>
+        <tr>
+          <td id="nCurrency">*Exchange Rate of Renminbi (CNH) to Hong Kong Dollar<sup>1</sup> (for reference only): <span id="nExchangeRate">{{ .nCurrency }}</span></td>
+          <td align="right">Data source: Sumscope</td>
+        </tr>
+        <tr>
+          <td><!--d = at least 20 minutes delay--></td>
+          <td align="right" id="sCurrentTime">{{ .sCurrentTime }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
