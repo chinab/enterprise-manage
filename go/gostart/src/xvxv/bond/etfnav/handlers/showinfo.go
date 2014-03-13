@@ -10,21 +10,21 @@ import (
 func ShowInfo(r render.Render, params martini.Params, log *log.Logger) {
 	infotype := params["type"]
 	tableName := "ETF_NAV"
-	titleName := "CSOP China 5-Year Treasury Bond ETF"
-	columnName := "NAV per Share"
+	//titleName := "CSOP China 5-Year Treasury Bond ETF"
+	//columnName := "NAV per Share"
 	switch infotype {
 	case "0":
 		tableName = "ETF_NAV"
-		titleName = "CSOP China 5-Year Treasury Bond ETF"
-		columnName = "NAV per Share"
+		//titleName = "CSOP China 5-Year Treasury Bond ETF"
+		//columnName = "NAV per Share"
 	case "1":
 		tableName = "csop_a50"
-		titleName = "CSOP China 5-Year Treasury Bond A50"
-		columnName = "A50 per Share"
+		//titleName = "CSOP China 5-Year Treasury Bond A50"
+		//columnName = "A50 per Share"
 	case "2":
 		tableName = "csop_a80"
-		titleName = "CSOP China 5-Year Treasury Bond A80"
-		columnName = "A80 per Share"
+		//titleName = "CSOP China 5-Year Treasury Bond A80"
+		//columnName = "A80 per Share"
 	default:
 		infotype = "0"
 	}
@@ -40,7 +40,7 @@ func ShowInfo(r render.Render, params martini.Params, log *log.Logger) {
 
 	result := make(map[string]interface{})
 	result["info"] = info
-	result["titleName"] = titleName
-	result["columnName"] = columnName
+	//result["titleName"] = titleName
+	//result["columnName"] = columnName
 	r.HTML(200, "showInfo", result)
 }

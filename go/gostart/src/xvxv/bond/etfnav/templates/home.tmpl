@@ -17,9 +17,9 @@
   <div> </div>
   <div class="container">
     <div class="btn-group btn-group-lg">
-      <button type="button" class="btn btn-default active">NAV</button>
-      <button type="button" class="btn btn-default">A50</button>
-      <button type="button" class="btn btn-default">A80</button>
+      <button type="button" class="btn btn-default active">China 5-Year Treasury Bond</button>
+      <button type="button" class="btn btn-default">FTSE China A50 ETF</button>
+      <button type="button" class="btn btn-default">CES China A80 ETF</button>
     </div>
     <p></p>
     <div id="content">
@@ -34,9 +34,10 @@ function loadContent(){
   $("#content").load("/indexInfo/"+infoType);
 }
 $(function(){
-  window.setTimeout(loadContent,10000);
+  window.setInterval("loadContent();",10000);
   $(".btn-group button").click(function(){
     $("button.active").removeClass("active");
+    document.title=$(this).html();
     $(this).addClass("active");
     infoType = $(this).index();
     loadContent();
