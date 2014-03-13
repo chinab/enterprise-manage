@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+    <!-- Default panel contents -->
+  <div class="panel-heading">
+    <div class="row">
+      <h4 class="col-md-8">{{ .titleName }}</h4>
+      <div class="col-md-4">
+        Last updated : <span class="text-info"> {{ .nowTime }}</span>
+        <br>
+        <span class="text-danger">*</span>update every 10 seconds
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{{ .columnName }}</th>
+        <th>Time</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {{ $infotype := .infotype }}
+    {{ range .datas }}
+      <tr>
+        <td style="width:33%;">{{ .value }}</td>
+        <td style="width:33%;">{{ .time }}</td>
+        <td style="width:33%;"><a href="/showInfo/{{ $infotype }}/{{ .id }}" target="_blank">Calculation Process</a></td>
+      </tr>
+    {{ end }}
+    </tbody>
+  </table>
+
+</div>

@@ -9,15 +9,14 @@ import (
 )
 
 func main() {
-	//defer utils.SetLogOutPut("logs/etfnav.log")()
-
 	m := martini.Classic()
 	m.Use(martini.Static("assets"))
 
 	m.Use(render.Renderer())
 
-	m.Get("/showInfo/:id", handlers.ShowInfo)
 	m.Get("/", handlers.HomeHandler)
+	m.Get("/indexInfo/:type", handlers.IndexInfoHandler)
+	m.Get("/showInfo/:type/:id", handlers.ShowInfo)
 	m.Get("/iframe_en", handlers.IframeEnHandler)
 	m.Get("/iframeData_en", handlers.IframeEnDataHandler)
 
