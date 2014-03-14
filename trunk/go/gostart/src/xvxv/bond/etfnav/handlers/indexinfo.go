@@ -42,7 +42,7 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
 
 	begin := fmt.Sprintf("%v 00:00:00", dateStr)
 	end := fmt.Sprintf("%v 23:59:59", dateStr)
-	rows, err = db.Query("select nav_per_share,create_time,id from "+tableName+" where create_time > ? and create_time < ? order by seq desc,create_time desc", begin, end)
+	rows, err = db.Query("select nav_per_share,create_time,id from "+tableName+" where create_time > ? and create_time < ? order by seq desc,create_time desc LIMIT 0,1000", begin, end)
 
 	checkErr(err, log)
 	datas := make([]map[string]string, 0)
