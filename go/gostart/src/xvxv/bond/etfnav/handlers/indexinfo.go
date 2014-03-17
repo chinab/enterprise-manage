@@ -9,22 +9,7 @@ import (
 )
 
 func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
-	infotype := params["type"]
-	tableName := "ETF_NAV"
-	titleName := "CSOP China 5-Year Treasury Bond ETF"
-	switch infotype {
-	case "0":
-		tableName = "ETF_NAV"
-		titleName = "CSOP China 5-Year Treasury Bond ETF"
-	case "1":
-		tableName = "csop_a50"
-		titleName = "CSOP FTSE China A50 ETF"
-	case "2":
-		tableName = "csop_a80"
-		titleName = "CSOP CES China A80 ETF"
-	default:
-		infotype = "0"
-	}
+	tableName, titleName, infotype := getValueByType(params["type"])
 
 	nowTime := time.Now().Format("2006-01-02 15:04:05")
 	dateStr := time.Now().Format("2006-01-02")
