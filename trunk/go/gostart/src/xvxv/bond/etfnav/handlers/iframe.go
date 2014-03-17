@@ -3,27 +3,33 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"log"
 	"strconv"
 	"time"
 )
 
-func IframeEnHandler(r render.Render, log *log.Logger) {
-	result := iframeEnData(log)
+func IframeEnHandler(r render.Render, params martini.Params, log *log.Logger) {
+	tableName, _, infotype := getValueByType(params["type"])
+
+	result := iframeEnData(log, tableName)
+	result["infotype"] = infotype
+
 	r.HTML(200, "iframe_en", result)
 }
 
-func IframeEnDataHandler(log *log.Logger) string {
-	result := iframeEnData(log)
+func IframeEnDataHandler(params martini.Params, log *log.Logger) string {
+	tableName, _, _ := getValueByType(params["type"])
+
+	result := iframeEnData(log, tableName)
 	b, err := json.Marshal(result)
 	checkErr(err, log)
 	return string(b)
 }
 
-func iframeEnData(log *log.Logger) map[string]string {
-
-	rows, err := db.Query("SELECT nav_per_share,create_time FROM ETF_NAV order by create_time desc LIMIT 0,1")
+func iframeEnData(log *log.Logger, tableName string) map[string]string {
+	rows, err := db.Query("SELECT nav_per_share,create_time FROM " + tableName + " order by seq desc,create_time desc LIMIT 0,1")
 
 	checkErr(err, log)
 
@@ -68,6 +74,8 @@ func iframeEnData(log *log.Logger) map[string]string {
 
 	if nIopvPriceHKD != 0.0 {
 		result["nIopvPriceHKD"] = fmt.Sprintf("%9.4f", nIopvPriceHKD)
+	} else {
+		result["nIopvPriceHKD"] = "--"
 	}
 
 	result["sCurrentTime"] = fmt.Sprintf("Hong Kong Time: %s", time.Now().Format("03:04pm"))
