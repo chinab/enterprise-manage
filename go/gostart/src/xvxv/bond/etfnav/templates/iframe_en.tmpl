@@ -7,8 +7,9 @@
 		<link href="/css/iframe.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
 		<script type="text/JavaScript">
+			var timestamp = (new Date()).valueOf();
 			function refresh(){
-				$.get('/iframeData_en/{{ .infotype }}?timestamp='+Date()+'&l=en&i=HK0000112307&a=1',function(data) {
+				$.get("/iframeData_en/{{ .infotype }}?timestamp="+(timestamp++),function(data) {
 					var obj = $.parseJSON(data);
 					/**
 					$.each(obj.Result,function(){
