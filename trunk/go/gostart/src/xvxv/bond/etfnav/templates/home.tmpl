@@ -30,8 +30,9 @@
 <script type="text/javascript" src="/js/jquery-1.11.0.min.js"></script>
 <script type="text/javascript">
 var infoType = 0;
+var timestamp = (new Date()).valueOf();
 function loadContent(){
-  $("#content").load("/indexInfo/"+infoType);
+  $("#content").load("/indexInfo/"+infoType+"?timestamp="+(timestamp++));
 }
 $(function(){
   window.setInterval("loadContent();",10000);
