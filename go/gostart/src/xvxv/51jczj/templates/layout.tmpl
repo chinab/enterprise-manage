@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>静川之家-儿童家园</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <header class="navbar navbar-inverse navbar-fixed-top" role="banner">
+      <div class="container">
+        <div class="navbar-header">
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">51jczj.com</a>
+        </div>
+          <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav">
+              <li id="indexA"><a href="/">首页</a></li>
+      				<li id="booksA"><a href="books">儿童读物</a></li>
+      				<li id="knowledgeA"><a href="knowledge">育儿知识</a></li>
+      				<li id="recipesA"><a href="recipes">营养食谱</a></li>
+      				<li id="showA"><a href="show">宝宝SHOW</a></li>
+      				<li id="shopA"><a href="shop">亲子SHOP</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">其它<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">关于我们</a></li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <div id="header-bottom"></div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/index.js"></script>
+    <script>
+      $("#{{.}}A").addClass("active");
+    </script>
+
+  {{ yield }}
+
+
+
+  </body>
+</html>
