@@ -12,7 +12,7 @@ func ManagerHandler(w http.ResponseWriter, req *http.Request, r render.Render) {
 	if token != nil && token != "" {
 		r.HTML(200, "manager/manager", "manager")
 	} else {
-		r.HTML(200, "user/login", "login")
+		http.Redirect(w, req, "/login/manager", http.StatusFound)
 	}
 
 }
