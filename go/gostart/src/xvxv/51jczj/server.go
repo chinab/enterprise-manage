@@ -22,6 +22,7 @@ func main() {
 	m.Get("/", home.HomeHandler)
 	m.Get("/manager", manager.ManagerHandler)
 	m.Post("/login", user.LoginHandler)
+	m.Get("/login", user.GoLoginHandler)
 	m.Get("/login/:path", user.GoLoginHandler)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", base.WebPort), m)
