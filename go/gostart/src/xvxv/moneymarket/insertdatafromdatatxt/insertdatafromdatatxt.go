@@ -7,7 +7,7 @@ package main
 import (
 	"database/sql"
 	//"fmt"
-	_ "github.com/Go-SQL-Driver/MySQL"
+	_ "github.com/go-sql-driver/mysql"
 	"io/ioutil"
 	"strings"
 	"xvxv/utils"
