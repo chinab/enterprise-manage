@@ -9,9 +9,12 @@ import (
 	"xvxv/51jczj/controllers/home"
 	"xvxv/51jczj/controllers/manager"
 	"xvxv/51jczj/controllers/user"
+	"xvxv/51jczj/models"
 )
 
 func main() {
+	models.CreateDb()
+
 	m := martini.Classic()
 	m.Use(martini.Static("assets"))
 
@@ -26,4 +29,5 @@ func main() {
 	m.Get("/login/:path", user.GoLoginHandler)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", base.WebPort), m)
+
 }

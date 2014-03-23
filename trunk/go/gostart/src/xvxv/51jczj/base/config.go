@@ -1,48 +1,37 @@
 package base
 
 import (
-	// "database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/sbinet/go-config/config"
-	"log"
 )
 
-// var db *sql.DB
-var WebPort string
+var DbHost, DbPort, DbUsername, DbPassword, DbSchema, WebPort string
 
 func init() {
-	setting, err := config.ReadDefault("server.cfg")
+	setting, err := config.ReadDefault("config/server.cfg")
 	handlerErr(err)
 
-	host, err := setting.String("mysql", "host")
+	DbHost, err = setting.String("mysql", "host")
 	handlerErr(err)
 
-	port, err := setting.String("mysql", "port")
+	DbPort, err = setting.String("mysql", "port")
 	handlerErr(err)
 
-	username, err := setting.String("mysql", "username")
+	DbUsername, err = setting.String("mysql", "username")
 	handlerErr(err)
 
-	password, err := setting.String("mysql", "password")
+	DbPassword, err = setting.String("mysql", "password")
+	handlerErr(err)
+
+	DbSchema, err = setting.String("mysql", "schema")
 	handlerErr(err)
 
 	WebPort, err = setting.String("web", "port")
 	handlerErr(err)
 
-	url := fmt.Sprintf("%v:%v@tcp(%v:%v)/ss_product?charset=utf8", username, password, host, port)
+	fmt.Println("listening port : ", WebPort)
+	fmt.Println("database info  : ", DbHost, DbPort, DbUsername, DbPassword, DbSchema)
 
-	// db, err = sql.Open("mysql", url)
-	fmt.Println(url)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func checkErr(err error, log *log.Logger) {
-	if err != nil {
-		log.Println(err)
-	}
 }
 
 func handlerErr(err error) {
