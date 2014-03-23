@@ -1,7 +1,7 @@
 package user
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"net/http"
