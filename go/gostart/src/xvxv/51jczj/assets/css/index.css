@@ -12,28 +12,47 @@ pre code {
 	background: transparent;
 }
 
-.content-item{
-	color: #FFF;
+/****标题****/
+.title-p{
+	margin:10px 0 10px 0;
 }
 
-.content-item a,.content-item a:hover{
-	padding-top: 50px;
-	padding-bottom: 50px;
-	text-align: center;
-	color: #FFF;
+a.title-link,a.title-link:hover{
 	text-decoration: none;
+	color: #FFFFFF;
 }
 
-.content-item div{
-	position: relative;
-	margin-right: auto;
-	margin-left: auto;
-	width: 260px;
-	height: 160px;
-    font-family: Microsoft YaHei;
-    font-size: 24px;
+.bs-header{
+	background: #3b3137;
+	background-image: url("../img/header-bg.png");
+
 }
 
-#header-bottom{
-	height: 60px;
+.text-lg{
+	font-size: 26px;
 }
+
+
+.container>.navbar-header, .container>.navbar-collapse {
+	margin-right: 0;
+	margin-left: 0;
+}
+
+.navbar-inverse{
+	background: #200415;
+	border: none;
+	border-radius: 0px;
+}
+
+.navbar-inverse .navbar-nav>li>a:hover{
+	background-color: #2f0920;
+	border-bottom: 3px solid #bd4b91;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus {
+	color: #fff;
+	background-color: #552442;
+	border-bottom: 3px solid #ff009c;
+}
+
+
