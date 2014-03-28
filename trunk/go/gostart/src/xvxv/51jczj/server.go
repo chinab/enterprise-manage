@@ -9,11 +9,11 @@ import (
 	"xvxv/51jczj/controllers/home"
 	"xvxv/51jczj/controllers/manager"
 	"xvxv/51jczj/controllers/user"
-	"xvxv/51jczj/models"
+	// "xvxv/51jczj/models"
 )
 
 func main() {
-	models.CreateDb()
+	//models.CreateDb()
 
 	m := martini.Classic()
 	m.Use(martini.Static("assets"))
