@@ -36,6 +36,8 @@ a.title-link,a.title-link:hover{
 .container>.navbar-header, .container>.navbar-collapse {
 	margin-right: 0;
 	margin-left: 0;
+	padding-right: 0;
+	padding-left: 0;
 }
 
 .navbar-inverse{
