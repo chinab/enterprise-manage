@@ -5,7 +5,7 @@ import (
 	"github.com/sbinet/go-config/config"
 )
 
-var DbHost, DbPort, DbUsername, DbPassword, DbSchema, WebPort string
+var DbHost, DbPort, DbUsername, DbPassword, DbSchema, HomeWebPort, AdminWebPort, RedisHost, RedisPort string
 
 func init() {
 	setting, err := config.ReadDefault("config/server.cfg")
@@ -26,11 +26,22 @@ func init() {
 	DbSchema, err = setting.String("mysql", "schema")
 	handlerErr(err)
 
-	WebPort, err = setting.String("web", "port")
+	HomeWebPort, err = setting.String("home-web", "port")
 	handlerErr(err)
 
-	fmt.Println("listening port : ", WebPort)
-	fmt.Println("database info  : ", DbHost, DbPort, DbUsername, DbPassword, DbSchema)
+	AdminWebPort, err = setting.String("admin-web", "port")
+	handlerErr(err)
+
+	RedisHost, err = setting.String("redis", "host")
+	handlerErr(err)
+
+	RedisPort, err = setting.String("redis", "port")
+	handlerErr(err)
+
+	fmt.Println("home port     : ", HomeWebPort)
+	fmt.Println("admin port    : ", AdminWebPort)
+	fmt.Println("database info : ", DbHost, DbPort, DbUsername, DbPassword, DbSchema)
+	fmt.Println("redis info    : ", RedisHost, RedisPort)
 
 }
 
