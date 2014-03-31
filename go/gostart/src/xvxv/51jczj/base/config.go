@@ -2,6 +2,7 @@ package base
 
 import (
 	"fmt"
+	"github.com/codegangsta/martini"
 	"github.com/sbinet/go-config/config"
 )
 
@@ -38,11 +39,14 @@ func init() {
 	RedisPort, err = setting.String("redis", "port")
 	handlerErr(err)
 
+	appEnv, err := setting.String("app", "env")
+	handlerErr(err)
+	martini.Env = appEnv
+
 	fmt.Println("home port     : ", HomeWebPort)
 	fmt.Println("admin port    : ", AdminWebPort)
 	fmt.Println("database info : ", DbHost, DbPort, DbUsername, DbPassword, DbSchema)
 	fmt.Println("redis info    : ", RedisHost, RedisPort)
-
 }
 
 func handlerErr(err error) {

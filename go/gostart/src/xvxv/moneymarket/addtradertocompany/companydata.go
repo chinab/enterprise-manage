@@ -16,7 +16,7 @@ import (
 func main() {
 	brokerCompanyId := "1"
 
-	db, err := sql.Open("mysql", "artogrid:artogrid@tcp(192.168.1.105:3306)/idb_moneymarket?charset=utf8")
+	db, err := sql.Open("mysql", "artogrid:artogrid@tcp(10.10.2.4:3306)/idb_moneymarket?charset=utf8")
 	checkErr(err)
 
 	defer db.Close()
@@ -43,7 +43,7 @@ func main() {
 	SET id=?,account_id=?,display_name=?,broker_company_id=?,create_time=?,status=?`)
 	checkErr(err)
 
-	i := 0
+	i := 500
 	for rows.Next() {
 		var companyId string
 		var companyName string
