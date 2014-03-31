@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	//"time"
+	"os"
 	"strings"
 	"xvxv/51jczj/base"
 )
@@ -26,31 +27,76 @@ func main() {
 		err = rows.Scan(&tableName)
 		checkErr(err)
 
-		createGoModel(tableName)
+		createGoModel(strings.ToLower(tableName))
 	}
 
 }
 
-func createGoModel(tableName string) {
-	tns := strings.Split(tableName, "_")
+func toGoName(name string) string {
+	names := strings.Split(name, "_")
 
-	name := ""
-	for _, tn := range tns {
-		name += strings.ToUpper(tn[0:1]) + strings.ToLower(tn[1:len(tn)])
+	newName := ""
+	for _, ntemp := range names {
+		newName += strings.ToUpper(ntemp[0:1]) + strings.ToLower(ntemp[1:len(ntemp)])
 	}
-	fmt.Println(name)
+	return newName
+}
+
+func createGoModel(tableName string) {
+	structName := toGoName(tableName)
 
 	rows, err := db.Query("show full columns from " + tableName + ";")
 	checkErr(err)
+
+	path := "models/"
+	_, err = os.Stat(path)
+	if err != nil && os.IsNotExist(err) {
+		os.Mkdir(path, os.ModeDir)
+	}
+	goFile, _ := os.Create(path + tableName + ".go")
+	defer goFile.Close()
+	goFile.WriteString("/**\r\n")
+	goFile.WriteString(" *  create by tools,\r\n")
+	goFile.WriteString(" *  go-model生成器\r\n")
+	goFile.WriteString(" **/\r\n")
+	goFile.WriteString("package models\r\n")
+	goFile.WriteString("\r\n")
+
+	goFile.WriteString("type " + structName + " struct {\r\n")
+
+	fieldNames := make([]string, 0)
+	maxFieldNameSize := 0
+
+	// int(11)
+	// varchar(255)
+	// datetime
+	// tinyint(1)
 
 	for rows.Next() {
 		var fname, ftype, fcollation, fnull, fkey, fdefault, fextra, fprivileges, fcomment []byte
 		err = rows.Scan(&fname, &ftype, &fcollation, &fnull, &fkey, &fdefault, &fextra, &fprivileges, &fcomment)
 		checkErr(err)
 
-		fmt.Println("\t", string(fname))
+		fieldName := toGoName(string(fname))
+
+		fmt.Println(tableName, string(fname), string(ftype))
+
+		fieldNames = append(fieldNames, fieldName)
+		if maxFieldNameSize < len(fieldName) {
+			maxFieldNameSize = len(fieldName)
+		}
 	}
 
+	for _, fieldName := range fieldNames {
+		sSize := maxFieldNameSize - len(fieldName)
+		spaces := " "
+		for i := 0; i < sSize; i++ {
+			spaces += " "
+		}
+		goFile.WriteString("	" + fieldName + spaces + "int\r\n")
+	}
+
+	goFile.WriteString("}\r\n")
 	/**
 	  	attrRows := make([][]string, len(rows)-3)
 	  	for i := 3; i < len(rows); i++ {
