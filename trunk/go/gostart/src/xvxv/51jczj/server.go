@@ -35,7 +35,8 @@ func adminserver() {
 	m := martini.Classic()
 	m.Use(martini.Static("assets"))
 
-	store := redistore.NewRediStore(10, "tcp", fmt.Sprintf(":%s", base.RedisPort), base.RedisHost, []byte("secret-key"))
+	store, _ := redistore.NewRediStore(10, "tcp", fmt.Sprintf(":%s", base.RedisPort), base.RedisHost, []byte("secret-key"))
+
 	store.SetMaxAge(3600)
 	defer store.Close()
 	m.Use(sessions.Sessions("51jczj_session", store))

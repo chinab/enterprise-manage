@@ -1,23 +1,19 @@
+// main.go
 package main
 
 import (
 	"github.com/codegangsta/martini"
-	"log"
-	"net/http"
-	"xvxv/utils"
+	"github.com/martini-contrib/render"
 )
 
 func main() {
-	defer utils.SetLogOutPut("log/logfile.txt")()
-
-	log.Println("hahahahahahah")
-
 	m := martini.Classic()
+	// render html templates from templates directory
+	m.Use(render.Renderer())
 
-	m.Get("/", func(log *log.Logger) string {
-		log.Println("你好")
-		return "Hello world!"
+	m.Get("/", func(r render.Render) {
+		r.HTML(200, "hello", "jeremy")
 	})
-	//http.Handle("/", m)
-	http.ListenAndServe(":8080", m)
+
+	m.Run()
 }

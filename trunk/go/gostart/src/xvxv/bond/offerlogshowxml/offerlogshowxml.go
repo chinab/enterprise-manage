@@ -12,13 +12,13 @@ import (
 	"os"
 )
 
-var db, err = sql.Open("mysql", "artogrid:artogrid@tcp(192.168.1.105:3306)/idb_center?charset=utf8")
+var db, err = sql.Open("mysql", "artogrid:artogrid@tcp(10.10.2.4:3306)/idb_center?charset=utf8")
 
 func main() {
 	checkErr(err)
 	defer db.Close()
 
-	userFile := "F:\\message_test.xml"
+	userFile := "message_test.xml"
 	fout, err := os.Create(userFile)
 	defer fout.Close()
 
@@ -27,10 +27,10 @@ func main() {
 		return
 	}
 
-	version := 348809
+	version := 863431
 	orm := beedb.New(db)
 
-	for version <= 348823 {
+	for version <= 863431 {
 		rows, _ := orm.SetTable("sync_message_data").Where("VERSION=?", version).FindMap()
 		for _, row := range rows {
 			inBuffer := bytes.NewBuffer(row["VALUE"])
