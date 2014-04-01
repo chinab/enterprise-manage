@@ -20,12 +20,20 @@ func main() {
 
 func homeserver() {
 	m := martini.Classic()
-	m.Use(martini.Static("assets"))
+	// m.Use(martini.Static("assets"))
 
 	m.Use(render.Renderer(render.Options{
 		Layout: "home_layout",
 	}))
 
+	/***********static*************/
+	m.Get("/css/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+	m.Get("/editor/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+	m.Get("/fonts/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+	m.Get("/img/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+	m.Get("/js/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+
+	/***********biz*************/
 	m.Get("/", home.HomeHandler)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", base.HomeWebPort), m)
@@ -33,7 +41,7 @@ func homeserver() {
 
 func adminserver() {
 	m := martini.Classic()
-	m.Use(martini.Static("assets"))
+	// m.Use(martini.Static("./assets/"))
 
 	store, _ := redistore.NewRediStore(10, "tcp", fmt.Sprintf(":%s", base.RedisPort), base.RedisHost, []byte("secret-key"))
 
@@ -45,6 +53,14 @@ func adminserver() {
 		Layout: "admin_layout",
 	}))
 
+	/***********static*************/
+	m.Get("/css/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+	m.Get("/editor/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+	m.Get("/fonts/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+	m.Get("/img/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+	m.Get("/js/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
+
+	/***********biz*************/
 	m.Get("/", admin.ManagerHandler)
 	m.Post("/login", admin.LoginHandler)
 	m.Get("/login", admin.GoLoginHandler)
