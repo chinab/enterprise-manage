@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectUsers">
+		select id, username, password
+		from users
+		where id = #{id} and username=#{username} and password=#{password} #{
+	</select>
+</osm>
