@@ -46,7 +46,7 @@ a.title-link,a.title-link:hover{
 	border-radius: 0px;
 }
 
-.navbar-inverse .navbar-nav>li>a:hover{
+.navbar-inverse .navbar-nav>li>a:hover,.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:hover, .navbar-inverse .navbar-nav>.open>a:focus {
 	background-color: #2f0920;
 	border-bottom: 3px solid #bd4b91;
 }
@@ -56,5 +56,4 @@ a.title-link,a.title-link:hover{
 	background-color: #552442;
 	border-bottom: 3px solid #ff009c;
 }
-
 
