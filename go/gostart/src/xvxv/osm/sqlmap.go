@@ -96,25 +96,36 @@ func newMapper(stmt stmtXml) (sqlMapperObj *sqlMapper) {
 			sqls = append(sqls, sql[0:si])
 			sql = sql[si+2:]
 			startFlag++
-			errorIndex += si
+			errorIndex += si + 2
 		} else if (ei != -1 && si != -1 && ei < si) || (ei != -1 && si == -1) {
 			sqls = append(sqls, "?")
 			params = append(params, sql[0:ei])
 			sql = sql[ei+1:]
 			startFlag--
-			errorIndex += ei
+			errorIndex += ei + 1
 		} else {
-			fmt.Printf("sql read error '''%v''' %v\n", stmt.Sql, errorIndex)
+			if ei > -1 {
+				errorIndex += ei
+			} else {
+				errorIndex += si
+			}
+			fmt.Printf("sql read error '''%v'''\n", markSqlError(stmt.Sql, errorIndex))
 			return
 		}
+
 	}
 
 	if startFlag != 0 {
-		fmt.Printf("sql read error '''%v''' %v\n", stmt.Sql, errorIndex)
+		fmt.Printf("sql read error '''%v'''\n", markSqlError(stmt.Sql, errorIndex))
 		return
 	}
 	sqlMapperObj.sql = strings.Join(sqls, "")
 	sqlMapperObj.params = params
 
 	return
+}
+
+func markSqlError(sql string, index int) string {
+	result := fmt.Sprintf("%s[****ERROR****]->%s", sql[0:index], sql[index:])
+	return result
 }
