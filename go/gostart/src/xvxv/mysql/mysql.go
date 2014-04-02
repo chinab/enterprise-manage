@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	//"time"
+	"time"
 )
 
 func main() {
-	db, err := sql.Open("mysql", "artogrid:artogrid@/test?charset=utf8")
+	db, err := sql.Open("mysql", "root:root@/test?charset=utf8")
 	checkErr(err)
 
 	//插入数据
@@ -35,7 +35,13 @@ func main() {
 	fmt.Println(affect)
 
 	//查询数据
-	rows, err := db.Query("SELECT * FROM userinfo")
+
+	start := time.Now().Nanosecond()
+	stmt, err = db.Prepare("SELECT * FROM userinfo")
+	fmt.Println("xvxv", (time.Now().Nanosecond()-start)/1000000)
+	checkErr(err)
+
+	rows, err := stmt.Query()
 	checkErr(err)
 
 	for rows.Next() {

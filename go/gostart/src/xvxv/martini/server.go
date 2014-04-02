@@ -2,6 +2,7 @@
 package main
 
 import (
+	"github.com/boj/redistore"
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 )
