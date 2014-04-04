@@ -49,31 +49,76 @@ func NewOsm(driverName, dataSource string, xmlPaths []string, params ...int) (os
 }
 
 func (o *Osm) Query(id string, param interface{}) (err error) {
-	t := reflect.TypeOf(param)
-	t
 
 	sm, ok := o.sqlMappersMap[id]
 	if !ok {
 		return fmt.Errorf("Query \"%s\" error ,id not fond ", id)
 	}
+
 	var params []interface{}
-	for _, paramName := range sm.paramNames {
-		params = append(params, paramMap[paramName])
+
+	v := reflect.ValueOf(param)
+
+	kind := v.Kind()
+	switch {
+	case kind == reflect.Array || kind == reflect.Slice:
+		params, ok = param.([]interface{})
+		if !ok {
+			err = fmt.Errorf("array type not []interface{} of %s", param)
+			return
+		}
+	case kind == reflect.Map:
+		for _, paramName := range sm.paramNames {
+			p, ok := param.(map[string]interface{})
+			if ok {
+				params = append(params, p[paramName])
+			} else {
+				err = fmt.Errorf("array type not map[string]interface{} of %s", param)
+				return
+			}
+		}
+	case kind == reflect.Struct:
+		for _, paramName := range sm.paramNames {
+			params = append(params, v.FieldByName(paramName))
+		}
+	case kind == reflect.Bool ||
+		kind == reflect.Int ||
+		kind == reflect.Int8 ||
+		kind == reflect.Int16 ||
+		kind == reflect.Int32 ||
+		kind == reflect.Int64 ||
+		kind == reflect.Uint ||
+		kind == reflect.Uint8 ||
+		kind == reflect.Uint16 ||
+		kind == reflect.Uint32 ||
+		kind == reflect.Uint64 ||
+		kind == reflect.Uintptr ||
+		kind == reflect.Float32 ||
+		kind == reflect.Float64 ||
+		kind == reflect.Complex64 ||
+		kind == reflect.Complex128 ||
+		kind == reflect.String:
+		params = append(params, param)
+	default:
 	}
+
 	stmt, err := o.db.Prepare(sm.sql)
+	if err != nil {
+		return
+	}
+	fmt.Println(sm.sql)
 	rows, err := stmt.Query(params...)
+	if err != nil {
+		return
+	}
 
 	for rows.Next() {
 		var uid int
 		var username string
-		var department string
-		var created string
-		err = rows.Scan(&uid, &username, &department, &created)
+		err = rows.Scan(&uid, &username)
 
 		fmt.Println(uid)
 		fmt.Println(username)
-		fmt.Println(department)
-		fmt.Println(created)
 	}
 	return
 }
