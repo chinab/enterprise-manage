@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"xvxv/osm"
+	// "xvxv/osm/models"
 )
 
 func main() {
@@ -12,10 +13,10 @@ func main() {
 		fmt.Println(err.Error())
 	}
 
-	paramMap := make(map[string]interface{})
-	paramMap["uid"] = 1
+	user := make(map[string]int16)
+	user["Id"] = 1
 
-	err = s.Query("selectUsers", paramMap)
+	err = s.Query("selectUsers", user)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

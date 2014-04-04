@@ -14,10 +14,12 @@ const (
 	type_insert = iota
 	type_delete = iota
 
+	/**
 	param_value  = "value"  //简单为类型,如int double string date等
 	param_array  = "array"  //array长度与'?'数相等
 	param_map    = "map"    //从map中取数据
 	param_struct = "struct" //从struct中取数据
+	**/
 
 	return_row       = "row"    //查出的结果为单行,并存入struct
 	return_rows      = "rows"   //查出的结果为多行,并存入struct array
@@ -33,14 +35,14 @@ type sqlMapper struct {
 	sql        string
 	paramNames []string
 	sqlType    int
-	param      string
-	result     string
+	// param      string
+	result string
 }
 
 type stmtXml struct {
-	Id     string `xml:"id,attr"`
-	Param  string `xml:"paramType,attr"`
-	Result string `xml:"resultType,attr"`
+	Id string `xml:"id,attr"`
+	// Param  string `xml:"param,attr"`
+	Result string `xml:"result,attr"`
 	Sql    string `xml:",chardata"`
 }
 
@@ -90,8 +92,8 @@ func newMapper(stmt stmtXml, sqlType int) (sqlMapperObj *sqlMapper) {
 	sqlMapperObj = new(sqlMapper)
 	sqlMapperObj.id = stmt.Id
 	sqlMapperObj.sqlType = sqlType
-	sqlMapperObj.paramType = stmt.ParamType
-	sqlMapperObj.resultType = stmt.ResultType
+	// sqlMapperObj.param = stmt.Param
+	sqlMapperObj.result = stmt.Result
 
 	sqls := make([]string, 0)
 	paramNames := make([]string, 0)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <osm>
 	<select id="selectUsers" param="struct" result="row">
-		SELECT * FROM user where uid=#{id}
+		SELECT id,email FROM user where id=#{Id}
 	</select>
 </osm>
