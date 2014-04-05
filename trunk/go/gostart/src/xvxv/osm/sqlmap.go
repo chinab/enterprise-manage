@@ -14,20 +14,14 @@ const (
 	type_insert = iota
 	type_delete = iota
 
-	/**
-	param_value  = "value"  //简单为类型,如int double string date等
-	param_array  = "array"  //array长度与'?'数相等
-	param_map    = "map"    //从map中取数据
-	param_struct = "struct" //从struct中取数据
-	**/
-
-	return_row       = "row"    //查出的结果为单行,并存入struct
-	return_rows      = "rows"   //查出的结果为多行,并存入struct array
-	return_map       = "map"    //查出的结果为单行,并存入map
-	return_maps      = "maps"   //查出的结果为多行,并存入map array
-	return_array     = "array"  //查出的结果为单行,并存入array
-	return_arrays    = "arrays" //查出的结果为多行,并存入array array
-	return_key_value = "kv"     //查出的结果为多行,每行有两个字段,前者为key,后者为value,存入map
+	result_value   = "value"   //查出的结果为单行,并存入不定长的变量上(...)
+	result_struct  = "struct"  //查出的结果为单行,并存入struct
+	result_structs = "structs" //查出的结果为多行,并存入struct array
+	result_map     = "map"     //查出的结果为单行,并存入map
+	result_maps    = "maps"    //查出的结果为多行,并存入map array
+	result_array   = "array"   //查出的结果为单行,并存入array
+	result_arrays  = "arrays"  //查出的结果为多行,并存入array array
+	result_kvs     = "kvs"     //查出的结果为多行,每行有两个字段,前者为key,后者为value,存入map
 )
 
 type sqlMapper struct {
@@ -133,6 +127,7 @@ func newMapper(stmt stmtXml, sqlType int) (sqlMapperObj *sqlMapper) {
 		}
 
 	}
+	sqls = append(sqls, sql)
 
 	if startFlag != 0 {
 		fmt.Printf("sql read error \"%v\"\n", markSqlError(stmt.Sql, errorIndex))

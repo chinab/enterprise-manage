@@ -22,5 +22,5 @@ type User struct {
 	Address     string
 	Sex         string
 	ContactInfo string
-	CreateTime  string
+	CreateTime  time.Time
 }
