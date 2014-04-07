@@ -3,7 +3,10 @@ package osm
 import (
 	"database/sql"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -23,6 +26,7 @@ type Osm struct {
 func NewOsm(driverName, dataSource string, xmlPaths []string, params ...int) (osm *Osm, err error) {
 	osm = new(Osm)
 	db, err := sql.Open(driverName, dataSource)
+
 	if err != nil {
 		if db != nil {
 			db.Close()
@@ -44,8 +48,33 @@ func NewOsm(driverName, dataSource string, xmlPaths []string, params ...int) (os
 		}
 	}
 
+	osmXmlPaths := make([]string, 0)
 	for _, xmlPath := range xmlPaths {
-		sqlMappers, err := readMappers(xmlPath)
+		var pathInfo os.FileInfo
+		pathInfo, err = os.Stat(xmlPath)
+
+		if err != nil {
+			return
+		}
+
+		if pathInfo.IsDir() {
+			if strings.LastIndex(xmlPath, "/") != (len([]rune(xmlPath)) - 1) {
+				xmlPath += "/"
+			}
+			fs, _ := ioutil.ReadDir(xmlPath)
+			for _, fileInfo := range fs {
+				fileName := fileInfo.Name()
+				if strings.LastIndex(fileName, ".xml") == (len([]rune(fileName)) - 4) {
+					osmXmlPaths = append(osmXmlPaths, xmlPath+fileName)
+				}
+			}
+		} else {
+			osmXmlPaths = append(osmXmlPaths, xmlPath)
+		}
+	}
+
+	for _, osmXmlPath := range osmXmlPaths {
+		sqlMappers, err := readMappers(osmXmlPath)
 		if err == nil {
 			for _, sm := range sqlMappers {
 				osm.sqlMappersMap[sm.id] = sm
