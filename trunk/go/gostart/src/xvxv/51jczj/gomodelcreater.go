@@ -60,6 +60,8 @@ func createGoModel(tableName string) {
 	goFile.WriteString("package models\r\n")
 
 	fieldNames := make([]string, 0)
+	columnNames := make([]string, 0)
+	setSqls := make([]string, 0)
 	types := make([]string, 0)
 	maxFieldNameSize := 0
 
@@ -70,11 +72,11 @@ func createGoModel(tableName string) {
 		err = rows.Scan(&fname, &ftype, &fcollation, &fnull, &fkey, &fdefault, &fextra, &fprivileges, &fcomment)
 		checkErr(err)
 
-		fieldName := toGoName(string(fname))
-
-		fmt.Println(tableName, string(fname), string(ftype))
+		columnName := string(fname)
+		fieldName := toGoName(columnName)
 
 		fieldNames = append(fieldNames, fieldName)
+		columnNames = append(columnNames, columnName)
 		columnType := strings.ToLower(string(ftype))
 		types = append(types, columnType)
 		if maxFieldNameSize < len(fieldName) {
@@ -84,6 +86,8 @@ func createGoModel(tableName string) {
 		if columnType == "datetime" || columnType == "date" {
 			hasTime = true
 		}
+
+		setSqls = append(setSqls, columnName+"=#{"+fieldName+"}")
 	}
 
 	if hasTime {
@@ -117,8 +121,43 @@ func createGoModel(tableName string) {
 
 		goFile.WriteString("	" + fieldName + spaces + columnType + "\r\n")
 	}
-
 	goFile.WriteString("}\r\n")
+
+	xmlPath := "config/models/"
+	_, err = os.Stat(xmlPath)
+	if err != nil && os.IsNotExist(err) {
+		os.Mkdir(xmlPath, os.ModeDir)
+	}
+	xmlFile, _ := os.Create(xmlPath + tableName + ".xml")
+	defer xmlFile.Close()
+	xmlFile.WriteString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n")
+	xmlFile.WriteString("<osm>\r\n")
+
+	xmlFile.WriteString("	<select id=\"select" + structName + "ById\" result=\"struct\">\r\n")
+	xmlFile.WriteString("SELECT " + strings.Join(columnNames, ",") + "\r\n")
+	xmlFile.WriteString("FROM " + tableName + "\r\n")
+	xmlFile.WriteString("WHERE id=#{Id};\r\n")
+	xmlFile.WriteString("	</select>\r\n")
+
+	xmlFile.WriteString("	<insert id=\"insert" + structName + "\">\r\n")
+	xmlFile.WriteString("INSERT INTO " + tableName + "\r\n")
+	xmlFile.WriteString("(" + strings.Join(columnNames, ",") + ")\r\n")
+	xmlFile.WriteString("VALUES\r\n")
+	xmlFile.WriteString("(#{" + strings.Join(fieldNames, "},#{") + "});\r\n")
+	xmlFile.WriteString("	</insert>\r\n")
+
+	xmlFile.WriteString("	<update id=\"update" + structName + "ById\">\r\n")
+	xmlFile.WriteString("UPDATE " + tableName + "SET\r\n")
+	xmlFile.WriteString(strings.Join(setSqls, ",") + "\r\n")
+	xmlFile.WriteString("WHERE id=#{Id};\r\n")
+	xmlFile.WriteString("	</update>\r\n")
+
+	xmlFile.WriteString("	<delete id=\"delete" + structName + "ById\">\r\n")
+	xmlFile.WriteString("DELETE FROM " + tableName + " WHERE id=#{Id};\r\n")
+	xmlFile.WriteString("	</delete>\r\n")
+
+	xmlFile.WriteString("</osm>\r\n")
+
 }
 
 func checkErr(err error) {
