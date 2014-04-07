@@ -3,29 +3,42 @@ package base
 import (
 	"fmt"
 	"github.com/codegangsta/martini"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/sbinet/go-config/config"
+	"strings"
+	"xvxv/osm"
 )
 
-var DbHost, DbPort, DbUsername, DbPassword, DbSchema, HomeWebPort, AdminWebPort, RedisHost, RedisPort string
+var HomeWebPort, AdminWebPort, RedisHost, RedisPort string
+var Osm *osm.Osm
 
 func init() {
 	setting, err := config.ReadDefault("config/server.cfg")
 	handlerErr(err)
 
-	DbHost, err = setting.String("mysql", "host")
+	dbHost, err := setting.String("mysql", "host")
 	handlerErr(err)
 
-	DbPort, err = setting.String("mysql", "port")
+	dbPort, err := setting.String("mysql", "port")
 	handlerErr(err)
 
-	DbUsername, err = setting.String("mysql", "username")
+	dbUsername, err := setting.String("mysql", "username")
 	handlerErr(err)
 
-	DbPassword, err = setting.String("mysql", "password")
+	dbPassword, err := setting.String("mysql", "password")
 	handlerErr(err)
 
-	DbSchema, err = setting.String("mysql", "schema")
+	dbSchema, err := setting.String("mysql", "schema")
 	handlerErr(err)
+
+	xmlPathsStr, err := setting.String("osm", "xmlpaths")
+	xmlPaths := strings.Split(xmlPathsStr, ",")
+
+	url := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbUsername, dbPassword, dbHost, dbPort, dbSchema)
+	Osm, err = osm.NewOsm("mysql", url, xmlPaths)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	HomeWebPort, err = setting.String("home-web", "port")
 	handlerErr(err)
@@ -41,11 +54,12 @@ func init() {
 
 	appEnv, err := setting.String("app", "env")
 	handlerErr(err)
+
 	martini.Env = appEnv
 
 	fmt.Println("home port     : ", HomeWebPort)
 	fmt.Println("admin port    : ", AdminWebPort)
-	fmt.Println("database info : ", DbHost, DbPort, DbUsername, DbPassword, DbSchema)
+	fmt.Println("database info : ", dbHost, dbPort, dbUsername, dbPassword, dbSchema)
 	fmt.Println("redis info    : ", RedisHost, RedisPort)
 }
 
