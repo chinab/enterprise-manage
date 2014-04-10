@@ -1,7 +1,6 @@
 package osm
 
 import (
-	// "database/sql"
 	"encoding/xml"
 	"fmt"
 	"os"
@@ -29,13 +28,11 @@ type sqlMapper struct {
 	sql        string
 	paramNames []string
 	sqlType    int
-	// param      string
-	result string
+	result     string
 }
 
 type stmtXml struct {
-	Id string `xml:"id,attr"`
-	// Param  string `xml:"param,attr"`
+	Id     string `xml:"id,attr"`
 	Result string `xml:"result,attr"`
 	Sql    string `xml:",chardata"`
 }
@@ -86,7 +83,6 @@ func newMapper(stmt stmtXml, sqlType int) (sqlMapperObj *sqlMapper) {
 	sqlMapperObj = new(sqlMapper)
 	sqlMapperObj.id = stmt.Id
 	sqlMapperObj.sqlType = sqlType
-	// sqlMapperObj.param = stmt.Param
 	sqlMapperObj.result = stmt.Result
 
 	sqls := make([]string, 0)
