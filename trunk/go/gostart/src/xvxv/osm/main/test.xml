@@ -47,5 +47,8 @@ sex = #{Sex},
 contact_info = #{ContactInfo},
 create_time = #{CreateTime} 
 where id = #{Id};
-	</update>
+	</update>	
+	<delete id="deleteUser">
+DELETE FROM user where id = #{Id};
+	</delete>
 </osm>

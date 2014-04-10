@@ -5,8 +5,25 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"time"
 	"xvxv/osm"
-	"xvxv/osm/models"
 )
+
+type User struct {
+	Id          int64
+	Email       string
+	Mobile      string
+	Nickname    string
+	Password    string
+	Description string
+	Name        string
+	Birth       time.Time
+	Province    string
+	City        string
+	Company     string
+	Address     string
+	Sex         string
+	ContactInfo string
+	CreateTime  time.Time
+}
 
 func main() {
 
@@ -16,13 +33,13 @@ func main() {
 	}
 
 	start := time.Now().Nanosecond() / 1000000
-	// s.Begin()
+	s.Begin()
 
-	// user := models.User{Email: "yinshuwei@foxmail.com", Id: 17}
+	// user := User{Email: "yinshuwei@foxmail.com", Id: 17}
 
 	// /*************/
 	// fmt.Println("structs")
-	// var users []models.User
+	// var users []User
 	// s.Query("selectUsers", user)(&users)
 
 	// for _, u := range users {
@@ -31,7 +48,7 @@ func main() {
 
 	// /*************/
 	// fmt.Println("\nstruct")
-	// u := models.User{}
+	// u := User{}
 	// s.Query("selectUser", user)(&u)
 
 	// fmt.Println(u.Id, u.Email)
@@ -89,27 +106,34 @@ func main() {
 	// 	fmt.Println(k, v)
 	// }
 
+	/*****************/
+	fmt.Println("\ninsert")
+	insertUser := User{
+		// Id:         2,
+		Email:      "yinshuwei@foxmail.com",
+		Mobile:     "13113113113",
+		Nickname:   "haha",
+		Birth:      time.Now(),
+		CreateTime: time.Now(),
+	}
+	fmt.Println(s.Insert("insertUser", insertUser))
+
 	// /*****************/
-	// fmt.Println("\ninsert")
-	// insertUser := models.User{
-	// 	// Id:         2,
+	// fmt.Println("\nupdate")
+	// updateUser := User{
+	// 	Id:         4,
 	// 	Email:      "yinshuwei@foxmail.com",
 	// 	Birth:      time.Now(),
 	// 	CreateTime: time.Now(),
 	// }
-	// fmt.Println(s.Insert("insertUser", insertUser))
+	// fmt.Println(s.Update("updateUser", updateUser))
 
-	// s.Commit()
+	// /*****************/
+	// fmt.Println("\ndelete")
+	// deleteUser := User{Id: 3}
+	// fmt.Println(s.Delete("deleteUser", deleteUser))
 
-	/*****************/
-	fmt.Println("\nupdate")
-	updateUser := models.User{
-		Id:         17,
-		Email:      "yinshuwei@foxmail.com",
-		Birth:      time.Now(),
-		CreateTime: time.Now(),
-	}
-	fmt.Println(s.Update("updateUser", updateUser))
+	s.Commit()
 
 	fmt.Println(time.Now().Nanosecond()/1000000-start, "ms")
 }
