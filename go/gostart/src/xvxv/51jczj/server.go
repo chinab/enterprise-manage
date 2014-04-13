@@ -62,7 +62,9 @@ func adminserver() {
 
 	/***********biz*************/
 	m.Get("/", admin.ManagerHandler)
+
 	m.Post("/login", admin.LoginHandler)
+	m.Get("/logout", admin.LogoutHandler)
 	m.Get("/login", admin.GoLoginHandler)
 	m.Get("/login/:path", admin.GoLoginHandler)
 
