@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func resultStructs(o *Osm, sm *sqlMapper, sqlParams []interface{}, container interface{}) (int64, error) {
+func resultStructs(o *osmBase, sm *sqlMapper, sqlParams []interface{}, container interface{}) (int64, error) {
 	pointValue := reflect.ValueOf(container)
 	if pointValue.Kind() != reflect.Ptr {
 		return 0, fmt.Errorf("Query()() all args must be use ptr")

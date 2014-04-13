@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func resultValue(o *Osm, sm *sqlMapper, sqlParams []interface{}, containers []interface{}) (int64, error) {
+func resultValue(o *osmBase, sm *sqlMapper, sqlParams []interface{}, containers []interface{}) (int64, error) {
 	values := make([]reflect.Value, len(containers))
 
 	for i, container := range containers {

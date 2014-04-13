@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func resultMap(o *Osm, sm *sqlMapper, sqlParams []interface{}, container interface{}) (int64, error) {
+func resultMap(o *osmBase, sm *sqlMapper, sqlParams []interface{}, container interface{}) (int64, error) {
 
 	pointValue := reflect.ValueOf(container)
 	if pointValue.Kind() != reflect.Ptr {
