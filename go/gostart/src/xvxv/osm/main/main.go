@@ -27,20 +27,19 @@ type User struct {
 
 func main() {
 
-	s, err := osm.NewOsm("mysql", "root:root@/51jczj?charset=utf8", []string{"test.xml"})
+	osm, err := osm.NewOsm("mysql", "root:root@/51jczj?charset=utf8", []string{"test.xml"})
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
 	start := time.Now().Nanosecond() / 1000000
-	s.Begin()
 
 	// user := User{Email: "yinshuwei@foxmail.com", Id: 17}
 
 	// /*************/
 	// fmt.Println("structs")
 	// var users []User
-	// s.Query("selectUsers", user)(&users)
+	// osm.Query("selectUsers", user)(&users)
 
 	// for _, u := range users {
 	// 	fmt.Println(u.Id, u.Email)
@@ -49,14 +48,14 @@ func main() {
 	// /*************/
 	// fmt.Println("\nstruct")
 	// u := User{}
-	// s.Query("selectUser", user)(&u)
+	// osm.Query("selectUser", user)(&u)
 
 	// fmt.Println(u.Id, u.Email)
 
 	// /***************/
 	// fmt.Println("\nmaps")
 	// var userMaps []map[string]osm.Data
-	// s.Query("selectUserMaps", user)(&userMaps)
+	// osm.Query("selectUserMaps", user)(&userMaps)
 
 	// for _, uMap := range userMaps {
 	// 	fmt.Println(uMap["Id"].Int64(), uMap["Email"].String())
@@ -65,14 +64,14 @@ func main() {
 	// /***************/
 	// fmt.Println("\nmap")
 	// var userMap map[string]osm.Data
-	// s.Query("selectUserMap", user)(&userMap)
+	// osm.Query("selectUserMap", user)(&userMap)
 
 	// fmt.Println(userMap["Id"].Int64(), userMap["Email"].String())
 
 	// /***************/
 	// fmt.Println("\narrays")
 	// var userArrays [][]osm.Data
-	// s.Query("selectUserArrays", "yinshuwei@foxmail.com")(&userArrays)
+	// osm.Query("selectUserArrays", "yinshuwei@foxmail.com")(&userArrays)
 
 	// for _, uArray := range userArrays {
 	// 	if uArray != nil && len(uArray) >= 2 {
@@ -83,7 +82,7 @@ func main() {
 	// /***************/
 	// fmt.Println("\narray")
 	// var userArray []osm.Data
-	// s.Query("selectUserArray", user)(&userArray)
+	// osm.Query("selectUserArray", user)(&userArray)
 
 	// if userArray != nil && len(userArray) >= 2 {
 	// 	fmt.Println(userArray[0].Int64(), userArray[1].String())
@@ -93,30 +92,30 @@ func main() {
 	// fmt.Println("\nvalue")
 	// var id int64
 	// var email string
-	// s.Query("selectUserValue", user)(&id, &email)
+	// osm.Query("selectUserValue", user)(&id, &email)
 
 	// fmt.Println(id, email)
 
 	// /***************/
 	// fmt.Println("\nkvs")
 	// var idEmailMap map[int64]string
-	// s.Query("selectUserKvs", user)(&idEmailMap)
+	// osm.Query("selectUserKvs", user)(&idEmailMap)
 
 	// for k, v := range idEmailMap {
 	// 	fmt.Println(k, v)
 	// }
 
-	/*****************/
-	fmt.Println("\ninsert")
-	insertUser := User{
-		// Id:         2,
-		Email:      "yinshuwei@foxmail.com",
-		Mobile:     "13113113113",
-		Nickname:   "haha",
-		Birth:      time.Now(),
-		CreateTime: time.Now(),
-	}
-	fmt.Println(s.Insert("insertUser", insertUser))
+	// /*****************/
+	// fmt.Println("\ninsert")
+	// insertUser := User{
+	// 	// Id:         2,
+	// 	Email:      "yinshuwei@foxmail.com",
+	// 	Mobile:     "13113113113",
+	// 	Nickname:   "haha",
+	// 	Birth:      time.Now(),
+	// 	CreateTime: time.Now(),
+	// }
+	// fmt.Println(osm.Insert("insertUser", insertUser))
 
 	// /*****************/
 	// fmt.Println("\nupdate")
@@ -126,14 +125,28 @@ func main() {
 	// 	Birth:      time.Now(),
 	// 	CreateTime: time.Now(),
 	// }
-	// fmt.Println(s.Update("updateUser", updateUser))
+	// fmt.Println(osm.Update("updateUser", updateUser))
 
 	// /*****************/
 	// fmt.Println("\ndelete")
 	// deleteUser := User{Id: 3}
-	// fmt.Println(s.Delete("deleteUser", deleteUser))
+	// fmt.Println(osm.Delete("deleteUser", deleteUser))
 
-	s.Commit()
+	tx, err := osm.Begin()
+
+	/*****************/
+	fmt.Println("\ninsert")
+	txInsertUser := User{
+		// Id:         2,
+		Email:      "yinshuwei@foxmail.com",
+		Mobile:     "13113113113",
+		Nickname:   "haha",
+		Birth:      time.Now(),
+		CreateTime: time.Now(),
+	}
+	fmt.Println(tx.Insert("insertUser", txInsertUser))
+
+	tx.Commit()
 
 	fmt.Println(time.Now().Nanosecond()/1000000-start, "ms")
 }

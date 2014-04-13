@@ -17,10 +17,17 @@ type dbRunner interface {
 	QueryRow(query string, args ...interface{}) *sql.Row
 }
 
-type Osm struct {
-	dbBase        *sql.DB
+type osmBase struct {
 	db            dbRunner
 	sqlMappersMap map[string]*sqlMapper
+}
+
+type Osm struct {
+	osmBase
+}
+
+type OsmTx struct {
+	osmBase
 }
 
 func NewOsm(driverName, dataSource string, xmlPaths []string, params ...int) (osm *Osm, err error) {
@@ -35,16 +42,15 @@ func NewOsm(driverName, dataSource string, xmlPaths []string, params ...int) (os
 		return
 	}
 
-	osm.dbBase = db
-	osm.db = osm.dbBase
+	osm.db = db
 	osm.sqlMappersMap = make(map[string]*sqlMapper)
 
 	for i, v := range params {
 		switch i {
 		case 0:
-			osm.dbBase.SetMaxIdleConns(v)
+			db.SetMaxIdleConns(v)
 		case 1:
-			osm.dbBase.SetMaxOpenConns(v)
+			db.SetMaxOpenConns(v)
 		}
 	}
 
@@ -87,32 +93,49 @@ func NewOsm(driverName, dataSource string, xmlPaths []string, params ...int) (os
 	return
 }
 
-func (o *Osm) Begin() error {
-	if o.db == o.dbBase {
-		tx, err := o.dbBase.Begin()
-		if err != nil {
-			return err
+func (o *Osm) Begin() (tx *OsmTx, err error) {
+	tx = new(OsmTx)
+	tx.sqlMappersMap = o.sqlMappersMap
+
+	if o.db == nil {
+		err = fmt.Errorf("db no opened")
+	} else {
+		sqlDb, ok := o.db.(*sql.DB)
+		if ok {
+			tx.db, err = sqlDb.Begin()
+		} else {
+			err = fmt.Errorf("db no opened")
 		}
-		o.db = tx
-	} else {
-		return fmt.Errorf("tx runing")
 	}
-	return nil
+
+	return
 }
 
-func (o *Osm) Commit() error {
-	var err error
-	tx, ok := o.db.(*sql.Tx)
+func (tx *OsmTx) Commit() error {
+	if tx.db == nil {
+		return fmt.Errorf("tx no runing")
+	}
+	sqlTx, ok := tx.db.(*sql.Tx)
 	if ok {
-		err = tx.Commit()
+		return sqlTx.Commit()
 	} else {
-		err = fmt.Errorf("tx no runing")
+		return fmt.Errorf("tx no runing")
 	}
-	o.db = o.dbBase
-	return err
 }
 
-func (o *Osm) Delete(id string, params ...interface{}) (int64, error) {
+func (tx *OsmTx) Rollback() error {
+	if tx.db == nil {
+		return fmt.Errorf("tx no runing")
+	}
+	sqlTx, ok := tx.db.(*sql.Tx)
+	if ok {
+		return sqlTx.Rollback()
+	} else {
+		return fmt.Errorf("tx no runing")
+	}
+}
+
+func (o *osmBase) Delete(id string, params ...interface{}) (int64, error) {
 	sm, sqlParams, err := o.readSqlParams(id, type_delete, params...)
 	if err != nil {
 		return 0, err
@@ -129,7 +152,7 @@ func (o *Osm) Delete(id string, params ...interface{}) (int64, error) {
 	return result.RowsAffected()
 }
 
-func (o *Osm) Update(id string, params ...interface{}) (int64, error) {
+func (o *osmBase) Update(id string, params ...interface{}) (int64, error) {
 	sm, sqlParams, err := o.readSqlParams(id, type_update, params...)
 	if err != nil {
 		return 0, err
@@ -146,7 +169,7 @@ func (o *Osm) Update(id string, params ...interface{}) (int64, error) {
 	return result.RowsAffected()
 }
 
-func (o *Osm) Insert(id string, params ...interface{}) (int64, int64, error) {
+func (o *osmBase) Insert(id string, params ...interface{}) (int64, int64, error) {
 	sm, sqlParams, err := o.readSqlParams(id, type_insert, params...)
 	if err != nil {
 		return 0, 0, err
@@ -169,7 +192,7 @@ func (o *Osm) Insert(id string, params ...interface{}) (int64, int64, error) {
 	return insertId, count, err
 }
 
-func (o *Osm) Query(id string, params ...interface{}) func(containers ...interface{}) (int64, error) {
+func (o *osmBase) Query(id string, params ...interface{}) func(containers ...interface{}) (int64, error) {
 	sm, sqlParams, err := o.readSqlParams(id, type_select, params...)
 
 	if err != nil {
@@ -238,7 +261,7 @@ func (o *Osm) Query(id string, params ...interface{}) func(containers ...interfa
 	return callback
 }
 
-func (o *Osm) readSqlParams(id string, sqlType int, params ...interface{}) (sm *sqlMapper, sqlParams []interface{}, err error) {
+func (o *osmBase) readSqlParams(id string, sqlType int, params ...interface{}) (sm *sqlMapper, sqlParams []interface{}, err error) {
 	sqlParams = make([]interface{}, 0)
 	sm, ok := o.sqlMappersMap[id]
 	err = nil
