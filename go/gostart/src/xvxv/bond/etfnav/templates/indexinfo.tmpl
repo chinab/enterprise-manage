@@ -1,18 +1,15 @@
-<div class="panel panel-default">
-    <!-- Default panel contents -->
-  <div class="panel-heading">
-    <div class="row">
-      <h4 class="col-md-8">{{ .titleName }}</h4>
-      <div class="col-md-4">
+  <div class="productBrief">
+      <h3>{{ .titleName }}</h3>
+      <div class="summary">
         Last updated : <span class="text-info"> {{ .nowTime }}</span>
         <br>
         <span class="text-danger">*</span>update every 10 seconds
       </div>
-    </div>
+      <div class="fix"></div>
   </div>
 
   <!-- Table -->
-  <table class="table">
+  <table cellspacing="0" width="100%">
     <thead>
       <tr>
         <th>NAV per Share</th>
@@ -26,10 +23,9 @@
       <tr>
         <td style="width:33%;">{{ .value }}</td>
         <td style="width:33%;">{{ .time }}</td>
-        <td style="width:33%;"><a href="/showInfo/{{ $infotype }}/{{ .id }}" target="_blank">Calculation Process</a></td>
+        <td class="tr"><a href="/showInfo/{{ $infotype }}/{{ .id }}" target="_blank">Calculation Process</a></td>
       </tr>
     {{ end }}
     </tbody>
   </table>
 
-</div>

@@ -1,0 +1,140 @@
+body{margin:0;padding:0;font:400 14px/18px Arial,"微软雅黑","Microsoft YaHei";color:#ffebc8;background:#000;min-height:500px;height:500px;}
+h1,h2,h3,h4,h4,h5,ul,ol,dl,dt,dd,form{margin:0;padding:0;}
+ol,ul{list-style:none;}
+a:link, a:visited, a:hover, a:active{color:#3da296;text-decoration:underline;}
+img{border: 0}
+.fix{clear:both;}
+.fix:after{
+	 content: "."; 
+	 display: block; 
+	 height: 0; 
+	 clear: both; 
+	 visibility: hidden;
+}
+.l{float: left;}
+.r{float: right;}
+
+.tabBar{margin-top:10px;height:28px;border-bottom: 2px solid #277388}
+.tabBar li{float: left;/*margin-right: 1px;*/text-align: center;position: relative;_width:120px;}
+.tabBar li span.badge{background: red;color: #fff;padding:0 4px;border-radius: 10px;display: block;height:16px;line-height:16px;width:auto;position: absolute;top:0;right:0;}
+.tabBar li a{padding: 0 30px;border-right:1px solid #fff;border-radius: 2px 2px 0 0;line-height:28px;display: block;height: 28px;background: #cadbe0;font-weight: 400;}
+.tabBar li.last a{border-right:0;}
+.tabBar li a:hover{background: #ccedf6}
+.tabBar li.selected a{background: #277388;color: #fff}
+
+.tabBarSecondary{height:28px;}
+.tabBarSecondary li{float: left;text-align: center;position: relative;_width:100px;margin-right:5px;}
+.tabBarSecondary li a{position:relative;z-index:2;padding: 0 30px;border-radius: 3px;line-height:28px;display: block;height: 28px;background: none;font-weight: 400;font-size:14px;text-decoration: none;behavior: url(PIE.htc);}
+.tabBarSecondary li.selected a{background: #141414;color: #ffae46}
+.tabBarSecondary li a:hover{background: #242424;}
+
+.tabBarThird{padding:2px;background: #0b8586;margin:20px 0 10px 0;}
+.tabBarThird li{float: left;text-align: center;position: relative;margin-right: 2px;_width:80px}
+.tabBarThird li a{padding: 0 15px;color:#ffebc8;line-height:24px;display: block;height: 24px;background: #141414;font-weight: 400;font-size:14px;text-decoration: none;}
+.tabBarThird li.selected a{background: none;}
+
+#ProductNav{margin-left: 20px}
+
+h2{font-size: 14px;color:#f9ecd5;}
+h2.colTitle{cursor: pointer;}
+
+table{background: none;}
+table td{background: none;border-bottom:1px solid #3c3c3c;padding: 8px 5px;text-align: left;}
+table td.nobd{border-bottom:0;}
+table td.tc{text-align: center;}
+table td.tr{text-align: right;}
+table td.comment{background-image:url('img/comment.png');background-repeat:no-repeat;background-position:top right;}
+table th{padding: 5px;font-weight: 700;text-align: left;}
+table th.tc{text-align: center;}
+.tablenum td{background: none;border-bottom:1px solid #3c3c3c;padding: 8px 5px;text-align: right;}
+table tr.expire td{color: #848484}
+
+
+.ipt{background:#5a5a5a;color:#ffebc8;border:none;border-radius:3px;height:28px;line-height: 28px;padding:0 5px;behavior: url("/etf/PIE.htc");}
+input[type=text]{background:#5a5a5a;color:#ffebc8;border:none;border-radius:3px;height:28px;line-height: 28px;padding:0 5px;behavior: url(/etf/PIE.htc);z-index: 2;position: relative;vertical-align:middle;} 
+
+.options a,.optd a,button,a.btn,.btnImt{position:relative;z-index:2;color:#000;font-size:12px;height:28px;line-height:28px;padding: 0 10px;text-decoration:none;display:inline-block;text-align: center; -webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;border:0;cursor:pointer;-webkit-box-shadow: #e8e8e8 0 1px 0 inset;-moz-box-shadow: #e8e8e8 0 1px 0 inset;box-shadow: #e8e8e8 0 1px 0 inset;background-color: -webkit-gradient(linear, 0 0, 0 bottom, from(#a1a1a0), to(#7f7d77));background-color: -webkit-linear-gradient(#a1a1a0, #7f7d77);background-color: -moz-linear-gradient(#a1a1a0, #7f7d77);background-color: -ms-linear-gradient(#a1a1a0, #7f7d77);background-color: -o-linear-gradient(#a1a1a0, #7f7d77);background-color: linear-gradient(#a1a1a0, #7f7d77);-pie-background-color: linear-gradient(#a1a1a0, #7f7d77);background-color: #a1a1a0;behavior: url(PIE.htc);}
+
+
+a.btn:hover{background-color: #aaa;}
+.btnImt{color:#ffebc8;font-size:12px;border:0;-webkit-box-shadow: none;-moz-box-shadow: none;box-shadow: none;background: #35944e;background: -webkit-gradient(linear, 0 0, 0 bottom, from(#0b8586), to(#0d7778));background: -webkit-linear-gradient(#0b8586, #0d7778);background: -moz-linear-gradient(#0b8586, #0d7778);background: -ms-linear-gradient(#0b8586, #0d7778);background: -o-linear-gradient(#0b8586, #0d7778);background: linear-gradient(#0b8586, #0d7778);-pie-background: linear-gradient(#0b8586, #0d7778);behavior: url(PIE.htc);}
+a.btnImt:hover{background: -webkit-gradient(linear, 0 0, 0 bottom, from(#0d9091), to(#108788));background: -webkit-linear-gradient(#0d9091, #108788);background: -moz-linear-gradient(#0d9091, #108788);background: -ms-linear-gradient(#0d9091, #108788);background: -o-linear-gradient(#0d9091, #108788);background: linear-gradient(#0d9091, #108788);-pie-background: linear-gradient(#0d9091, #108788);}
+
+a.linkImt{text-decoration:none;}
+
+
+/*Text Style*/
+.fontImt{font-size: 14px}
+.fontSml{font-size: 12px}
+.highlight{color: #ffa633}
+.textCut{width: 150px;display: inline-block;overflow: hidden;white-space: nowrap;-o-text-overflow: ellipsis; text-overflow: ellipsis;}
+
+
+
+/*Header*/
+.header{width:1004px;margin: 0 auto;position: relative;height:72px;background: url(/img/header_bg.png) repeat-x;}
+.header h2{font-size: 18px;padding:20px 20px 0 20px;}
+.header a{text-decoration: none}
+.logo{float: left;margin:20px 0 0 20px;}
+.header .tabBar{border:0;height: 72px;margin:0;}
+.header .tabBar li a{border:0;border-radius:0;width:100px;height: 72px;font:700 14px/72px Arial;color:#ffebc8;background: none;}
+
+/*AD Banner*/
+.adBanner{width: 1004px;height:70px}
+
+/*Page Content*/
+.pageWrap{width:1004px;margin: 0 auto;background: #141414;padding-bottom: 40px}
+.pageTitle{font-size: 24px;margin: 20px 0;text-align: center;}
+
+/*Home*/
+.productBrief{background: #1f1f1f;border:1px solid #2b2b2b;padding:5px;margin:10px 20px;}
+.productBrief h3{float: left;font-size: 14px;font-weight:700;margin-top:15px;}
+.summary{float: right;padding:5px 0;margin-right: 10px}
+.summary strong{color:#e6b33c;}
+
+
+/*Pagination*/
+.pagination{margin:30px auto;width:530px;}
+.pagination input{width:30px;margin:0 5px;}
+.pagination a,.pagination span{margin: 0 5px}
+.pagination a,.pagination span,.pagination .ipt,.pagination input[type=text]{float:left;}
+.pagination .goto{margin-left: 40px}
+.pagination .goto span{margin-top: 5px}
+.pagination a.btn.prev{/*display:-moz-inline-stack;display:inline-block;_display:inline;*/overflow:hidden;outline:none;font:0/0 sans-serif;text-indent:-9999px;*text-indent:0;zoom:1;background-image: url(img/icon_prev.png);background-repeat:no-repeat; background-position:center center;}
+.pagination a.btn.next{overflow:hidden;outline:none;font:0/0 sans-serif;text-indent:-9999px;*text-indent:0;zoom:1;background-image: url(img/icon_next.png);background-repeat:no-repeat; background-position:center center;}.pagination .next{background-image: url(img/icon_next.png);}
+
+.pagination{clear:both;}
+.pagination:after{
+	 content: "."; 
+	 display: block; 
+	 height: 0; 
+	 clear: both; 
+	 visibility: hidden;
+}
+
+.i{width:20px;height:20px;background:url(img/20.png) 0 0;background-repeat:no-repeat !important;vertical-align:middle;}
+span.i,em.i,a.i{display:-moz-inline-stack;display:inline-block;_display:inline;overflow:hidden;outline:none;font:0/0 sans-serif;text-align:left;text-indent:-9999px;*text-indent:0;zoom:1;}
+
+.submit{text-align: center;}
+.submit button,.submit .btn{margin-right:10px;width:100px;}
+
+/*Panel*/
+.panel{background: #141414;border:3px solid #45693b;}
+.panel h2{color:#ffebc8;height:30px;line-height:30px;margin:0;padding:0 10px;background: #0b8586;}
+.panel .con{margin:20px;}
+
+/*Dialog*/
+.dialogBox{position: absolute;z-index:100;top:100px;left:300px;width:380px;background: #141414;border:3px solid #45693b;}
+.dialogBox h2 .iCloseWindow{float: right;margin-top: 5px}
+.alertBox{height:180px;}
+.dialogBox h2{color:#ffebc8;height:30px;line-height:30px;margin:0;padding:0 10px;}
+.dialogBox .con{margin:20px;}
+.dialogBox .alert{padding-left: 150px;margin:20px 0 40px 0;}
+.dialogBox .con .symbol{margin-left: -130px;float: left;_display:inline;}
+.dialogBox .con .text{float: left;width: 100%}
+.dialogBox .submit{text-align: center;margin-bottom: 10px;}
+
+
+
+
+

@@ -6,6 +6,9 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/sbinet/go-config/config"
 	"log"
+	"net/http"
+	"time"
+	"xvxv/utils"
 )
 
 var db *sql.DB
@@ -44,7 +47,7 @@ func getValueByType(infotype string) (string, string, string) {
 
 	switch {
 	case infotype == "0" || infotype == "china_bond":
-		tableName = "ETF_NAV"
+		tableName = "ETF_NAV_NEW_NEW"
 		titleName = "CSOP China 5-Year Treasury Bond ETF"
 	case infotype == "1" || infotype == "china_A50_etf":
 		tableName = "csop_a50"
@@ -57,6 +60,23 @@ func getValueByType(infotype string) (string, string, string) {
 	}
 
 	return tableName, titleName, infotype
+}
+
+func WriteLog(w http.ResponseWriter, r *http.Request, log *log.Logger) {
+	cookie, _ := r.Cookie("client_uuid")
+	if cookie == nil {
+		expiration := time.Now()
+		expiration = expiration.AddDate(5, 0, 0)
+		uuid, _ := utils.GenUUID()
+		cookie = &http.Cookie{Name: "client_uuid", Value: uuid, Expires: expiration}
+		http.SetCookie(w, cookie)
+	}
+
+	stmt, err := db.Prepare("INSERT INTO etf_web_log (path,client_id,remote_addr,time) VALUES (?,?,?,?);")
+	checkErr(err, log)
+
+	_, err = stmt.Exec(r.URL.Path, cookie.Value, r.RemoteAddr, time.Now().Format("2006-01-02 15:04:05"))
+	checkErr(err, log)
 }
 
 func checkErr(err error, log *log.Logger) {
