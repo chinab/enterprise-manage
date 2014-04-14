@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html>
-  <head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>CSOP China 5-Year Treasury Bond</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -14,14 +15,19 @@
     <![endif]-->
   </head>
   <body>
-  <div> </div>
-  <div class="container">
-    <div class="btn-group btn-group-lg">
-      <button type="button" class="btn btn-default active">China 5-Year Treasury Bond</button>
-      <button type="button" class="btn btn-default">FTSE China A50 ETF</button>
-      <button type="button" class="btn btn-default">CES China A80 ETF</button>
+  <div class="header">
+    <div class="logo">
+      <a href="http://www.sumscope.com" target="_blank" title="Sumscope"><img src="/img/logo.png" alt="Sumscope" /></a>
     </div>
-    <p></p>
+  </div>
+  <div class="pageWrap">
+   <div class="adBanner"><a href="http://www.sumscope.com/Quoteboard.html" target="_blank"><img src="/img/ad01.png" alt="" /></a></div>
+           <ul class="tabBarThird l" id="ProductNav">
+            <li class="selected"><a href="javascript:void();">China 5-Year Treasury Bond</a></li>
+            <li><a href="javascript:void();">FTSE China A50 ETF</a></li>
+            <li><a href="javascript:void();">CES China A80 ETF</a></li>
+        </ul>   
+    <div class="fix"></div>
     <div id="content">
 
     </div>
@@ -36,10 +42,10 @@ function loadContent(){
 }
 $(function(){
   window.setInterval("loadContent();",10000);
-  $(".btn-group button").click(function(){
-    $("button.active").removeClass("active");
-    document.title=$(this).html();
-    $(this).addClass("active");
+  $("#ProductNav li").click(function(){
+    $("#ProductNav li.selected").removeClass("selected");
+    document.title=$(this).children("a").html();
+    $(this).addClass("selected");
     infoType = $(this).index();
     loadContent();
   });

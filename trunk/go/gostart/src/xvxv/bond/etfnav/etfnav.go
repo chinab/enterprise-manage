@@ -14,6 +14,8 @@ func main() {
 
 	m.Use(render.Renderer())
 
+	m.Use(handlers.WriteLog)
+
 	m.Get("/", handlers.HomeHandler)
 	m.Get("/indexInfo/:type", handlers.IndexInfoHandler)
 	m.Get("/showInfo/:type/:id", handlers.ShowInfo)
