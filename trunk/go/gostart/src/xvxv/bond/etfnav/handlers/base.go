@@ -75,7 +75,21 @@ func WriteLog(w http.ResponseWriter, r *http.Request, log *log.Logger) {
 	stmt, err := db.Prepare("INSERT INTO etf_web_log (path,client_id,remote_addr,time) VALUES (?,?,?,?);")
 	checkErr(err, log)
 
-	_, err = stmt.Exec(r.URL.Path, cookie.Value, r.RemoteAddr, time.Now().Format("2006-01-02 15:04:05"))
+	path := ""
+	clientId := ""
+	remoteAddr := ""
+	if r != nil {
+		if r.URL != nil {
+			path = r.URL.Path
+		}
+		remoteAddr = r.RemoteAddr
+	}
+
+	if cookie != nil {
+		clientId = cookie.Value
+	}
+
+	_, err = stmt.Exec(path, clientId, remoteAddr, time.Now().Format("2006-01-02 15:04:05"))
 	checkErr(err, log)
 }
 
