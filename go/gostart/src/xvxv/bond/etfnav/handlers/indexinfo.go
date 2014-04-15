@@ -50,5 +50,12 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
 	result["titleName"] = titleName
 	result["infotype"] = infotype
 	result["datas"] = datas
+
+	row := db.QueryRow("select max(MessageInfo) from ETF_Message where Date=? and ProductCode='83199'", dateStr)
+	var messageInfo []byte
+	row.Scan(&messageInfo)
+
+	result["messageInfo"] = string(messageInfo)
+
 	r.HTML(200, "indexinfo", result)
 }
