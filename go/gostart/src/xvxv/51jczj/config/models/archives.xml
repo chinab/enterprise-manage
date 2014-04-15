@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectArchivesById" result="struct">
+SELECT id,user_id,group_id,title,content,keyword,author,create_time,published
+FROM archives
+WHERE id=#{Id};
+	</select>
+	<insert id="insertArchives">
+INSERT INTO archives
+(id,user_id,group_id,title,content,keyword,author,create_time,published)
+VALUES
+(#{Id},#{UserId},#{GroupId},#{Title},#{Content},#{Keyword},#{Author},#{CreateTime},#{Published});
+	</insert>
+	<update id="updateArchivesById">
+UPDATE archivesSET
+id=#{Id},user_id=#{UserId},group_id=#{GroupId},title=#{Title},content=#{Content},keyword=#{Keyword},author=#{Author},create_time=#{CreateTime},published=#{Published}
+WHERE id=#{Id};
+	</update>
+	<delete id="deleteArchivesById">
+DELETE FROM archives WHERE id=#{Id};
+	</delete>
+</osm>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectGeneralPrivilegeById" result="struct">
+SELECT id,privilege_id,role_id
+FROM general_privilege
+WHERE id=#{Id};
+	</select>
+	<insert id="insertGeneralPrivilege">
+INSERT INTO general_privilege
+(id,privilege_id,role_id)
+VALUES
+(#{Id},#{PrivilegeId},#{RoleId});
+	</insert>
+	<update id="updateGeneralPrivilegeById">
+UPDATE general_privilegeSET
+id=#{Id},privilege_id=#{PrivilegeId},role_id=#{RoleId}
+WHERE id=#{Id};
+	</update>
+	<delete id="deleteGeneralPrivilegeById">
+DELETE FROM general_privilege WHERE id=#{Id};
+	</delete>
+</osm>

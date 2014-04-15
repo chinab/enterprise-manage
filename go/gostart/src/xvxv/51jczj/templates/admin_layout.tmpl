@@ -13,14 +13,19 @@
   </head>
 
   <body>
-    <div class="bs-header">
+    <div class="bs-header text-muted">
       <div class="container">
-        <p class="title-p"><a class="title-link" href="/">
-          <span class="text-lg">无疑基础专家</span> 51jczj.com 
-        </a></p>
-        <p class="text-muted">基础知识的专家，技能入门的好帮手。</p>
+        <p class="title-p">
+          <a class="title-link" href="/">
+            <span class="text-lg">无疑基础专家</span> 51jczj.com 
+          </a>
+          <span class="pull-right">
+            <a href="">{{ .username }}</a>,欢迎你!
+            <a href="/logout">登出</a>
+          </span>
+        </p>
+        <p>基础知识的专家，技能入门的好帮手。</p>
       </div>
-      <a href="/logout">登出</a>
     </div>
     <header class="navbar navbar-inverse" role="banner">
       <div class="container">
@@ -33,12 +38,10 @@
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
           <ul class="nav navbar-nav">
-            <li id="indexA"><a href="/">文章管理</a></li>
-    				<li id="knowledgeA"><a href="group">章节管理</a></li>
-            <li id="booksA"><a href="books">主题管理</a></li>
-            <li id="booksA"><a href="books">学科管理</a></li>
-    				<li id="recipesA"><a href="recipes">用户管理</a></li>
-    				<li id="showA"><a href="show">角色与权限</a></li>
+            <li id="archives"><a href="/archives">文章管理</a></li>
+    				<li id="archivesgroup"><a href="archivesgroup">章节管理</a></li>
+    				<li id="users"><a href="users">用户管理</a></li>
+    				<li id="privileges"><a href="privileges">角色与权限</a></li>
           </ul>
         </nav>
       </div>
@@ -47,14 +50,14 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/index.js"></script>
-    <script>
-      $("#{{.}}A").addClass("active");
-    </script>
 
   <div class="container fix">
   {{ yield }}
   <div>
 
 
+    <script>
+      $(page).addClass("active");
+    </script>
   </body>
 </html>

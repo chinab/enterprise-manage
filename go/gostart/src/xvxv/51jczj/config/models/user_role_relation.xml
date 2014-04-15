@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectUserRoleRelationById" result="struct">
+SELECT id,role_id,user_id
+FROM user_role_relation
+WHERE id=#{Id};
+	</select>
+	<insert id="insertUserRoleRelation">
+INSERT INTO user_role_relation
+(id,role_id,user_id)
+VALUES
+(#{Id},#{RoleId},#{UserId});
+	</insert>
+	<update id="updateUserRoleRelationById">
+UPDATE user_role_relationSET
+id=#{Id},role_id=#{RoleId},user_id=#{UserId}
+WHERE id=#{Id};
+	</update>
+	<delete id="deleteUserRoleRelationById">
+DELETE FROM user_role_relation WHERE id=#{Id};
+	</delete>
+</osm>

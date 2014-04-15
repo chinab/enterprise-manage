@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectRoleById" result="struct">
+SELECT id,name
+FROM role
+WHERE id=#{Id};
+	</select>
+	<insert id="insertRole">
+INSERT INTO role
+(id,name)
+VALUES
+(#{Id},#{Name});
+	</insert>
+	<update id="updateRoleById">
+UPDATE roleSET
+id=#{Id},name=#{Name}
+WHERE id=#{Id};
+	</update>
+	<delete id="deleteRoleById">
+DELETE FROM role WHERE id=#{Id};
+	</delete>
+</osm>
