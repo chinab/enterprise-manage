@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectArchivesPrivilegeById" result="struct">
+SELECT id,role_id,archives_group_id,editable,addable,publishable,deleteable
+FROM archives_privilege
+WHERE id=#{Id};
+	</select>
+	<insert id="insertArchivesPrivilege">
+INSERT INTO archives_privilege
+(id,role_id,archives_group_id,editable,addable,publishable,deleteable)
+VALUES
+(#{Id},#{RoleId},#{ArchivesGroupId},#{Editable},#{Addable},#{Publishable},#{Deleteable});
+	</insert>
+	<update id="updateArchivesPrivilegeById">
+UPDATE archives_privilegeSET
+id=#{Id},role_id=#{RoleId},archives_group_id=#{ArchivesGroupId},editable=#{Editable},addable=#{Addable},publishable=#{Publishable},deleteable=#{Deleteable}
+WHERE id=#{Id};
+	</update>
+	<delete id="deleteArchivesPrivilegeById">
+DELETE FROM archives_privilege WHERE id=#{Id};
+	</delete>
+</osm>

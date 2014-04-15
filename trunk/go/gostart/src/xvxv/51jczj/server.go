@@ -61,7 +61,8 @@ func adminserver() {
 	m.Get("/js/**", http.FileServer(http.Dir("./assets")).ServeHTTP)
 
 	/***********biz*************/
-	m.Get("/", admin.ManagerHandler)
+	m.Get("/", admin.ArchivesHandler)
+	m.Get("/archives", admin.ArchivesHandler)
 
 	m.Post("/login", admin.LoginHandler)
 	m.Get("/logout", admin.LogoutHandler)

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectLoginLogById" result="struct">
+SELECT id,user_id,login_time,logout_time,login_ip,login_name,login_status
+FROM login_log
+WHERE id=#{Id};
+	</select>
+	<insert id="insertLoginLog">
+INSERT INTO login_log
+(id,user_id,login_time,logout_time,login_ip,login_name,login_status)
+VALUES
+(#{Id},#{UserId},#{LoginTime},#{LogoutTime},#{LoginIp},#{LoginName},#{LoginStatus});
+	</insert>
+	<update id="updateLoginLogById">
+UPDATE login_logSET
+id=#{Id},user_id=#{UserId},login_time=#{LoginTime},logout_time=#{LogoutTime},login_ip=#{LoginIp},login_name=#{LoginName},login_status=#{LoginStatus}
+WHERE id=#{Id};
+	</update>
+	<delete id="deleteLoginLogById">
+DELETE FROM login_log WHERE id=#{Id};
+	</delete>
+</osm>

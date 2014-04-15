@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectPrivilegeById" result="struct">
+SELECT id,code,name,description
+FROM privilege
+WHERE id=#{Id};
+	</select>
+	<insert id="insertPrivilege">
+INSERT INTO privilege
+(id,code,name,description)
+VALUES
+(#{Id},#{Code},#{Name},#{Description});
+	</insert>
+	<update id="updatePrivilegeById">
+UPDATE privilegeSET
+id=#{Id},code=#{Code},name=#{Name},description=#{Description}
+WHERE id=#{Id};
+	</update>
+	<delete id="deletePrivilegeById">
+DELETE FROM privilege WHERE id=#{Id};
+	</delete>
+</osm>

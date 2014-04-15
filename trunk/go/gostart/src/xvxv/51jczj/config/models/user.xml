@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<osm>
+	<select id="selectUserById" result="struct">
+SELECT id,email,mobile,nickname,password,description,name,birth,province,city,company,address,sex,contact_info,create_time
+FROM user
+WHERE id=#{Id};
+	</select>
+	<insert id="insertUser">
+INSERT INTO user
+(id,email,mobile,nickname,password,description,name,birth,province,city,company,address,sex,contact_info,create_time)
+VALUES
+(#{Id},#{Email},#{Mobile},#{Nickname},#{Password},#{Description},#{Name},#{Birth},#{Province},#{City},#{Company},#{Address},#{Sex},#{ContactInfo},#{CreateTime});
+	</insert>
+	<update id="updateUserById">
+UPDATE userSET
+id=#{Id},email=#{Email},mobile=#{Mobile},nickname=#{Nickname},password=#{Password},description=#{Description},name=#{Name},birth=#{Birth},province=#{Province},city=#{City},company=#{Company},address=#{Address},sex=#{Sex},contact_info=#{ContactInfo},create_time=#{CreateTime}
+WHERE id=#{Id};
+	</update>
+	<delete id="deleteUserById">
+DELETE FROM user WHERE id=#{Id};
+	</delete>
+	<select id="selectUserByUsername" result="struct">
+SELECT id,email,mobile,nickname,password,description,name,birth,province,city,company,address,sex,contact_info,create_time
+FROM user
+WHERE email=#{Username} or mobile=#{Username} or nickname=#{Username};
+	</select>
+</osm>
