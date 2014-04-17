@@ -24,8 +24,8 @@
    <div class="adBanner"><a href="http://www.sumscope.com/Quoteboard.html" target="_blank"><img src="/img/ad01.png" alt="" /></a></div>
            <ul class="tabBarThird l" id="ProductNav">
             <li class="selected"><a href="javascript:void();">China 5-Year Treasury Bond</a></li>
-            <li><a href="javascript:void();">FTSE China A50 ETF</a></li>
-            <li><a href="javascript:void();">CES China A80 ETF</a></li>
+            <!--<li><a href="javascript:void();">FTSE China A50 ETF</a></li>
+            <li><a href="javascript:void();">CES China A80 ETF</a></li>-->
         </ul>   
     <div class="fix"></div>
     <div id="content">
@@ -38,7 +38,7 @@
 var infoType = 0;
 var timestamp = (new Date()).valueOf();
 function loadContent(){
-  $("#content").load("/indexInfo/"+infoType+"?timestamp="+(timestamp++));
+  $("#content").load("indexInfo/"+infoType+"?timestamp="+(timestamp++));
 }
 $(function(){
   window.setInterval("loadContent();",10000);

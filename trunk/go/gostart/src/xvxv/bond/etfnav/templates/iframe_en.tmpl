@@ -9,7 +9,7 @@
 		<script type="text/JavaScript">
 			var timestamp = (new Date()).valueOf();
 			function refresh(){
-				$.get("/iframeData_en/{{ .infotype }}?timestamp="+(timestamp++),function(data) {
+				$.get("iframeData_en/{{ .infotype }}?timestamp="+(timestamp++),function(data) {
 					var obj = $.parseJSON(data);
 					/**
 					$.each(obj.Result,function(){

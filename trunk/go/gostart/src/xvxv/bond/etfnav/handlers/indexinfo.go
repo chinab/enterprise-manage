@@ -9,13 +9,18 @@ import (
 )
 
 func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
-	tableName, titleName, infotype := getValueByType(params["type"])
+	if CheckRoot(r, params) {
+		return
+	}
+
+	tableName, titleName, infotype := getValueByType(params["root"], params["type"])
 
 	nowTime := time.Now().Format("2006-01-02 15:04:05")
 	dateStr := time.Now().Format("2006-01-02")
 	rows, err := db.Query("select date_format(max(create_time), '%Y-%m-%d') from " + tableName)
+	checkErr(err, log)
 
-	for rows.Next() {
+	for rows != nil && rows.Next() {
 		var dateBytes []byte
 		err = rows.Scan(&dateBytes)
 		checkErr(err, log)
@@ -28,11 +33,10 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
 	begin := fmt.Sprintf("%v 00:00:00", dateStr)
 	end := fmt.Sprintf("%v 23:59:59", dateStr)
 	rows, err = db.Query("select nav_per_share,create_time,id from "+tableName+" where create_time > ? and create_time < ? order by seq desc,create_time desc LIMIT 0,1000", begin, end)
-
 	checkErr(err, log)
-	datas := make([]map[string]string, 0)
 
-	for rows.Next() {
+	datas := make([]map[string]string, 0)
+	for rows != nil && rows.Next() {
 		var value, createTime, id []byte
 		err = rows.Scan(&value, &createTime, &id)
 		checkErr(err, log)
@@ -52,10 +56,19 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
 	result["datas"] = datas
 
 	row := db.QueryRow("select max(MessageInfo) from ETF_Message where Date=? and ProductCode='83199'", dateStr)
-	var messageInfo []byte
-	row.Scan(&messageInfo)
+	mi := ""
+	if row != nil {
+		var messageInfo []byte
+		row.Scan(&messageInfo)
 
-	result["messageInfo"] = string(messageInfo)
+		mi = string(messageInfo)
+	}
 
+	if mi != "" {
+		mi = fmt.Sprintf("[*%s]", mi)
+	}
+	result["messageInfo"] = mi
+
+	result["root"] = params["root"]
 	r.HTML(200, "indexinfo", result)
 }
