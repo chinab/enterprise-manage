@@ -19,7 +19,7 @@ func IframeEnHandler(r render.Render, params martini.Params, log *log.Logger) {
 
 	result := iframeEnData(log, tableName)
 	result["infotype"] = infotype
-	result["root"] = params["root"]
+	result["root"], _ = BaseUrlMap[params["root"]]
 
 	r.HTML(200, "iframe_en", result)
 }
