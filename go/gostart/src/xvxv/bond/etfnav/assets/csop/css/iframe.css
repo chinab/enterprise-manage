@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS Document */
+@import url('reset.css');
+@import url('setting.css');
+
+
+/*General
+**********************************/
+
+html, body	{ width:100%; height:100%; margin:0px; padding:0px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#373737; line-height:1.2em;}
+
+.functionBox	{ width:728px; margin-bottom:20px; xborder:1px solid #1568a6; }
+.functionBox .title	{ width:700px; height:30px; cursor:pointer; padding-left:28px; line-height:2.5em; color:#fff; font-weight:bold; background:url(../images/img_groupHeader.gif) no-repeat left top #00448d; }
+.functionBox .close	{ background-position:left bottom; }
+.functionBox .content	{ padding:15px; }
+
+table.tableFormat_v1	{ width:100%; margin-bottom:15px; }
+table.tableFormat_v1 td	{ padding:13px 0; border-left:1px solid #e2e3e7; text-align:center; vertical-align:middle; }
+table.tableFormat_v1 td span	{ display:block; font-size:11px; font-weight:normal; color:#999999;}
+table.tableFormat_v1 td:first-child	{ border-left:0; color:#000; }
+table.tableFormat_v1 thead tr:first-child, table.tableFormat_v1 thead tr:first-child td	{ background-color:#eef2f4; color:#00448d; font-weight:bold;}
+table.tableFormat_v1 tbody td	{ border-top:1px solid #e2e3e7; }
+table.tableFormat_v1 tbody tr:first-child td	{ border-top:0; }
+table.tableFormat_v1 tbody tr:nth-child(even) {background-color: #fafafa;}
+
+.bgCol		{ background-color:#fafafa }
+
+.remark	{ font-size:11px; color:#666; line-height:1.2em; padding-top:10px; border-top:1px solid #e2e3e7;}
+.remark table		{ width:100%; }
+.remark table td	{ padding-bottom:3px;}

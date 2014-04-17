@@ -8,9 +8,17 @@ import (
 )
 
 func ShowInfo(r render.Render, params martini.Params, log *log.Logger) {
-	tableName, _, _ := getValueByType(params["type"])
+	if CheckRoot(r, params) {
+		return
+	}
+
+	tableName, _, _ := getValueByType(params["root"], params["type"])
 
 	rows, err := db.Query("select info from "+tableName+" where id=?", params["id"])
+	if checkErr(err, log) {
+		return
+	}
+
 	info := ""
 	fmt.Println(params["id"])
 
@@ -21,7 +29,6 @@ func ShowInfo(r render.Render, params martini.Params, log *log.Logger) {
 
 	result := make(map[string]interface{})
 	result["info"] = info
-	//result["titleName"] = titleName
-	//result["columnName"] = columnName
+	result["root"] = params["root"]
 	r.HTML(200, "showInfo", result)
 }

@@ -1,6 +1,6 @@
   <div class="productBrief">
       <h3>{{ .titleName }}</h3>
-      <div class="ex">[*{{ .messageInfo }}]</div>
+      <div class="ex">{{ .messageInfo }}</div>
       <div class="summary">
         Last updated : <span class="text-info"> {{ .nowTime }}</span>
         <br>
@@ -24,7 +24,7 @@
       <tr>
         <td style="width:33%;">{{ .value }}</td>
         <td style="width:33%;">{{ .time }}</td>
-        <td class="tr"><a href="/showInfo/{{ $infotype }}/{{ .id }}" target="_blank">Calculation Process</a></td>
+        <td class="tr"><a href="showInfo/{{ $infotype }}/{{ .id }}" target="_blank">Calculation Process</a></td>
       </tr>
     {{ end }}
     </tbody>
