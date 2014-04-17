@@ -38,7 +38,7 @@
 var infoType = 0;
 var timestamp = (new Date()).valueOf();
 function loadContent(){
-  $("#content").load("indexInfo/"+infoType+"?timestamp="+(timestamp++));
+  $("#content").load("{{ .baseurl }}/indexInfo/"+infoType+"?timestamp="+(timestamp++));
 }
 $(function(){
   window.setInterval("loadContent();",10000);

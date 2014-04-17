@@ -18,6 +18,7 @@ var db *sql.DB
 var WebPort string
 var etfWebLogStmt *sql.Stmt
 var tableMap map[string]([]string)
+var BaseUrlMap map[string]string
 
 const (
 	TABLE_SIZE = 4
@@ -54,6 +55,17 @@ func init() {
 		if len(tables) == TABLE_SIZE {
 			tableMap[option] = tables
 		}
+	}
+
+	baseUrlMapping, err := setting.Options("baseurlmapping")
+	handlerErr(err)
+
+	BaseUrlMap = make(map[string]string)
+	for _, option := range baseUrlMapping {
+		baseUrl, err := setting.String("baseurlmapping", option)
+		handlerErr(err)
+
+		BaseUrlMap[option] = baseUrl
 	}
 
 	url := fmt.Sprintf("%v:%v@tcp(%v:%v)/ss_product?charset=utf8", username, password, host, port)

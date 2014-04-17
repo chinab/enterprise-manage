@@ -29,6 +29,6 @@ func ShowInfo(r render.Render, params martini.Params, log *log.Logger) {
 
 	result := make(map[string]interface{})
 	result["info"] = info
-	result["root"] = params["root"]
+	result["root"], _ = BaseUrlMap[params["root"]]
 	r.HTML(200, "showInfo", result)
 }

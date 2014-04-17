@@ -9,5 +9,5 @@ func HomeHandler(r render.Render, params martini.Params) {
 	if CheckRoot(r, params) {
 		return
 	}
-	r.HTML(200, "home", map[string]string{"root": params["root"]})
+	r.HTML(200, "home", map[string]string{"baseurl": BaseUrlMap[params["root"]]})
 }
