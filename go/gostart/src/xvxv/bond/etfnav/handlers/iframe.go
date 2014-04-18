@@ -6,41 +6,45 @@ import (
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"log"
+	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
-func IframeEnHandler(r render.Render, params martini.Params, log *log.Logger) {
-	if CheckRoot(r, params) {
+func IframeEnHandler(r render.Render, params martini.Params, log *log.Logger, w http.ResponseWriter, req *http.Request) {
+	if CheckRoot(r, params, w, req, log) {
 		return
 	}
+	root := params["root"]
 
-	tableName, _, infotype := getValueByType(params["root"], params["type"])
+	tableName, _, infotype := getValueByType(root, params["type"])
 
-	result := iframeEnData(log, tableName)
+	result := iframeEnData(log, tableName, root)
 	result["infotype"] = infotype
-	result["root"], _ = BaseUrlMap[params["root"]]
+	result["root"], _ = BaseUrlMap[root]
 
 	r.HTML(200, "iframe_en", result)
 }
 
-func IframeEnDataHandler(r render.Render, params martini.Params, log *log.Logger) string {
-	if CheckRoot(r, params) {
+func IframeEnDataHandler(r render.Render, params martini.Params, log *log.Logger, w http.ResponseWriter, req *http.Request) string {
+	if CheckRoot(r, params, w, req, log) {
 		return ""
 	}
+	root := params["root"]
 
-	tableName, _, _ := getValueByType(params["root"], params["type"])
+	tableName, _, _ := getValueByType(root, params["type"])
 
-	result := iframeEnData(log, tableName)
+	result := iframeEnData(log, tableName, root)
 	b, err := json.Marshal(result)
 	checkErr(err, log)
 	return string(b)
 }
 
-func iframeEnData(log *log.Logger, tableName string) map[string]string {
+func iframeEnData(log *log.Logger, tableName string, root string) map[string]string {
 	result := make(map[string]string)
 
-	rows, err := db.Query("SELECT nav_per_share,create_time FROM " + tableName + " order by seq desc,create_time desc LIMIT 0,1")
+	rows, err := db.Query("SELECT nav_per_share,create_time FROM "+tableName+" where company=? order by seq desc,create_time desc LIMIT 0,1", strings.ToUpper(root))
 	checkErr(err, log)
 
 	createTime := "2014-01-01 00:00:00"
@@ -52,7 +56,7 @@ func iframeEnData(log *log.Logger, tableName string) map[string]string {
 		checkErr(err, log)
 	}
 
-	rows, err = db.Query("SELECT cn_value,cn_date FROM t_cnhhkd order by create_date desc LIMIT 0,1")
+	rows, err = db.Query("SELECT cn_value,cn_date FROM ss_product.t_cnhhkd where cd_type=? order by create_date desc LIMIT 0,1", root)
 	checkErr(err, log)
 
 	for rows != nil && rows.Next() {

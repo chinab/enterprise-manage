@@ -14,7 +14,7 @@ func main() {
 
 	m.Use(render.Renderer())
 
-	m.Use(handlers.WriteLog)
+	// m.Use(handlers.WriteLog)
 
 	m.Get("/:root", handlers.HomeHandler)
 	m.Get("/:root/", handlers.HomeHandler)

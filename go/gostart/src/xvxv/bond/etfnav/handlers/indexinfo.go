@@ -5,15 +5,18 @@ import (
 	"github.com/codegangsta/martini"
 	"github.com/martini-contrib/render"
 	"log"
+	"net/http"
+	"strings"
 	"time"
 )
 
-func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
-	if CheckRoot(r, params) {
+func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger, w http.ResponseWriter, req *http.Request) {
+	if CheckRoot(r, params, w, req, log) {
 		return
 	}
+	root := params["root"]
 
-	tableName, titleName, infotype := getValueByType(params["root"], params["type"])
+	tableName, titleName, infotype := getValueByType(root, params["type"])
 
 	nowTime := time.Now().Format("2006-01-02 15:04:05")
 	dateStr := time.Now().Format("2006-01-02")
@@ -32,7 +35,7 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
 
 	begin := fmt.Sprintf("%v 00:00:00", dateStr)
 	end := fmt.Sprintf("%v 23:59:59", dateStr)
-	rows, err = db.Query("select nav_per_share,create_time,id from "+tableName+" where create_time > ? and create_time < ? order by seq desc,create_time desc LIMIT 0,1000", begin, end)
+	rows, err = db.Query("select nav_per_share,create_time,id from "+tableName+" where create_time>? and create_time<? and company=? order by seq desc,create_time desc LIMIT 0,1000", begin, end, strings.ToUpper(root))
 	checkErr(err, log)
 
 	datas := make([]map[string]string, 0)
@@ -55,7 +58,7 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
 	result["infotype"] = infotype
 	result["datas"] = datas
 
-	row := db.QueryRow("select max(MessageInfo) from ETF_Message where Date=? and ProductCode='83199'", dateStr)
+	row := db.QueryRow("select max(MessageInfo) from ETF_Message where Date=? and Company=? and ProductCode='83199'", dateStr, strings.ToUpper(root))
 	mi := ""
 	if row != nil {
 		var messageInfo []byte
@@ -69,6 +72,6 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger) {
 	}
 	result["messageInfo"] = mi
 
-	result["root"], _ = BaseUrlMap[params["root"]]
+	result["root"], _ = BaseUrlMap[root]
 	r.HTML(200, "indexinfo", result)
 }

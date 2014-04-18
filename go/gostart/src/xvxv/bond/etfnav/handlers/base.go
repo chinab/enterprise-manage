@@ -17,7 +17,6 @@ import (
 var db *sql.DB
 var WebPort string
 var etfWebLogStmt *sql.Stmt
-var tableMap map[string]([]string)
 var BaseUrlMap map[string]string
 
 const (
@@ -43,20 +42,6 @@ func init() {
 	WebPort, err = setting.String("web", "port")
 	handlerErr(err)
 
-	tablemappingKeys, err := setting.Options("tablemapping")
-	handlerErr(err)
-
-	tableMap = make(map[string]([]string))
-	for _, option := range tablemappingKeys {
-		tableStr, err := setting.String("tablemapping", option)
-		handlerErr(err)
-
-		tables := strings.Split(tableStr, ",")
-		if len(tables) == TABLE_SIZE {
-			tableMap[option] = tables
-		}
-	}
-
 	baseUrlMapping, err := setting.Options("baseurlmapping")
 	handlerErr(err)
 
@@ -68,7 +53,7 @@ func init() {
 		BaseUrlMap[option] = baseUrl
 	}
 
-	url := fmt.Sprintf("%v:%v@tcp(%v:%v)/ss_product?charset=utf8", username, password, host, port)
+	url := fmt.Sprintf("%v:%v@tcp(%v:%v)/nav_etf?charset=utf8", username, password, host, port)
 
 	db, err = sql.Open("mysql", url)
 	handlerErr(err)
@@ -77,12 +62,13 @@ func init() {
 	handlerErr(err)
 }
 
-func CheckRoot(r render.Render, params martini.Params) bool {
-	tables, ok := tableMap[params["root"]]
-	if !ok || len(tables) != TABLE_SIZE {
+func CheckRoot(r render.Render, params martini.Params, w http.ResponseWriter, req *http.Request, log *log.Logger) bool {
+	_, ok := BaseUrlMap[params["root"]]
+	if !ok {
 		r.Redirect("/html/404.html", 404)
 		return true
 	}
+	WriteLog(w, req, log)
 	return false
 }
 
@@ -92,13 +78,13 @@ func getValueByType(root string, infotype string) (string, string, string) {
 
 	switch {
 	case infotype == "0" || infotype == "china_bond":
-		tableName = tableMap[root][0]
+		tableName = "bond_etf"
 		titleName = "CSOP China 5-Year Treasury Bond ETF"
 	case infotype == "1" || infotype == "china_A50_etf":
-		tableName = tableMap[root][1]
+		tableName = "csop_a50"
 		titleName = "CSOP FTSE China A50 ETF"
 	case infotype == "2" || infotype == "china_A80_etf":
-		tableName = tableMap[root][2]
+		tableName = "csop_a80"
 		titleName = "CSOP CES China A80 ETF"
 	default:
 		infotype = "0"
@@ -125,7 +111,12 @@ func WriteLog(w http.ResponseWriter, r *http.Request, log *log.Logger) {
 			if r.URL != nil {
 				path = r.URL.Path
 			}
-			remoteAddr = r.RemoteAddr
+			ra := r.RemoteAddr
+
+			remoteAddr = r.Header.Get("X-Forwarded-For")
+			if len(remoteAddr) == 0 {
+				remoteAddr = strings.Split(ra, ":")[0]
+			}
 		}
 
 		if cookie != nil {
