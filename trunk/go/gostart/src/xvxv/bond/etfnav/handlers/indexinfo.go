@@ -16,7 +16,7 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger, w
 	}
 	root := params["root"]
 
-	tableName, titleName, infotype := getValueByType(root, params["type"])
+	tableName, title, infotype := getValueByType(root, params["type"])
 
 	nowTime := time.Now().Format("2006-01-02 15:04:05")
 	dateStr := time.Now().Format("2006-01-02")
@@ -54,7 +54,6 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger, w
 
 	result := make(map[string]interface{})
 	result["nowTime"] = nowTime
-	result["titleName"] = titleName
 	result["infotype"] = infotype
 	result["datas"] = datas
 
@@ -73,5 +72,6 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger, w
 	result["messageInfo"] = mi
 
 	result["root"], _ = BaseUrlMap[root]
+	result["title"] = title
 	r.HTML(200, "indexinfo", result)
 }

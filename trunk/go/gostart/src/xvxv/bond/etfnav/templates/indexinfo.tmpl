@@ -1,32 +1,32 @@
-  <div class="productBrief">
-      <h3>{{ .titleName }}</h3>
-      <div class="ex">{{ .messageInfo }}</div>
-      <div class="summary">
-        Last updated : <span class="text-info"> {{ .nowTime }}</span>
-        <br>
-        <span class="text-danger">*</span>update every 10 seconds
-      </div>
-      <div class="fix"></div>
-  </div>
+<div class="productBrief">
+    <h3>{{ .title }}</h3>
+    <div class="ex">{{ .messageInfo }}</div>
+    <div class="summary">
+      Last updated : <span class="text-info"> {{ .nowTime }}</span>
+      <br>
+      <span class="text-danger">*</span>update every 10 seconds
+    </div>
+    <div class="fix"></div>
+</div>
 
-  <!-- Table -->
-  <table cellspacing="0" width="100%">
-    <thead>
-      <tr>
-        <th>NAV per Share</th>
-        <th>Time</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-    {{ $infotype := .infotype }}
-    {{ range .datas }}
-      <tr>
-        <td style="width:33%;">{{ .value }}</td>
-        <td style="width:33%;">{{ .time }}</td>
-        <td class="tr"><a href="{{ .baseurl }}/showInfo/{{ $infotype }}/{{ .id }}" target="_blank">Calculation Process</a></td>
-      </tr>
-    {{ end }}
-    </tbody>
-  </table>
+<!-- Table -->
+<table cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>NAV per Share</th>
+      <th>Time</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  {{ $infotype := .infotype }}
+  {{ range .datas }}
+    <tr>
+      <td style="width:33%;">{{ .value }}</td>
+      <td style="width:33%;">{{ .time }}</td>
+      <td class="tr"><a href="{{ .baseurl }}/showInfo/{{ $infotype }}/{{ .id }}" target="_blank">Calculation Process</a></td>
+    </tr>
+  {{ end }}
+  </tbody>
+</table>
 

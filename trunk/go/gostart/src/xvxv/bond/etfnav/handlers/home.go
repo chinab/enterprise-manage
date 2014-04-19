@@ -11,5 +11,6 @@ func HomeHandler(r render.Render, params martini.Params, w http.ResponseWriter, 
 	if CheckRoot(r, params, w, req, log) {
 		return
 	}
-	r.HTML(200, "home", map[string]string{"baseurl": BaseUrlMap[params["root"]]})
+	root := params["root"]
+	r.HTML(200, "home", map[string]interface{}{"baseurl": BaseUrlMap[root], "tabTexts": TabTextMap[root], "titles": TabTextMap[root]})
 }
