@@ -18,6 +18,8 @@ var db *sql.DB
 var WebPort string
 var etfWebLogStmt *sql.Stmt
 var BaseUrlMap map[string]string
+var TabTextMap map[string][]string
+var TitleMap map[string][]string
 
 const (
 	TABLE_SIZE = 4
@@ -44,13 +46,32 @@ func init() {
 
 	baseUrlMapping, err := setting.Options("baseurlmapping")
 	handlerErr(err)
-
 	BaseUrlMap = make(map[string]string)
 	for _, option := range baseUrlMapping {
 		baseUrl, err := setting.String("baseurlmapping", option)
 		handlerErr(err)
 
 		BaseUrlMap[option] = baseUrl
+	}
+
+	tabTextMapping, err := setting.Options("tabtextmapping")
+	handlerErr(err)
+	TabTextMap = make(map[string][]string)
+	for _, option := range tabTextMapping {
+		tabText, err := setting.String("tabtextmapping", option)
+		handlerErr(err)
+
+		TabTextMap[option] = strings.Split(tabText, "|")
+	}
+
+	titleMapping, err := setting.Options("titlemapping")
+	handlerErr(err)
+	TitleMap = make(map[string][]string)
+	for _, option := range titleMapping {
+		title, err := setting.String("titlemapping", option)
+		handlerErr(err)
+
+		TitleMap[option] = strings.Split(title, "|")
 	}
 
 	url := fmt.Sprintf("%v:%v@tcp(%v:%v)/nav_etf?charset=utf8", username, password, host, port)
@@ -74,23 +95,25 @@ func CheckRoot(r render.Render, params martini.Params, w http.ResponseWriter, re
 
 func getValueByType(root string, infotype string) (string, string, string) {
 	tableName := "ETF_NAV"
-	titleName := "CSOP China 5-Year Treasury Bond ETF"
+	title := ""
 
 	switch {
 	case infotype == "0" || infotype == "china_bond":
 		tableName = "bond_etf"
-		titleName = "CSOP China 5-Year Treasury Bond ETF"
+		title = TitleMap[root][0]
 	case infotype == "1" || infotype == "china_A50_etf":
 		tableName = "csop_a50"
-		titleName = "CSOP FTSE China A50 ETF"
+		title = TitleMap[root][1]
 	case infotype == "2" || infotype == "china_A80_etf":
 		tableName = "csop_a80"
-		titleName = "CSOP CES China A80 ETF"
+		title = TitleMap[root][1]
 	default:
 		infotype = "0"
+		tableName = "bond_etf"
+		title = TitleMap[root][0]
 	}
 
-	return tableName, titleName, infotype
+	return tableName, title, infotype
 }
 
 func WriteLog(w http.ResponseWriter, r *http.Request, log *log.Logger) {

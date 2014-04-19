@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>CSOP China 5-Year Treasury Bond</title>
+    <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="/css/style.css">
@@ -23,9 +23,9 @@
   <div class="pageWrap">
    <div class="adBanner"><a href="http://www.sumscope.com/Quoteboard.html" target="_blank"><img src="/img/ad01.png" alt="" /></a></div>
            <ul class="tabBarThird l" id="ProductNav">
-            <li class="selected"><a href="javascript:void();">China 5-Year Treasury Bond</a></li>
-            <!--<li><a href="javascript:void();">FTSE China A50 ETF</a></li>
-            <li><a href="javascript:void();">CES China A80 ETF</a></li>-->
+            <li class="selected"><a href="javascript:void();"></a></li>
+            <!--<li><a href="javascript:void();"></a></li>
+            <li><a href="javascript:void();"></a></li>-->
         </ul>   
     <div class="fix"></div>
     <div id="content">
@@ -37,16 +37,24 @@
 <script type="text/javascript">
 var infoType = 0;
 var timestamp = (new Date()).valueOf();
+
+var tabTexts = [{{ range .tabTexts }}"{{ . }}",{{ end }}""];
+var titles = [{{ range .titles }}"{{ . }}",{{ end }}""];
+
 function loadContent(){
   $("#content").load("{{ .baseurl }}/indexInfo/"+infoType+"?timestamp="+(timestamp++));
 }
 $(function(){
+  $("#ProductNav>li>a").each(function(){
+    $(this).html(tabTexts[$(this).index()]);
+  });
+
   window.setInterval("loadContent();",10000);
   $("#ProductNav li").click(function(){
-    $("#ProductNav li.selected").removeClass("selected");
-    document.title=$(this).children("a").html();
+    $("#ProductNav li.selected").removeClass("selected");    
     $(this).addClass("selected");
     infoType = $(this).index();
+    document.title=titles[infoType];
     loadContent();
   });
   loadContent();
