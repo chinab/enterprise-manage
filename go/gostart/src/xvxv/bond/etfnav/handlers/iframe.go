@@ -56,7 +56,7 @@ func iframeEnData(log *log.Logger, tableName string, root string) map[string]str
 		checkErr(err, log)
 	}
 
-	rows, err = db.Query("SELECT cn_value,cn_date FROM ss_product.t_cnhhkd where cd_type=? order by create_date desc LIMIT 0,1", root)
+	rows, err = db.Query("SELECT cn_value,cn_date FROM ss_product.t_cnhhkd order by create_date desc LIMIT 0,1")
 	checkErr(err, log)
 
 	for rows != nil && rows.Next() {
