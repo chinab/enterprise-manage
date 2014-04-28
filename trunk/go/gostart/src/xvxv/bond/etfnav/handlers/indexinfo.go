@@ -20,7 +20,7 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger, w
 
 	nowTime := time.Now().Format("2006-01-02 15:04:05")
 	dateStr := time.Now().Format("2006-01-02")
-	rows, err := db.Query("select date_format(max(create_time), '%Y-%m-%d') from " + tableName)
+	rows, err := db.Query("select date_format(max(create_time), '%Y-%m-%d') from "+tableName+" where company=? ", strings.ToUpper(root))
 	checkErr(err, log)
 
 	for rows != nil && rows.Next() {

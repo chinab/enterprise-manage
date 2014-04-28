@@ -88,7 +88,7 @@ a.linkImt{text-decoration:none;}
 
 /*Home*/
 .productBrief{background: #1f1f1f;border:1px solid #2b2b2b;padding:5px;margin:10px 20px;}
-.productBrief h3{float: left;font-size: 14px;font-weight:700;margin-top:15px;}
+.productBrief h3{float: left;font-size: 14px;font-weight:700;margin-top:5px;}
 .productBrief .ex{float: left;margin:15px 0 0 50px;color:#ffd792;}
 .summary{float: right;padding:5px 0;margin-right: 10px;color:#ffd792;}
 .summary strong{color:#e6b33c;}
