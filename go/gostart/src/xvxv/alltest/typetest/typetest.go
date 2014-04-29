@@ -2,16 +2,28 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"net"
+	"github.com/go-martini/martini"
+	"net/http"
+	"time"
+	"xvxv/utils"
 )
 
 func main() {
-	conn, _ := net.Dial("tcp4", "www.baidu.com:80")
+	m := martini.Classic()
+	m.Get("/", func(w http.ResponseWriter, r *http.Request) string {
 
-	conn.Write([]byte("HEAD / HTTP/1.0\r\n\r\n"))
+		cookie, _ := r.Cookie("client_uuid")
+		if cookie == nil {
+			expiration := time.Now()
+			expiration = expiration.AddDate(5, 0, 0)
+			uuid, _ := utils.GenUUID()
+			cookie = &http.Cookie{Name: "client_uuid", Value: uuid, Expires: expiration}
+			http.SetCookie(w, cookie)
+		}
 
-	result, _ := ioutil.ReadAll(conn)
+		fmt.Println(cookie.Value, r.RemoteAddr)
 
-	fmt.Println(string(result))
+		return "Hello world!"
+	})
+	http.ListenAndServe(":7070", m)
 }

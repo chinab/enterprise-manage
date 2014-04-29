@@ -71,7 +71,7 @@ func IndexInfoHandler(r render.Render, params martini.Params, log *log.Logger, w
 	}
 	result["messageInfo"] = mi
 
-	result["root"], _ = BaseUrlMap[root]
+	result["baseurl"], _ = BaseUrlMap[root]
 	result["title"] = title
 	r.HTML(200, "indexinfo", result)
 }
