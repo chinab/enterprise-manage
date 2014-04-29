@@ -2,7 +2,7 @@ package base
 
 import (
 	"fmt"
-	"github.com/codegangsta/martini"
+	"github.com/go-martini/martini"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/sbinet/go-config/config"
 	"strings"
