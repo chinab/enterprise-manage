@@ -3,7 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"fmt"
-	"github.com/codegangsta/martini"
+	"github.com/go-martini/martini"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/martini-contrib/render"
 	"github.com/sbinet/go-config/config"
