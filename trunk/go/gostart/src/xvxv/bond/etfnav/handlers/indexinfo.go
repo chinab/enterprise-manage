@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/codegangsta/martini"
+	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"log"
 	"net/http"
