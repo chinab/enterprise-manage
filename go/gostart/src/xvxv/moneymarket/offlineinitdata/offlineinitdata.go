@@ -89,8 +89,12 @@ func main() {
 		}
 	}
 
-	for i, line := range lines {
-		if i < 3 {
+	companyNameIdMap := make(map[string]string)
+
+	n := 0
+
+	for r, line := range lines {
+		if r < 3 {
 			continue
 		}
 
@@ -108,22 +112,30 @@ func main() {
 			if cnData == "" {
 				continue
 			}
+
 			fmt.Println(cnData, bankLevelCN)
 
-			bankLevel := levelMap[bankLevelCN]
+			id, ok := companyNameIdMap[cnData]
+			if !ok {
 
-			id, err := utils.GenUUID()
-			checkErr(err)
+				bankLevel := levelMap[bankLevelCN]
 
-			_, err = insertTemp.Exec(id, cnData, cnData, createTime, createTime, status, processStatus, brokerCompanyId, bankLevel)
-			checkErr(err)
+				id, err = utils.GenUUID()
+				checkErr(err)
 
-			_, err = insertExtend.Exec(id, id, 1, cnData, isFee, cnData, isInternal, brokerCompanyId, createTime, status, toPinyin(cnData))
-			checkErr(err)
+				_, err = insertTemp.Exec(id, cnData, cnData, createTime, createTime, status, processStatus, brokerCompanyId, bankLevel)
+				checkErr(err)
+
+				_, err = insertExtend.Exec(id, id, 1, cnData, isFee, cnData, isInternal, brokerCompanyId, createTime, status, toPinyin(cnData))
+				checkErr(err)
+
+				companyNameIdMap[cnData] = id
+			}
 
 			traderId, err := utils.GenUUID()
 			checkErr(err)
-			traderName := fmt.Sprintf("trader%v", i)
+			traderName := fmt.Sprintf("trader%v", n)
+			n = n + 1
 
 			_, err = insertTraderTemp.Exec(traderId, id, cnData, traderName, traderName, "123456", traderName, "2", "1", createTime, createTime, status, processStatus, brokerCompanyId, traderName)
 			checkErr(err)
