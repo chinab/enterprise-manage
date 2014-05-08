@@ -28,10 +28,16 @@ var f = pinyin4go.Format{pinyin4go.U_UNICODE, pinyin4go.LOWER_CASE, pinyin4go.NO
 
 func main() {
 
-	db, err := sql.Open("mysql", "artogrid:artogrid@tcp(192.168.1.105:3306)/idb_mm_offline?charset=utf8")
+	db, err := sql.Open("mysql", "artogrid:artogrid@tcp(10.10.2.4:3306)/idb_mm_offline?charset=utf8")
 	checkErr(err)
 
 	defer db.Close()
+
+	//删除数据
+	stmt, err := db.Prepare("delete from mm_trader_broker_relation where trader_account_id not in (select id from mm_temp_account)")
+	checkErr(err)
+	_, err = stmt.Exec()
+	checkErr(err)
 
 	brokerDataByte, _ := ioutil.ReadFile("broker.txt")
 	brokerData := string(brokerDataByte)
@@ -48,10 +54,42 @@ func main() {
 		brokerNameIdMap[name] = string(id)
 	}
 
+	companyNameIdMap := make(map[string]string)
+
+	rows, err := db.Query("select name,id from mm_temp_financial_company where broker_company_id=?", brokerCompanyId)
+	checkErr(err)
+
+	for rows.Next() {
+		var name []byte
+		var id []byte
+		err = rows.Scan(&name, &id)
+		checkErr(err)
+		companyNameIdMap[string(name)] = string(id)
+	}
+
+	companyNameBrokerIdTraderId := make(map[string]string)
+	rows, err = db.Query(`select c.name,r.broker_account_id,t.id 
+		from mm_temp_financial_company c,mm_temp_account t,mm_trader_broker_relation r 
+		where c.id=t.company_id
+		and t.id=r.trader_account_id
+		and c.broker_company_id=t.broker_company_id
+		and r.broker_company_id=t.broker_company_id
+		and c.broker_company_id=?`, brokerCompanyId)
+	checkErr(err)
+
+	for rows.Next() {
+		var name []byte
+		var brokerId []byte
+		var traderId []byte
+		err = rows.Scan(&name, &brokerId, &traderId)
+		checkErr(err)
+		companyNameBrokerIdTraderId[string(name)+"_"+string(brokerId)] = string(traderId)
+	}
+
 	tx, err := db.Begin()
 	checkErr(err)
 
-	//插入数据
+	//插入机构数据
 	insertTemp, err := tx.Prepare(`INSERT mm_temp_financial_company
 										SET ID=?,NAME=?,fullname_cn_front=?,CREATE_TIME=?,MODIFY_TIME=?,STATUS=?,PROCESS_STATUS=?,BROKER_COMPANY_ID=?,bank_level=?`)
 	checkErr(err)
@@ -60,7 +98,7 @@ func main() {
 										SET id=?,company_id=?,level=?,display_name=?,is_fee=?,description=?,is_internal=?,broker_company_id=?,create_time=?,status=?,pinyin=?`)
 	checkErr(err)
 
-	//插入数据
+	//插入trader数据
 	insertTraderTemp, err := tx.Prepare(`INSERT mm_temp_account
 										SET ID=?,COMPANY_ID=?,COMPANY_NAME=?,ACCOUNT_CODE=?,USERNAME=?,PASSWORD=?,DISPLAY_NAME=?,
 										ACCOUNT_TYPE=?,IS_FORBIDDEN=?,CREATE_TIME=?,MODIFY_TIME=?,STATUS=?,process_status=?,broker_company_id=?,pinyin_keyword=?`)
@@ -70,6 +108,7 @@ func main() {
 										SET id=?,account_id=?,display_name=?,broker_company_id=?,create_time=?,status=?`)
 	checkErr(err)
 
+	//插入关系数据
 	insertRelation, err := tx.Prepare(`INSERT INTO mm_trader_broker_relation 
 										(id, trader_account_id, broker_account_id, level, is_temp, create_time, status, broker_company_id) 
 										VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
@@ -89,9 +128,8 @@ func main() {
 		}
 	}
 
-	companyNameIdMap := make(map[string]string)
-
-	n := 0
+	n := 30000
+	ccc := 0
 
 	for r, line := range lines {
 		if r < 3 {
@@ -113,8 +151,6 @@ func main() {
 				continue
 			}
 
-			fmt.Println(cnData, bankLevelCN)
-
 			id, ok := companyNameIdMap[cnData]
 			if !ok {
 
@@ -130,28 +166,41 @@ func main() {
 				checkErr(err)
 
 				companyNameIdMap[cnData] = id
+
+				fmt.Println(cnData, bankLevelCN)
 			}
 
-			traderId, err := utils.GenUUID()
-			checkErr(err)
-			traderName := fmt.Sprintf("trader%v", n)
-			n = n + 1
+			brokerName := brokerNames[i/2]
+			brokerId := brokerNameIdMap[brokerName]
+			_, ok = companyNameBrokerIdTraderId[cnData+"_"+brokerId]
+			if !ok {
+				traderId, err := utils.GenUUID()
+				checkErr(err)
+				traderName := fmt.Sprintf("trader%v", n)
+				n++
 
-			_, err = insertTraderTemp.Exec(traderId, id, cnData, traderName, traderName, "123456", traderName, "2", "1", createTime, createTime, status, processStatus, brokerCompanyId, traderName)
-			checkErr(err)
+				_, err = insertTraderTemp.Exec(traderId, id, cnData, traderName, traderName, "123456", traderName, "2", "1", createTime, createTime, status, processStatus, brokerCompanyId, traderName)
+				checkErr(err)
 
-			_, err = insertTraderExtend.Exec(traderId, traderId, traderName, brokerCompanyId, createTime, "1")
-			checkErr(err)
+				_, err = insertTraderExtend.Exec(traderId, traderId, traderName, brokerCompanyId, createTime, "1")
+				checkErr(err)
 
-			relationId, err := utils.GenUUID()
-			checkErr(err)
+				relationId, err := utils.GenUUID()
+				checkErr(err)
 
-			_, err = insertRelation.Exec(relationId, traderId, brokerNameIdMap[brokerNames[i/2]], 0, "", createTime, status, brokerCompanyId)
-			checkErr(err)
+				_, err = insertRelation.Exec(relationId, traderId, brokerId, 0, "", createTime, status, brokerCompanyId)
+				checkErr(err)
+
+				fmt.Println(cnData, bankLevelCN, brokerName)
+
+				ccc++
+			}
 		}
 	}
 
 	tx.Commit()
+
+	fmt.Println(ccc)
 }
 
 func toPinyin(str string) string {
