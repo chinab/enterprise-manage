@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/boj/redistore"
 	"github.com/go-martini/martini"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
@@ -19,10 +18,7 @@ func adminserver() {
 	m := martini.Classic()
 	// m.Use(martini.Static("./assets/"))
 
-	store, _ := redistore.NewRediStore(10, "tcp", fmt.Sprintf(":%s", base.RedisPort), base.RedisHost, []byte("secret-key"))
-
-	store.SetMaxAge(3600)
-	defer store.Close()
+	store := sessions.NewCookieStore([]byte("secret123"))
 	m.Use(sessions.Sessions("51jczj_session", store))
 
 	m.Use(render.Renderer(render.Options{
